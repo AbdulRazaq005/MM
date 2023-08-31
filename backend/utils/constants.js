@@ -1,0 +1,2 @@
+export const CATEGORY_DEPTH_START = 1;
+export const CATEGORY_DEPTH_ALLOWED = process.env.CATEGORY_DEPTH_ALLOWED || 3;

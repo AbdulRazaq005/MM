@@ -1,7 +1,4 @@
-import mongoose from 'mongoose';
-import Event from './nestedModels/eventModel';
-import Detail from './nestedModels/detailModel';
-import Category from './nestedModels/categoryModel';
+import mongoose from "mongoose";
 
 const projectSchema = mongoose.Schema(
   {
@@ -14,18 +11,57 @@ const projectSchema = mongoose.Schema(
       type: String,
       required: true,
     },
-    categories: {
-      type: [Category],
-    },
-    details: {
-      type: [Detail],
-    },
-    events: {
-      type: [Event],
-    },
     estimate: {
       type: Number,
       default: 0,
+    },
+    vendor: {
+      type: mongoose.Types.ObjectId,
+      ref: "Contact",
+    },
+    categories: [
+      {
+        type: mongoose.Types.ObjectId,
+        ref: "Category",
+      },
+    ],
+    details: {
+      type: [
+        {
+          key: {
+            type: String,
+            required: true,
+          },
+          value: {
+            type: String,
+            required: true,
+          },
+        },
+      ],
+      default: [],
+    },
+    events: {
+      type: [
+        {
+          name: {
+            type: String,
+            required: true,
+            unique: true,
+          },
+          description: {
+            type: String,
+            required: true,
+          },
+          date: {
+            type: Date,
+            required: true,
+          },
+          urls: {
+            type: [String],
+          },
+        },
+      ],
+      default: [],
     },
   },
   {
@@ -33,6 +69,6 @@ const projectSchema = mongoose.Schema(
   }
 );
 
-const Project = mongoose.model('Project', projectSchema);
+const Project = mongoose.model("Project", projectSchema);
 
 export default Project;
