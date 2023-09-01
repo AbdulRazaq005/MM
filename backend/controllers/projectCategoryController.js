@@ -4,7 +4,7 @@ import {
   getCategoryDetailsById,
   removeCategory,
   updateCategory,
-} from "../services/categoryService";
+} from "../services/categoryService.js";
 
 // GET /api/projects/categories/:id
 export const getCategoryDetails = asyncHandler(async (req, res) => {

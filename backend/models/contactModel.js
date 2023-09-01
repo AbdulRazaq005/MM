@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+import mongoose from "mongoose";
 
 const contactSchema = mongoose.Schema(
   {
@@ -11,9 +11,6 @@ const contactSchema = mongoose.Schema(
       type: String,
       required: true,
     },
-    projectId: {
-      type: mongoose.Types.ObjectId,
-    },
     contactNo: {
       type: String,
       unique: true,
@@ -25,14 +22,20 @@ const contactSchema = mongoose.Schema(
     address: {
       type: String,
     },
+    isActive: {
+      type: Boolean,
+      default: true,
+    },
+    projectId: {
+      type: mongoose.Types.ObjectId,
+    },
   },
   {
     timestamps: true,
   }
 );
 
-const Contact = mongoose.model('Contact', contactSchema);
+const Contact = mongoose.model("Contact", contactSchema);
 
 export default Contact;
 export { contactSchema };
-

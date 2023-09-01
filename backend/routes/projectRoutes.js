@@ -14,7 +14,7 @@ import {
   getCategoryDetails,
   removeSubCategory,
   updateCategoryDetails,
-} from "../controllers/categoryController.js";
+} from "../controllers/projectCategoryController.js";
 
 const router = express.Router();
 
