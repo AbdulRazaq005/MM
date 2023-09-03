@@ -14,17 +14,6 @@ const transactionSchema = mongoose.Schema(
     description: {
       type: String,
     },
-    typeEnum: {
-      type: String,
-      required: true,
-    },
-    paymentModeEnum: {
-      type: String,
-      required: true,
-    },
-    bankEnum: {
-      type: String,
-    },
     date: {
       type: Date,
       required: true,
@@ -43,9 +32,28 @@ const transactionSchema = mongoose.Schema(
       ref: 'Contact',
       required: true,
     },
+    typeEnum: {
+      type: String,
+      required: true,
+    },
     statusEnum: {
       type: String,
       required: true,
+    },
+    paymentModeEnum: {
+      type: String,
+      required: true,
+    },
+    bankEnum: {
+      type: String,
+    },
+    moduleEnum: {
+      type: String,
+      required: true,
+    },
+    isActive: {
+      type: Boolean,
+      default: true,
     },
   },
   {

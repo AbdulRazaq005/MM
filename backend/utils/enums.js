@@ -16,7 +16,7 @@ export const PaymentModeType = Object.freeze({
   Cheque: "CHEQUE",
 });
 
-export const BankType = Object.freeze({
+export const BankAccount = Object.freeze({
   Sbi: "SBI",
   Union: "UNION",
   Canara: "CANARA",
@@ -24,4 +24,9 @@ export const BankType = Object.freeze({
   PragathiKrishna: "PKGB",
   TungaBadhra: "TBGB",
   Axis: "AXIS",
+});
+
+export const ModuleType = Object.freeze({
+  Projects: "PROJECTS",
+  Banking: "BANKING",
 });

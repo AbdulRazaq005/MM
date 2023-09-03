@@ -7,6 +7,7 @@ import { notFound, errorHandler } from './middleware/errorMiddleware.js';
 import userRoutes from './routes/userRoutes.js';
 import projectRoutes from './routes/projectRoutes.js';
 import contactRoutes from './routes/contactRoutes.js';
+import transactionRoutes from './routes/transactionRoutes.js';
 
 dotenv.config();
 connectDatabase();
@@ -19,6 +20,7 @@ app.use(cookieParser());
 app.use('/api/users', userRoutes);
 app.use('/api/projects', projectRoutes);
 app.use('/api/contacts', contactRoutes);
+app.use('/api/transactions', transactionRoutes);
 
 if (process.env.NODE_ENV === 'production') {
   const __dirname = path.resolve();
