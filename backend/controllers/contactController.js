@@ -44,7 +44,7 @@ export const updateContactById = asyncHandler(async (req, res) => {
 });
 
 // DELETE /api/contacts/:id
-export const deleteContactByd = asyncHandler(async (req, res) => {
+export const deleteContactById = asyncHandler(async (req, res) => {
   if (!req.params.id) {
     res.status(400).json({ message: "Contact id cannot be empty." });
   }

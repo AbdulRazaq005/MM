@@ -4,10 +4,11 @@ import mongoose from "mongoose";
 export async function getCategoryDetailsById(id) {
   const category = await Category.findById(id)
     .select("id name description categories events details estimate level")
+    .lean()
     .populate({
       path: "categories",
       model: "Category",
-      select: "id name description categories",
+      select: "id name description categories estimate",
       populate: {
         path: "categories",
         model: "Category",

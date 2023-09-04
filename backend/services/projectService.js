@@ -3,8 +3,7 @@ import Category from "../models/categoryModel.js";
 import mongoose from "mongoose";
 import { CATEGORY_DEPTH_START } from "../utils/constants.js";
 
-
-export async function getAllProjectDetails(id) {
+export async function getAllProjectDetails() {
   const projects = await Project.find({}).select("id name description");
   return projects;
 }
@@ -12,10 +11,11 @@ export async function getAllProjectDetails(id) {
 export async function getProjectDetailsById(id) {
   const project = await Project.findById(id)
     .select("id name description categories events details estimate")
+    .lean()
     .populate({
       path: "categories",
       model: "Category",
-      select: "id name description categories",
+      select: "id name description categories estimate",
       populate: {
         path: "categories",
         model: "Category",
@@ -60,14 +60,14 @@ export async function updateProject(id, projectDetails, events, details) {
 }
 
 export async function deleteProjectById(projectId) {
-  const res = await Project.deleteOne({_id: projectId});
+  const res = await Project.deleteOne({ _id: projectId });
   return res.deletedCount == 1;
 }
 
 export async function addCategory(projectId, categoryDetails) {
   const project = await Project.findById(projectId);
-  if (!project){
-    throw new Error("Project not found.")
+  if (!project) {
+    throw new Error("Project not found.");
   }
   const { name, description, estimate } = categoryDetails; // add more details
   const category = await Category.create({
@@ -83,8 +83,8 @@ export async function addCategory(projectId, categoryDetails) {
 
 export async function removeCategory(projectId, categoryId) {
   const project = await Project.findById(projectId);
-  if (!project){
-    throw new Error("Project not found.")
+  if (!project) {
+    throw new Error("Project not found.");
   }
   var index = project.categories.indexOf(categoryId);
   if (index !== -1) {

@@ -18,6 +18,7 @@ import {
 
 const router = express.Router();
 
+//  Project  Routes
 router
   .route("/")
   .get(protect, getAllProjects) // main projects page
@@ -32,6 +33,7 @@ router
 router.post("/add-category", protect, addProjectCategory);
 router.post("/remove-category", protect, removeProjectCategory);
 
+//  Category  Routes
 router
   .route("/categories/:id")
   .get(protect, getCategoryDetails)

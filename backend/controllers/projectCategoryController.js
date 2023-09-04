@@ -5,6 +5,7 @@ import {
   removeCategory,
   updateCategory,
 } from "../services/categoryService.js";
+import { getAllNestedTargetIds, getTotalCost } from "../services/transactionService.js";
 
 // GET /api/projects/categories/:id
 export const getCategoryDetails = asyncHandler(async (req, res) => {
@@ -15,6 +16,16 @@ export const getCategoryDetails = asyncHandler(async (req, res) => {
   if (!category) {
     res.status(404).json({ message: "Category not found." });
   }
+  let categoryCost = await getTotalCost([category._id]);
+  if (category.categories && Array.isArray(category.categories)) {
+    for (let subCategory of category.categories) {
+      const targetIds = getAllNestedTargetIds(subCategory);
+      const totalCost = await getTotalCost(targetIds);
+      subCategory.totalCost = totalCost;
+      categoryCost += totalCost;
+    }
+  }
+  category.totalCost = categoryCost;
   res.status(200).json(category);
 });
 

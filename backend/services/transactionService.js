@@ -1,17 +1,6 @@
 import Transaction from "../models/transactionModel.js";
 import mongoose from "mongoose";
 
-export async function getTotalCost(targetIds) {
-  let transactions = [];
-  if (Array.isArray(targetIds)) {
-    transactions = await Transaction.find({
-      targetId: { $in: targetIds },
-      isActive: true,
-    }).select("amount");
-  }
-  return transactions.reduce((partialSum, total) => partialSum + total, 0);
-}
-
 export async function getTransactions(filters) {
   const {
     targetIds,
@@ -143,4 +132,33 @@ export async function deleteTransaction(id, isHardDelete = false) {
     await transaction.save();
   }
   return result;
+}
+
+export async function getTotalCost(targetIds) {
+  let transactions = [];
+  if (Array.isArray(targetIds)) {
+    transactions = await Transaction.find({
+      targetId: { $in: targetIds },
+      isActive: true,
+    }).select("amount");
+  }
+  return transactions.reduce(
+    (cumulativeTotal, transaction) => transaction.amount + cumulativeTotal,
+    0
+  );
+}
+
+export function getAllNestedTargetIds(object) {
+  let categoryIds = [object._id];
+  getObjectCategoryIds(object, categoryIds);
+  return categoryIds;
+}
+
+function getObjectCategoryIds(object, cumulativeIds) {
+  if (object.categories && Array.isArray(object.categories)) {
+    object.categories.forEach((c) => {
+      cumulativeIds.push(c._id);
+      getObjectCategoryIds(c, cumulativeIds);
+    });
+  }
 }

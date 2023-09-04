@@ -8,6 +8,10 @@ import {
   removeCategory,
   updateProject,
 } from "../services/projectService.js";
+import {
+  getAllNestedTargetIds,
+  getTotalCost,
+} from "../services/transactionService.js";
 
 // GET /api/projects
 export const getAllProjects = asyncHandler(async (req, res) => {
@@ -37,6 +41,16 @@ export const getProjectDetails = asyncHandler(async (req, res) => {
   if (!project) {
     res.status(404).json({ message: "Project not found." });
   }
+  let projectCost = 0;
+  if (project.categories && Array.isArray(project.categories)) {
+    for (let category of project.categories) {
+      const targetIds = getAllNestedTargetIds(category);
+      const totalCost = await getTotalCost(targetIds);
+      category.totalCost = totalCost;
+      projectCost += totalCost;
+    }
+  }
+  project.totalCost = projectCost;
   res.status(200).json(project);
 });
 
