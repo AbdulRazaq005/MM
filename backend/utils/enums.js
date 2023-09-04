@@ -1,3 +1,8 @@
+export const UserRole = Object.freeze({
+  Admin: "Admin",
+  Officer: "Officer",
+});
+
 export const TransactionType = Object.freeze({
   Debit: "DEBIT",
   Credit: "CREDIT",

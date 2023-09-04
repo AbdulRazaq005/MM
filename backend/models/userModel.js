@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import { UserRole } from '../utils/enums';
 
 const userSchema = mongoose.Schema(
   {
@@ -18,6 +19,7 @@ const userSchema = mongoose.Schema(
     role: {
       type: String,
       required: true,
+      enum: Object.values(UserRole)
     },
     email: {
       type: String,

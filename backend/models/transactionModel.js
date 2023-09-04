@@ -1,4 +1,11 @@
-import mongoose from 'mongoose';
+import mongoose from "mongoose";
+import {
+  BankAccount,
+  ModuleType,
+  PaymentModeType,
+  TransactionStatus,
+  TransactionType,
+} from "../utils/enums.js";
 
 const transactionSchema = mongoose.Schema(
   {
@@ -24,32 +31,37 @@ const transactionSchema = mongoose.Schema(
     },
     fromContact: {
       type: mongoose.Types.ObjectId,
-      ref: 'Contact',
+      ref: "Contact",
       required: true,
     },
     toContact: {
       type: mongoose.Types.ObjectId,
-      ref: 'Contact',
+      ref: "Contact",
       required: true,
     },
     typeEnum: {
       type: String,
       required: true,
+      enum: Object.values(TransactionType),
     },
     statusEnum: {
       type: String,
       required: true,
+      enum: Object.values(TransactionStatus),
     },
     paymentModeEnum: {
       type: String,
       required: true,
+      enum: Object.values(PaymentModeType),
     },
     bankEnum: {
       type: String,
+      enum: Object.values(BankAccount),
     },
     moduleEnum: {
       type: String,
       required: true,
+      enum: Object.values(ModuleType),
     },
     isActive: {
       type: Boolean,
@@ -61,8 +73,7 @@ const transactionSchema = mongoose.Schema(
   }
 );
 
-const Transaction = mongoose.model('Transaction', transactionSchema);
+const Transaction = mongoose.model("Transaction", transactionSchema);
 
 export default Transaction;
 export { transactionSchema };
-

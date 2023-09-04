@@ -3,7 +3,7 @@ import User from '../models/userModel.js';
 import { verifyPassword, generateToken, hashPassword } from '../services/authService.js';
 
 
-// POST /api/users/auth
+// POST /api/users/login
 const loginUser = asyncHandler(async (req, res) => {
   const { username, password } = req.body;
   const user = await User.findOne({ 

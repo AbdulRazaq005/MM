@@ -66,7 +66,7 @@ export const addSubCategory = asyncHandler(async (req, res) => {
   res.status(200).json(category);
 });
 
-// POST /api/projects/categories/add-category
+// POST /api/projects/categories/remove-category
 export const removeSubCategory = asyncHandler(async (req, res) => {
   if (!req.body.categoryId) {
     res.status(400).json({ message: "Category id cannot be empty." });

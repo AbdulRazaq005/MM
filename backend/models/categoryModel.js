@@ -1,6 +1,4 @@
 import mongoose from "mongoose";
-// import { eventSchema } from "./nestedModels/eventModel.js";
-// import { detailSchema } from "./nestedModels/detailModel.js";
 import { CATEGORY_DEPTH_ALLOWED } from "../utils/constants.js";
 
 const categorySchema = mongoose.Schema({
