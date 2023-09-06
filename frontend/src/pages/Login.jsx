@@ -12,13 +12,12 @@ import Typography from "@mui/material/Typography";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { Link } from "react-router-dom";
 import axios from "axios";
-import { useNavigate  } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { LoginUrl } from "../Constants";
 
 const defaultTheme = createTheme();
 
 export default function Login() {
-    
   const navigate = useNavigate();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -29,11 +28,11 @@ export default function Login() {
     axios
       .post(LoginUrl, {
         username: username,
-        password: password
+        password: password,
       })
       .then((response) => {
         setMessage("Login Successful.");
-        navigate("/");
+        navigate("/projects");
       })
       .catch((error) => {
         setMessage(error.response.data.message);
@@ -66,7 +65,7 @@ export default function Login() {
               display: "flex",
               flexDirection: "column",
               alignItems: "center",
-              justifyContent: "center"
+              justifyContent: "center",
             }}
           >
             <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
@@ -90,8 +89,8 @@ export default function Login() {
                 autoFocus
                 size="small"
                 onChange={(e) => {
-                    setUsername(e.target.value);
-                  }}
+                  setUsername(e.target.value);
+                }}
               />
               <TextField
                 margin="normal"
@@ -102,14 +101,14 @@ export default function Login() {
                 type="password"
                 size="small"
                 onChange={(e) => {
-                    setPassword(e.target.value);
-                  }}
+                  setPassword(e.target.value);
+                }}
               />
               <FormControlLabel
                 control={<Checkbox value="remember" color="primary" />}
                 label="Remember me"
               />
-              <Typography>{message}</Typography>
+              <Typography sx={{ color: "red" }}>{message}</Typography>
               <Button
                 type="submit"
                 fullWidth

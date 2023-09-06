@@ -1,8 +1,8 @@
 import AppLayout from "./Layouts/AppLayout";
 import Dashboard from "./pages/Dashboard";
 import Test from "./pages/Test";
-import Projects from "./pages/Projects";
-import ProjectDetails from "./pages/ProjectDetails";
+import Projects from "./pages/projects/Projects";
+import ProjectDetails from "./pages/projects/ProjectDetails";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 

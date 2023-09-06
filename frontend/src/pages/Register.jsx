@@ -23,13 +23,14 @@ export default function Register() {
   const [username, setUsername] = useState();
   const [password1, setPassword1] = useState();
   const [password2, setPassword2] = useState();
-  const [role, setRole] = useState("Officer"); // to-do: move to enums
+  const [role, setRole] = useState(); // to-do: move to enums
   const [email, setEmail] = useState();
   const [contactNo, setContactNo] = useState();
   const [acceptTnC, setAcceptTnC] = useState(false);
   const [message, setMessage] = useState();
 
   const submitRegister = (e) => {
+    setRole("Officer");
     e.preventDefault();
     if (!(name && username && password1 && role && email && contactNo)) {
       setMessage("Please complete all fields");
@@ -52,7 +53,7 @@ export default function Register() {
         .then((response) => {
           setMessage("Registeration Successful.");
           console.log(response);
-          navigate("/");
+          navigate("/projects");
         })
         .catch((error) => {
           setMessage(error.response.data.message);
