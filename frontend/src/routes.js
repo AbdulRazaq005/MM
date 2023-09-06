@@ -4,11 +4,16 @@ import Dashboard from "./pages/Dashboard";
 import Test from "./pages/Test";
 import Projects from "./pages/Projects";
 import ProjectDetails from "./pages/ProjectDetails";
+import Login from "./pages/Login";
 
 const routes = [
   {
     path: "/auth",
     element: <Auth />,
+  },
+  {
+    path: "/login",
+    element: <Login />,
   },
   {
     path: "/*",
@@ -25,6 +30,10 @@ const routes = [
       {
         path: "project-details/:id",
         element: <ProjectDetails />,
+      },
+      {
+        path: "test",
+        element: <Test />,
       },
     ],
   },

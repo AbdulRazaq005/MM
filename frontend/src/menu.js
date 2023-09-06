@@ -60,7 +60,7 @@ const menuListItems = [
   [
     {
       label: "Settings",
-      path: "",
+      path: "/login",
       icon: <SettingsIcon />,
     },
   ],

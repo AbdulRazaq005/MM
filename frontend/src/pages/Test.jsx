@@ -1,12 +1,20 @@
 import * as React from "react";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
+import { getAsync } from "../services/apiHandlerService";
 
 function Test() {
+  React.useEffect(()=>{
+    async function fetchData() {
+    await getAsync("/api/projects");
+    }
+    fetchData();
+  },[])
+
   return (
     <Box sx={{ display: "flex" }}>
       <Typography paragraph>
-        ========= Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
+        =====gggggg==== Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
         do eiusmod tempor incididunt ut labore et dolore magna aliqua. Rhoncus
         dolor purus non enim praesent elementum facilisis leo vel. Risus at
         ultrices mi tempus imperdiet. Semper risus in hendrerit gravida rutrum

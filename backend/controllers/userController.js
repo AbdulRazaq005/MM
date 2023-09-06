@@ -1,13 +1,16 @@
-import asyncHandler from 'express-async-handler';
-import User from '../models/userModel.js';
-import { verifyPassword, generateToken, hashPassword } from '../services/authService.js';
+import asyncHandler from "express-async-handler";
+import User from "../models/userModel.js";
+import {
+  verifyPassword,
+  generateToken,
+  hashPassword,
+} from "../services/authService.js";
 
-
-// POST /api/users/login
+// POST /api/login
 const loginUser = asyncHandler(async (req, res) => {
   const { username, password } = req.body;
-  const user = await User.findOne({ 
-    username 
+  const user = await User.findOne({
+    username,
   });
   if (user && (await verifyPassword(password, user.password))) {
     generateToken(res, user._id, user);
@@ -16,22 +19,18 @@ const loginUser = asyncHandler(async (req, res) => {
       name: user.name,
       role: user.role,
     });
-  } 
-  else {
-    res.status(401);
-    throw new Error('Invalid username or password.');
+  } else {
+    res.status(401).json({ message: "Invalid username or password." });
   }
 });
 
-
-// POST /api/users
+// POST /api/register
 const registerUser = asyncHandler(async (req, res) => {
   const { name, username, password, role, email, contact } = req.body;
 
   const userExists = await User.findOne({ email });
   if (userExists) {
-    res.status(400);
-    throw new Error('Already registered. Please login.');
+    res.status(400).json({ message: "Already registered. Please login." });
   }
   const passwordHash = await hashPassword(password);
   const user = await User.create({
@@ -40,7 +39,7 @@ const registerUser = asyncHandler(async (req, res) => {
     password: passwordHash,
     role,
     email,
-    contact
+    contact,
   });
 
   if (user) {
@@ -52,27 +51,23 @@ const registerUser = asyncHandler(async (req, res) => {
     });
   } else {
     res.status(400);
-    throw new Error('Invalid user data.');
+    throw new Error("Invalid user data.");
   }
 });
 
-
-// POST /api/users/logout
+// POST /api/logout
 const logoutUser = (req, res) => {
   let token = req.cookies.auth;
-  if (token){
-    res.clearCookie('auth');
-    res.status(200).json({ message: 'Logout successful.' });
-  }
-  else{
-    res.status(200).json({ message: 'Already Logged out!' });
+  if (token) {
+    res.clearCookie("auth");
+    res.status(200).json({ message: "Logout successful." });
+  } else {
+    res.status(200).json({ message: "Already Logged out!" });
   }
 };
 
-
 // GET /api/users/profile
 const getUserProfile = asyncHandler(async (req, res) => {
-
   const user = await User.findById(req.user._id);
   if (user) {
     res.json({
@@ -80,14 +75,13 @@ const getUserProfile = asyncHandler(async (req, res) => {
       name: user.name,
       username: user.username,
       email: user.email,
-      contact: user.contact
+      contact: user.contact,
     });
   } else {
     res.status(404);
-    throw new Error('User not found.');
+    throw new Error("User not found.");
   }
 });
-
 
 // PUT /api/users/profile
 const updateUserProfile = asyncHandler(async (req, res) => {
@@ -108,13 +102,11 @@ const updateUserProfile = asyncHandler(async (req, res) => {
       name: updatedUser.name,
       email: updatedUser.email,
     });
-  } 
-  else {
+  } else {
     res.status(404);
-    throw new Error('User not found');
+    throw new Error("User not found");
   }
 });
-
 
 export {
   loginUser,

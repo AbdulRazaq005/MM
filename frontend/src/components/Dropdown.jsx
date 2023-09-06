@@ -9,8 +9,8 @@ const Dropdown = ({ options = [], name = "an option", setFunction }) => {
 
   const handleItemClick = (value) => {
     console.log({ selectedItem, value });
-    selectedItem == value ? setSelectedItem(null) : setSelectedItem(value);
-    selectedItem == value ? setFunction(null) : setFunction(value);
+    selectedItem === value ? setSelectedItem(null) : setSelectedItem(value);
+    selectedItem === value ? setFunction(null) : setFunction(value);
     setOpen(!isOpen);
   };
 
@@ -18,7 +18,7 @@ const Dropdown = ({ options = [], name = "an option", setFunction }) => {
     <div className="dropdown">
       <div className="dropdown-header" onClick={toggleDropdown}>
         {selectedItem
-          ? options.find((item) => item.value == selectedItem).label
+          ? options.find((item) => item.value === selectedItem).label
           : `Select ${name}`}
         <i className={`fa fa-chevron-right icon ${isOpen && "open"}`}></i>
       </div>
@@ -32,7 +32,7 @@ const Dropdown = ({ options = [], name = "an option", setFunction }) => {
           >
             <p
               className={`dropdown-item-text ${
-                item.value == selectedItem && "selected"
+                item.value === selectedItem && "selected"
               }`}
             >
               {item.label}

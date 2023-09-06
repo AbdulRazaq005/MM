@@ -1,7 +1,3 @@
-const domain = "http://localhost:5001";
+export const RegisterUrl = `/api/register`;
+export const LoginUrl = `/api/login`;
 
-const API = {
-  Register: `${domain}/api/register`,
-};
-
-export { API };

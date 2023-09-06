@@ -1,10 +1,12 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { API } from "../Constants";
+import {LoginUrl, RegisterUrl} from "../Constants";
 import Dropdown from "../components/Dropdown";
 import "../styles/LoginRegister.css";
+import { useNavigate  } from "react-router-dom";
 
 function Auth() {
+  const navigate = useNavigate();
   const [name, setName] = useState("");
   const [username, setUsername] = useState("");
   const [password1, setPassword1] = useState("");
@@ -14,20 +16,44 @@ function Auth() {
   const [contactNo, setContactNo] = useState(null);
 
   const [isLogin, setIsLogin] = useState(true);
-  const [errorMessage, setErrorMessage] = useState("");
+  const [message, setMessage] = useState("");
 
   const roleOptions = [
     { value: "admin", label: "Admin" },
     { value: "user", label: "User" },
   ];
 
-  var submit = (e) => {
+  const toggleIsLogin = () =>{
+    setUsername("");
+    setPassword1("");
+    setIsLogin(!isLogin);
+  }
+
+  const submitLogin = (e) => {
+    e.preventDefault();
+    axios
+      .post(LoginUrl, {
+        username: username,
+        password: password1
+      })
+      .then((response) => {
+        setMessage("Login Successful.");
+        console.log(response);
+        navigate("/");
+      })
+      .catch((error) => {
+        setMessage(error.response.data.message);
+        console.log(error);
+      });
+  };
+
+  const submitRegister = (e) => {
     e.preventDefault();
     if (password1 !== password2) {
-      setErrorMessage("Passowrds do not match. Please check again");
+      setMessage("Passowrds do not match. Please check again");
     } else {
       axios
-        .post(API.Register, {
+        .post(RegisterUrl, {
           name,
           username,
           password: password1,
@@ -36,11 +62,11 @@ function Auth() {
           contactNo,
         })
         .then((response) => {
-          setErrorMessage("Registeration Successful.");
+          setMessage("Registeration Successful.");
           console.log(response);
         })
         .catch((error) => {
-          setErrorMessage("Registeration Failed.");
+          setMessage(error.response.data.message);
           console.log(error);
         });
     }
@@ -51,19 +77,24 @@ function Auth() {
       {isLogin ? (
         <form className="login-container" action="">
           <h2 className="mb-1">Login</h2>
-          <input type="text" placeholder="Email" />
-          <input type="password" placeholder="Password" />
+          <input type="text" placeholder="Username" 
+            onChange={(e) => {
+              setUsername(e.target.value);
+            }}/>
+          <input type="password" placeholder="Password" 
+            onChange={(e) => {
+              setPassword1(e.target.value);
+            }}/>
           <div className="flex-x">
             <button
               type="submit"
-              onClick={() => {
-                setIsLogin(!isLogin);
-              }}
+              onClick={toggleIsLogin}
             >
               Register
             </button>
-            <button type="submit">Login</button>
+            <button type="submit" onClick={submitLogin}>Login</button>
           </div>
+      {}<p>{message}</p>
         </form>
       ) : (
         <form className="login-container" action="">
@@ -111,20 +142,19 @@ function Auth() {
               setContactNo(e.target.value);
             }}
           />
-          {errorMessage && <span>{errorMessage}</span>}
+          {message && <span>{message}</span>}
           <div className="flex-x">
             <button
               type="submit"
-              onClick={() => {
-                setIsLogin(!isLogin);
-              }}
+              onClick={toggleIsLogin}
             >
               Login
             </button>
-            <button type="submit" onClick={submit}>
+            <button type="submit" onClick={submitRegister}>
               Signup
             </button>
           </div>
+      <p>{message}</p>
         </form>
       )}
     </div>
