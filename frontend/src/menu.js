@@ -53,7 +53,7 @@ const menuListItems = [
     },
     {
       label: "Outings",
-      path: "",
+      path: "/register",
       icon: <CommuteIcon />,
     },
   ],

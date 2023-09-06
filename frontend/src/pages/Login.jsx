@@ -21,7 +21,7 @@ export default function Login() {
     
   const navigate = useNavigate();
   const [username, setUsername] = useState("");
-  const [password1, setPassword1] = useState("");
+  const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
 
   const submitLogin = (e) => {
@@ -29,7 +29,7 @@ export default function Login() {
     axios
       .post(LoginUrl, {
         username: username,
-        password: password1
+        password: password
       })
       .then((response) => {
         setMessage("Login Successful.");
@@ -85,7 +85,7 @@ export default function Login() {
                 margin="normal"
                 required
                 fullWidth
-                name="Username"
+                name="username"
                 label="Username"
                 autoFocus
                 size="small"
@@ -102,7 +102,7 @@ export default function Login() {
                 type="password"
                 size="small"
                 onChange={(e) => {
-                    setPassword1(e.target.value);
+                    setPassword(e.target.value);
                   }}
               />
               <FormControlLabel
@@ -119,7 +119,7 @@ export default function Login() {
                 Sign In
               </Button>
               <Typography sx={{ color: "#008dcf" }}>
-                <Link to="/auth">{"Don't have an account? Sign Up"}</Link>
+                <Link to="/register">{"Don't have an account? Register"}</Link>
               </Typography>
             </Box>
           </Box>

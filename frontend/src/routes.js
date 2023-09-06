@@ -1,19 +1,19 @@
-import Auth from "./pages/Auth";
 import AppLayout from "./Layouts/AppLayout";
 import Dashboard from "./pages/Dashboard";
 import Test from "./pages/Test";
 import Projects from "./pages/Projects";
 import ProjectDetails from "./pages/ProjectDetails";
 import Login from "./pages/Login";
+import Register from "./pages/Register";
 
 const routes = [
   {
-    path: "/auth",
-    element: <Auth />,
-  },
-  {
     path: "/login",
     element: <Login />,
+  },
+  {
+    path: "/register",
+    element: <Register />,
   },
   {
     path: "/*",
