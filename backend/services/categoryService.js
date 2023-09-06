@@ -29,9 +29,19 @@ export async function updateCategory(id, categoryDetails, events, details) {
   category.estimate = estimate || category.estimate;
 
   if (events && Array.isArray(events)) {
+    events.forEach((event) => {
+      if (!event._id) {
+        event._id = new mongoose.Types.ObjectId();
+      }
+    });
     category.events = events;
   }
   if (details && Array.isArray(details)) {
+    details.forEach((detail) => {
+      if (!detail._id) {
+        detail._id = new mongoose.Types.ObjectId();
+      }
+    });
     category.details = details;
   }
   if (contact) {

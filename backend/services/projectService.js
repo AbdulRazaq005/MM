@@ -47,9 +47,19 @@ export async function updateProject(id, projectDetails, events, details) {
   project.estimate = estimate || project.estimate;
 
   if (events && Array.isArray(events)) {
+    events.forEach((event) => {
+      if (!event._id) {
+        event._id = new mongoose.Types.ObjectId();
+      }
+    });
     project.events = events;
   }
   if (details && Array.isArray(details)) {
+    details.forEach((detail) => {
+      if (!detail._id) {
+        detail._id = new mongoose.Types.ObjectId();
+      }
+    });
     project.details = details;
   }
   if (contact) {
@@ -94,37 +104,3 @@ export async function removeCategory(projectId, categoryId) {
   }
   return false;
 }
-
-// Helper methods
-
-// async function updateProjectEvents(events, project) {
-//   let newEvents = events.filter((e) => e.status == DocumentUpdateStatus.New);
-//   newEvents.forEach(async (e) => {
-//     const event = await Event.create({
-//       name: e.name,
-//       description: e.description,
-//       date: e.date,
-//       urls: e.urls,
-//     });
-//     project.events.push(event);
-//   });
-
-//   let updatedEvents = events.filter(
-//     (e) => e.status == DocumentUpdateStatus.Updated
-//   );
-//   updatedEvents.forEach((e) => {
-//     const event = project.events.find((pe) => pe.id == e._id);
-//     event.name = e.name;
-//     event.description = e.description;
-//     event.date = e.date;
-//     event.urls = e.urls;
-//   });
-//   let deletedEvents = events.filter(
-//     (e) => e.status == DocumentUpdateStatus.Deleted
-//   );
-//   deletedEvents.forEach((e) => {
-//     const event = project.events.find((pe) => pe.id == e._id);
-//     project.events.pop(event);
-//   });
-//   return project;
-// }

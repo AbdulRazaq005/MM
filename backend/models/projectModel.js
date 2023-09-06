@@ -28,6 +28,11 @@ const projectSchema = mongoose.Schema(
     details: {
       type: [
         {
+          _id: {
+            type: mongoose.Types.ObjectId,
+            required: true,
+            unique: true,
+          },
           key: {
             type: String,
             required: true,
@@ -43,10 +48,14 @@ const projectSchema = mongoose.Schema(
     events: {
       type: [
         {
+          _id: {
+            type: mongoose.Types.ObjectId,
+            required: true,
+            unique: true,
+          },
           name: {
             type: String,
             required: true,
-            unique: true,
           },
           description: {
             type: String,

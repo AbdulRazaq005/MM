@@ -26,6 +26,11 @@ const categorySchema = mongoose.Schema({
   details: {
     type: [
       {
+        _id: {
+          type: mongoose.Types.ObjectId,
+          required: true,
+          unique: true,
+        },
         key: {
           type: String,
           required: true,
@@ -41,6 +46,11 @@ const categorySchema = mongoose.Schema({
   events: {
     type: [
       {
+        _id: {
+          type: mongoose.Types.ObjectId,
+          required: true,
+          unique: true,
+        },
         name: {
           type: String,
           required: true,
