@@ -4,10 +4,10 @@ import axios from "axios";
 export async function getAsync(url = "", params = {}) {
   try {
     const response = await axios.get(url, params);
-    console.log({ response });
+    console.info("ApiHandlerResponse: ", response);
     return successHandler(response);
   } catch (error) {
-    console.log({ error });
+    console.error({ error });
     return errorHandler(error);
   }
 }
@@ -39,7 +39,7 @@ export const errorHandler = (error) => {
       }
       case 401: {
         console.log("REDIRECT");
-        window.location.href = "/auth";
+        window.location.href = "/login";
         break;
       }
       case 403: {

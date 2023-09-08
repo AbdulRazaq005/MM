@@ -5,12 +5,28 @@ import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
+import { Button } from "@mui/material";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import { LogoutUrl } from "../Constants";
 
 function AppHeader({ handleDrawerToggle }) {
+  const navigate = useNavigate();
+  const submitLogout = () => {
+    axios
+      .post(LogoutUrl)
+      .then(() => {
+        navigate("/login");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   return (
-    <Box sx={{ display: "flex", height: "5rem", p: 0, m: 0 }}>
-      <AppBar position="fixed" sx={{ height: "5rem", py: 1, px: 2 }}>
-        <Toolbar>
+    <Box sx={{ display: "flex", p: 0, m: 0 }}>
+      <AppBar position="fixed" sx={{ py: 1, px: 2 }}>
+        <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
           <IconButton
             color="inherit"
             aria-label="open drawer"
@@ -23,6 +39,16 @@ function AppHeader({ handleDrawerToggle }) {
           <Typography sx={{ ml: "5%" }} variant="h5">
             Monetary Management
           </Typography>
+          <Box>
+            <Button
+              variant="contained"
+              color="error"
+              size="small"
+              onClick={submitLogout}
+            >
+              LOGOUT
+            </Button>
+          </Box>
         </Toolbar>
       </AppBar>
     </Box>

@@ -84,7 +84,7 @@ export async function addCategory(projectId, categoryDetails) {
     name,
     description,
     estimate,
-    CATEGORY_DEPTH_START,
+    level: CATEGORY_DEPTH_START,
   });
   project.categories.push(category._id);
   await project.save();

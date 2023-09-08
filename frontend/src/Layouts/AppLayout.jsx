@@ -42,7 +42,9 @@ export default function AppLayout() {
         }}
       >
         {/* Header */}
-        <Header handleDrawerToggle={handleDrawerToggle} />
+        <Box sx={{ height: "10%" }}>
+          <Header handleDrawerToggle={handleDrawerToggle} />
+        </Box>
 
         {/* Body */}
         <Box
@@ -50,7 +52,7 @@ export default function AppLayout() {
             display: "flex",
             width: "100%",
             maxWidth: "1400px",
-            height: "100%",
+            height: "90%",
           }}
         >
           <Box sx={{ width: { sm: drawerWidth }, flexShrink: { md: 0 } }}>
@@ -61,7 +63,7 @@ export default function AppLayout() {
               menuListItems={menuListItems}
             />
           </Box>
-          <Box sx={{ flexGrow: 1, p: 3 }}>
+          <Box sx={{ flexGrow: 1, p: 2, overflowY: "scroll" }}>
             <Main />
           </Box>
         </Box>
