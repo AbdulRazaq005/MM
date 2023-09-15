@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { getAsync } from "../../services/apiHandlerService";
-import { ProjectsUrl } from "../../Constants";
+import { CategoriesUrl } from "../../Constants";
 import { Box, Button, Divider, TextField, Typography } from "@mui/material";
 import Details from "../../components/Details";
 import AppTable from "../../components/AppTable";
 import ProjectsCard from "../../components/ProjectsCard";
 import axios from "axios";
 
-function ProjectDetails() {
+function CategoryDetails() {
   let { id } = useParams();
   const categoriesNavigateUrl = "/projects/categories";
   const [data, setData] = useState({});
@@ -21,14 +21,14 @@ function ProjectDetails() {
 
   useEffect(() => {
     async function fetchData() {
-      const url = ProjectsUrl + `/${id}`;
+      const url = CategoriesUrl + `/${id}`;
       const response = await getAsync(url);
       setData(response.payload);
       // console.log("pageData: ", data);
     }
     fetchData();
     // eslint-disable-next-line
-  }, [render]);
+  }, [id, render]);
 
   const submitCreateNewCategory = (e) => {
     e.preventDefault();
@@ -38,7 +38,7 @@ function ProjectDetails() {
       setMessage("Please enter a valid Estimate amount");
     } else {
       axios
-        .post(ProjectsUrl + "/add-category", {
+        .post(CategoriesUrl + "/add-category", {
           categoryId: id,
           name,
           description,
@@ -131,7 +131,9 @@ function ProjectDetails() {
 
   return (
     <Box sx={{ p: 4 }}>
-      <Typography variant="h5">Project Details</Typography>
+      <Typography variant="h5" color="gray">
+        Category Details
+      </Typography>
       <Divider />
 
       <Typography variant="h4" sx={{ mt: 3 }}>
@@ -150,25 +152,25 @@ function ProjectDetails() {
       <Details data={data.details} />
       <AppTable data={data.events} columns={["name", "date", "description"]} />
 
-      {data.categories && data.categories.length !== 0 && (
-        <Box sx={{ mt: 3 }}>
-          <Divider />
-          <Box sx={{ display: "flex", justifyContent: "space-between", mt: 2 }}>
-            <Typography sx={{ fontSize: 25, fontWeight: "600" }}>
-              Categories
-            </Typography>
-            <Button
-              variant="contained"
-              color={isCreateCaregory ? "error" : "success"}
-              size="small"
-              onClick={() => {
-                setIsCreateCaregory(!isCreateCaregory);
-              }}
-            >
-              {isCreateCaregory ? "Cancel" : "Create Contact"}
-            </Button>
-          </Box>
-          {createNewCategoryComponent()}
+      <Box sx={{ mt: 3 }}>
+        <Divider />
+        <Box sx={{ display: "flex", justifyContent: "space-between", mt: 2 }}>
+          <Typography sx={{ fontSize: 25, fontWeight: "600" }}>
+            Categories
+          </Typography>
+          <Button
+            variant="contained"
+            color={isCreateCaregory ? "error" : "success"}
+            size="small"
+            onClick={() => {
+              setIsCreateCaregory(!isCreateCaregory);
+            }}
+          >
+            {isCreateCaregory ? "Cancel" : "Create Contact"}
+          </Button>
+        </Box>
+        {createNewCategoryComponent()}
+        {data.categories && data.categories.length !== 0 && (
           <Box
             sx={{
               display: "flex",
@@ -185,10 +187,10 @@ function ProjectDetails() {
               );
             })}
           </Box>
-        </Box>
-      )}
+        )}
+      </Box>
     </Box>
   );
 }
 
-export default ProjectDetails;
+export default CategoryDetails;

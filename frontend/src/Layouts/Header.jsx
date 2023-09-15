@@ -24,8 +24,8 @@ function AppHeader({ handleDrawerToggle }) {
   };
 
   return (
-    <Box sx={{ display: "flex", p: 0, m: 0 }}>
-      <AppBar position="fixed" sx={{ py: 1, px: 2 }}>
+    <Box sx={{ display: "flex", p: 0, m: 0, height: "100%" }}>
+      <AppBar position="fixed" sx={{ p: 2, height: "10%" }}>
         <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
           <IconButton
             color="inherit"

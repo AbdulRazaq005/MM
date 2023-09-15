@@ -52,7 +52,7 @@ export default function Register() {
         })
         .then((response) => {
           setMessage("Registeration Successful.");
-          console.log(response);
+          // console.log(response);
           navigate("/projects");
         })
         .catch((error) => {

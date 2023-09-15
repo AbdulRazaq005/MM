@@ -2,6 +2,7 @@ import CurrencyRupeeIcon from "@mui/icons-material/CurrencyRupee";
 import DomainAddIcon from "@mui/icons-material/DomainAdd";
 import AccountBalanceWalletIcon from "@mui/icons-material/AccountBalanceWallet";
 import MovingIcon from "@mui/icons-material/Moving";
+import ContactPhoneIcon from "@mui/icons-material/ContactPhone";
 import AccountBalanceIcon from "@mui/icons-material/AccountBalance";
 import BarChartIcon from "@mui/icons-material/BarChart";
 import SettingsIcon from "@mui/icons-material/Settings";
@@ -18,14 +19,14 @@ const menuListItems = [
       icon: <DomainAddIcon />,
     },
     {
+      label: "Contacts",
+      path: "/contacts",
+      icon: <ContactPhoneIcon />,
+    },
+    {
       label: "Loans",
       path: "project-details/657665365465",
       icon: <AccountBalanceWalletIcon />,
-    },
-    {
-      label: "Investments",
-      path: "",
-      icon: <MovingIcon />,
     },
   ],
   [
@@ -38,6 +39,11 @@ const menuListItems = [
       label: "Banking",
       path: "",
       icon: <AccountBalanceIcon />,
+    },
+    {
+      label: "Investments",
+      path: "",
+      icon: <MovingIcon />,
     },
     {
       label: "Analytics",

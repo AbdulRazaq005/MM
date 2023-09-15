@@ -5,13 +5,14 @@ import { Box, Divider, Typography } from "@mui/material";
 import ProjectsCard from "../../components/ProjectsCard";
 
 function Projects() {
+  const categoriesNavigateUrl = "/projects";
   const [projects, setProjects] = useState([]);
 
   useEffect(() => {
     async function fetchData() {
       const response = await getAsync(ProjectsUrl);
       setProjects(response.payload);
-      console.log(projects);
+      // console.log({projects});
     }
     fetchData();
     // eslint-disable-next-line
@@ -28,7 +29,7 @@ function Projects() {
         }}
       >
         {projects.map((project) => {
-          return <ProjectsCard project={project} />;
+          return <ProjectsCard data={project} url={categoriesNavigateUrl} />;
         })}
       </Box>
     </Box>

@@ -63,7 +63,7 @@ export default function AppLayout() {
               menuListItems={menuListItems}
             />
           </Box>
-          <Box sx={{ flexGrow: 1, p: 2, overflowY: "scroll" }}>
+          <Box sx={{ flexGrow: 1, px: 2, overflowY: "scroll" }}>
             <Main />
           </Box>
         </Box>

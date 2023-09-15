@@ -5,6 +5,8 @@ import Projects from "./pages/projects/Projects";
 import ProjectDetails from "./pages/projects/ProjectDetails";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
+import CategoryDetails from "./pages/projects/CategoryDetails";
+import Contacts from "./pages/projects/Contacts";
 
 const routes = [
   {
@@ -30,6 +32,14 @@ const routes = [
       {
         path: "projects/:id",
         element: <ProjectDetails />,
+      },
+      {
+        path: "projects/categories/:id",
+        element: <CategoryDetails />,
+      },
+      {
+        path: "contacts",
+        element: <Contacts />,
       },
       {
         path: "test",

@@ -4,3 +4,5 @@ export const LogoutUrl = `/api/logout`;
 
 // projects
 export const ProjectsUrl = `/api/projects`;
+export const CategoriesUrl = `/api/projects/categories`;
+export const ContactsUrl = `/api/contacts`;
