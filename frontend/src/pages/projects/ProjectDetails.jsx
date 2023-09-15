@@ -150,25 +150,25 @@ function ProjectDetails() {
       <Details data={data.details} />
       <AppTable data={data.events} columns={["name", "date", "description"]} />
 
-      {data.categories && data.categories.length !== 0 && (
-        <Box sx={{ mt: 3 }}>
-          <Divider />
-          <Box sx={{ display: "flex", justifyContent: "space-between", mt: 2 }}>
-            <Typography sx={{ fontSize: 25, fontWeight: "600" }}>
-              Categories
-            </Typography>
-            <Button
-              variant="contained"
-              color={isCreateCaregory ? "error" : "success"}
-              size="small"
-              onClick={() => {
-                setIsCreateCaregory(!isCreateCaregory);
-              }}
-            >
-              {isCreateCaregory ? "Cancel" : "Create Contact"}
-            </Button>
-          </Box>
-          {createNewCategoryComponent()}
+      <Box sx={{ mt: 3 }}>
+        <Divider />
+        <Box sx={{ display: "flex", justifyContent: "space-between", mt: 2 }}>
+          <Typography sx={{ fontSize: 25, fontWeight: "600" }}>
+            Categories
+          </Typography>
+          <Button
+            variant="contained"
+            color={isCreateCaregory ? "error" : "success"}
+            size="small"
+            onClick={() => {
+              setIsCreateCaregory(!isCreateCaregory);
+            }}
+          >
+            {isCreateCaregory ? "Cancel" : "Create Category"}
+          </Button>
+        </Box>
+        {createNewCategoryComponent()}
+        {data.categories && data.categories.length !== 0 && (
           <Box
             sx={{
               display: "flex",
@@ -185,8 +185,8 @@ function ProjectDetails() {
               );
             })}
           </Box>
-        </Box>
-      )}
+        )}
+      </Box>
     </Box>
   );
 }

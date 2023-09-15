@@ -166,7 +166,7 @@ function CategoryDetails() {
               setIsCreateCaregory(!isCreateCaregory);
             }}
           >
-            {isCreateCaregory ? "Cancel" : "Create Contact"}
+            {isCreateCaregory ? "Cancel" : "Create Category"}
           </Button>
         </Box>
         {createNewCategoryComponent()}
