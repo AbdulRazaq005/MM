@@ -7,6 +7,7 @@ import Details from "../../components/Details";
 import AppTable from "../../components/AppTable";
 import ProjectsCard from "../../components/ProjectsCard";
 import axios from "axios";
+import { displayDate } from "../../helpers/dateTimeHelpers";
 
 function ProjectDetails() {
   let { id } = useParams();
@@ -16,7 +17,7 @@ function ProjectDetails() {
   const [description, setDescription] = useState("");
   const [estimate, setEstimate] = useState(0);
   const [message, setMessage] = useState("");
-  const [isCreateCaregory, setIsCreateCaregory] = useState(false);
+  const [isCreateCaregoryMode, setIsCreateCaregory] = useState(false);
   const [render, setRender] = useState(0);
 
   useEffect(() => {
@@ -47,7 +48,7 @@ function ProjectDetails() {
         .then((response) => {
           setMessage("Category Created Successfully.");
           console.log(response);
-          setIsCreateCaregory(!isCreateCaregory);
+          setIsCreateCaregory(!isCreateCaregoryMode);
           setRender(render + 1);
         })
         .catch((error) => {
@@ -58,7 +59,7 @@ function ProjectDetails() {
   };
 
   function createNewCategoryComponent() {
-    if (isCreateCaregory) {
+    if (isCreateCaregoryMode) {
       return (
         <Box
           sx={{
@@ -129,9 +130,13 @@ function ProjectDetails() {
     return <></>;
   }
 
+  const slots = {
+    date: (date) => displayDate(date)
+  }
+
   return (
-    <Box sx={{ p: 4 }}>
-      <Typography variant="h5">Project Details</Typography>
+    <Box sx={{ p: 4, color:"#444" }}>
+      <Typography variant="h5" color="gray">Project Details</Typography>
       <Divider />
 
       <Typography variant="h4" sx={{ mt: 3 }}>
@@ -148,23 +153,22 @@ function ProjectDetails() {
       </Typography>
 
       <Details data={data.details} />
-      <AppTable data={data.events} columns={["name", "date", "description"]} />
+      <AppTable name="Event Details" data={data.events} columns={["name", "date", "description"]} slots={slots}/>
 
-      <Box sx={{ mt: 3 }}>
-        <Divider />
+      <Box sx={{ mt: 5 }}>
         <Box sx={{ display: "flex", justifyContent: "space-between", mt: 2 }}>
-          <Typography sx={{ fontSize: 25, fontWeight: "600" }}>
+          <Typography sx={{ fontSize: 23, fontWeight: "600", color:"#555" }}>
             Categories
           </Typography>
           <Button
             variant="contained"
-            color={isCreateCaregory ? "error" : "success"}
+            color={isCreateCaregoryMode ? "error" : "success"}
             size="small"
             onClick={() => {
-              setIsCreateCaregory(!isCreateCaregory);
+              setIsCreateCaregory(!isCreateCaregoryMode);
             }}
           >
-            {isCreateCaregory ? "Cancel" : "Create Category"}
+            {isCreateCaregoryMode ? "Cancel" : "Create Category"}
           </Button>
         </Box>
         {createNewCategoryComponent()}

@@ -36,7 +36,7 @@ export default function AppLayout() {
         sx={{
           display: "flex",
           flexDirection: "column",
-          bgcolor: "#f3f3f3",
+          bgcolor: "#fafafa",
           height: "100vh",
           alignItems: "center",
         }}
@@ -51,11 +51,10 @@ export default function AppLayout() {
           sx={{
             display: "flex",
             width: "100%",
-            maxWidth: "1400px",
             height: "90%",
           }}
         >
-          <Box sx={{ width: { sm: drawerWidth }, flexShrink: { md: 0 } }}>
+          <Box sx={{ width: { md: drawerWidth }, flexShrink: { md: 0 } }}>
             <Sidebar
               menuOpen={menuOpen}
               handleDrawerToggle={handleDrawerToggle}
@@ -63,7 +62,7 @@ export default function AppLayout() {
               menuListItems={menuListItems}
             />
           </Box>
-          <Box sx={{ flexGrow: 1, px: 2, overflowY: "scroll" }}>
+          <Box sx={{ flexGrow: 1, px: 2, overflowY: "scroll", maxWidth: "1200px", marginX: "auto" }}>
             <Main />
           </Box>
         </Box>

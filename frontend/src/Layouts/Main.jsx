@@ -6,7 +6,7 @@ function Main() {
   return (
     <Box
       sx={{
-        bgcolor: "#fff",
+        bgcolor: "#fafafa",
       }}
     >
       <Outlet />

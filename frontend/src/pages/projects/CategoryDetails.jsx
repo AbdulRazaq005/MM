@@ -152,10 +152,9 @@ function CategoryDetails() {
       <Details data={data.details} />
       <AppTable data={data.events} columns={["name", "date", "description"]} />
 
-      <Box sx={{ mt: 3 }}>
-        <Divider />
+      <Box sx={{ mt: 5 }}>
         <Box sx={{ display: "flex", justifyContent: "space-between", mt: 2 }}>
-          <Typography sx={{ fontSize: 25, fontWeight: "600" }}>
+          <Typography sx={{ fontSize: 25, fontWeight: "600", color:"#555" }}>
             Categories
           </Typography>
           <Button
