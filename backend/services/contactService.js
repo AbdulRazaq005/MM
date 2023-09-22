@@ -1,7 +1,7 @@
 import Contact from "../models/contactModel.js";
 
 export async function getContacts() {
-  let contacts = await Contact.find({ isActive: true}).select('name designation contactNo email address');
+  let contacts = await Contact.find({ isActive: true});
   return contacts;
 }
 

@@ -130,8 +130,8 @@ function ProjectDetails() {
     return <></>;
   }
 
-  const slots = {
-    date: (date) => displayDate(date)
+  const eventSlots = {
+    date: ({data}) => displayDate(data)
   }
 
   return (
@@ -153,7 +153,7 @@ function ProjectDetails() {
       </Typography>
 
       <Details data={data.details} />
-      <AppTable name="Event Details" data={data.events} columns={["name", "date", "description"]} slots={slots}/>
+      <AppTable name="Event Details" data={data.events} columns={["name", "date", "description"]} slots={eventSlots}/>
 
       <Box sx={{ mt: 5 }}>
         <Box sx={{ display: "flex", justifyContent: "space-between", mt: 2 }}>

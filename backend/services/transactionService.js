@@ -1,5 +1,6 @@
 import Transaction from "../models/transactionModel.js";
 import mongoose from "mongoose";
+import { TransactionType } from "../utils/enums.js";
 
 export async function getTransactions(filters) {
   const {
@@ -140,12 +141,15 @@ export async function getTotalCost(targetIds) {
     transactions = await Transaction.find({
       targetId: { $in: targetIds },
       isActive: true,
-    }).select("amount");
+    }).select("amount typeEnum");
   }
-  return transactions.reduce(
-    (cumulativeTotal, transaction) => transaction.amount + cumulativeTotal,
-    0
-  );
+  return transactions.reduce((cumulativeTotal, transaction) => {
+    let amount = transaction.amount;
+    if (transaction.typeEnum === TransactionType.Credit)
+      return cumulativeTotal - amount;
+    else
+      return cumulativeTotal + amount;
+  }, 0);
 }
 
 export function getAllNestedTargetIds(object) {
@@ -161,4 +165,16 @@ function getObjectCategoryIds(object, cumulativeIds) {
       getObjectCategoryIds(c, cumulativeIds);
     });
   }
+}
+
+export function getTransactionsByIds(targetIds) {
+  let query = Transaction.where({ isActive: true });
+  if (targetIds && Array.isArray(targetIds)) {
+    query = query.where({ targetId: { $in: targetIds } });
+  }
+  return query
+    .lean()
+    .populate("fromContact toContact")
+    .select("-isActive -__v")
+    .exec();
 }

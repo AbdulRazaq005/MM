@@ -7,6 +7,7 @@ import Details from "../../components/Details";
 import AppTable from "../../components/AppTable";
 import ProjectsCard from "../../components/ProjectsCard";
 import axios from "axios";
+import { displayDate } from "../../helpers/dateTimeHelpers";
 
 function CategoryDetails() {
   let { id } = useParams();
@@ -129,6 +130,27 @@ function CategoryDetails() {
     return <></>;
   }
 
+  const transactionSlots = {
+    fromContact: ({ data }) => data.name,
+    toContact: ({ data }) => data.name,
+    date: ({ data }) => displayDate(data),
+    amount: ({ data, rowData }) => {
+      return (
+        <Typography
+          color={rowData.typeEnum === "DEBIT" ? "red" : "green"}
+          sx={{ fontSize:18, fontWeight: 550 }}
+        >
+          {data}
+        </Typography>
+      );
+    },
+  };
+  const customColumns = {
+    fromContact: "From",
+    toContact: "To",
+    paymentModeEnum: "Mode",
+  };
+
   return (
     <Box sx={{ p: 4 }}>
       <Typography variant="h5" color="gray">
@@ -154,7 +176,7 @@ function CategoryDetails() {
 
       <Box sx={{ mt: 5 }}>
         <Box sx={{ display: "flex", justifyContent: "space-between", mt: 2 }}>
-          <Typography sx={{ fontSize: 25, fontWeight: "600", color:"#555" }}>
+          <Typography sx={{ fontSize: 25, fontWeight: "600", color: "#555" }}>
             Categories
           </Typography>
           <Button
@@ -188,6 +210,20 @@ function CategoryDetails() {
           </Box>
         )}
       </Box>
+
+      <AppTable
+        data={data.transactions}
+        columns={[
+          "name",
+          "date",
+          "fromContact",
+          "toContact",
+          "amount",
+          "paymentModeEnum",
+        ]}
+        slots={transactionSlots}
+        customColumns={customColumns}
+      />
     </Box>
   );
 }

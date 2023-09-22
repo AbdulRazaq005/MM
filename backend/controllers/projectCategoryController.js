@@ -5,7 +5,7 @@ import {
   removeCategory,
   updateCategory,
 } from "../services/categoryService.js";
-import { getAllNestedTargetIds, getTotalCost } from "../services/transactionService.js";
+import { getAllNestedTargetIds, getTotalCost, getTransactionsByIds } from "../services/transactionService.js";
 
 // GET /api/projects/categories/:id
 export const getCategoryDetails = asyncHandler(async (req, res) => {
@@ -26,6 +26,9 @@ export const getCategoryDetails = asyncHandler(async (req, res) => {
     }
   }
   category.totalCost = categoryCost;
+  const transactionTargetIds = getAllNestedTargetIds(category);
+  const transactions = await getTransactionsByIds(transactionTargetIds);
+  category.transactions = transactions;
   res.status(200).json(category);
 });
 

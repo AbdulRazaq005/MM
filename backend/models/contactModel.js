@@ -29,9 +29,11 @@ const contactSchema = mongoose.Schema(
     projectId: {
       type: mongoose.Types.ObjectId,
     },
+    __v: { type: Number, select: false },
   },
   {
     timestamps: true,
+    versionKey: false,
   }
 );
 
