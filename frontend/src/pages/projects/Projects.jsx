@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { getAsync } from "../../services/apiHandlerService";
 import { ProjectsUrl } from "../../Constants";
 import { Box, Divider, Typography } from "@mui/material";
-import ProjectsCard from "../../components/ProjectsCard";
+import AppCard from "../../components/AppCard";
 
 function Projects() {
   const categoriesNavigateUrl = "/projects";
@@ -29,7 +29,7 @@ function Projects() {
         }}
       >
         {projects.map((project) => {
-          return <ProjectsCard data={project} url={categoriesNavigateUrl} />;
+          return <AppCard data={project} url={categoriesNavigateUrl} />;
         })}
       </Box>
     </Box>

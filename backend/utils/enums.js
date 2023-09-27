@@ -1,6 +1,6 @@
 export const UserRole = Object.freeze({
-  Admin: "Admin",
-  Officer: "Officer",
+  Admin: "ADMIN",
+  User: "USER",
 });
 
 export const TransactionType = Object.freeze({

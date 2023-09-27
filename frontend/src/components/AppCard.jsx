@@ -6,7 +6,7 @@ import Typography from "@mui/material/Typography";
 import { CardActionArea } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 
-export default function ProjectsCard({ data, url }) {
+export default function AppCard({ data, url }) {
   const navigate = useNavigate();
   function navigateToProjectDetails() {
     navigate(url + `/${data._id}`);
@@ -16,7 +16,7 @@ export default function ProjectsCard({ data, url }) {
     <>
       {data && (
         <Card
-          sx={{ width: "18.5rem", mr: 4, mt: 2 }}
+          sx={{ width: "18.5rem", mr: 4, mt: 2, mb: 1 }}
           onClick={navigateToProjectDetails}
         >
           <CardActionArea>

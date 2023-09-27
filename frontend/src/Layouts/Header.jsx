@@ -25,8 +25,8 @@ function AppHeader({ handleDrawerToggle }) {
 
   return (
     <Box sx={{ display: "flex", p: 0, m: 0, height: "100%" }}>
-      <AppBar position="fixed" sx={{ p: 2, height: "10%" }}>
-        <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
+      <AppBar position="fixed" sx={{ py: 1, px: 3, height: "10%" }}>
+        <Toolbar sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
           <IconButton
             color="inherit"
             aria-label="open drawer"
@@ -42,8 +42,9 @@ function AppHeader({ handleDrawerToggle }) {
           <Box>
             <Button
               variant="contained"
-              color="error"
+              color="inherit"
               size="small"
+              sx={{color: "#222", fontWeight:550}}
               onClick={submitLogout}
             >
               LOGOUT
