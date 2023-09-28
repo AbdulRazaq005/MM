@@ -1,30 +1,21 @@
-import React, { useEffect, useState } from "react";
-import { getAsync } from "../../services/apiHandlerService";
+import React, { useState } from "react";
 import { ContactsUrl } from "../../Constants";
 import { Box, Button, Divider, TextField, Typography } from "@mui/material";
 import ContactsCard from "../../components/ContactsCard";
 import axios from "axios";
+import { contactsAtom } from "../../App";
+import { useAtomValue } from "jotai";
 
 function Contacts() {
+  const contacts = useAtomValue(contactsAtom);
   const [isCreateContact, setIsCreateContact] = useState(false);
   const [render, setRender] = useState(0);
-  const [contacts, setContacts] = useState([]);
   const [name, setName] = useState("");
   const [designation, setDesignation] = useState("");
   const [contactNo, setContactNo] = useState("");
   const [email, setEmail] = useState("");
   const [address, setAddress] = useState("");
   const [message, setMessage] = useState("");
-
-  useEffect(() => {
-    async function fetchData() {
-      const response = await getAsync(ContactsUrl);
-      setContacts(response.payload);
-      console.log({ contacts });
-    }
-    fetchData();
-    // eslint-disable-next-line
-  }, [render]);
 
   const submitCreateNewContact = (e) => {
     e.preventDefault();
@@ -177,7 +168,7 @@ function Contacts() {
         }}
       >
         {contacts.map((contact) => {
-          return <ContactsCard data={contact} />;
+          return <ContactsCard data={contact} key={contact._id} />;
         })}
       </Box>
     </Box>

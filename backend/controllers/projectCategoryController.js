@@ -5,7 +5,11 @@ import {
   removeCategory,
   updateCategory,
 } from "../services/categoryService.js";
-import { getAllNestedTargetIds, getTotalCost, getTransactionsByIds } from "../services/transactionService.js";
+import {
+  getAllNestedTargetIds,
+  getTotalCost,
+  getTransactionsByIds,
+} from "../services/transactionService.js";
 
 // GET /api/projects/categories/:id
 export const getCategoryDetails = asyncHandler(async (req, res) => {
@@ -49,11 +53,11 @@ export const updateCategoryDetails = asyncHandler(async (req, res) => {
 
 // POST /api/projects/categories/add-category
 export const addSubCategory = asyncHandler(async (req, res) => {
-  if (!req.body.categoryId) {
+  if (!req.body.targetId) {
     res.status(400).json({ message: "Category id cannot be empty." });
   }
-  const { categoryId, name, description, estimate } = req.body;
-  const isSuccessful = await addCategory(categoryId, {
+  const { targetId, name, description, estimate } = req.body;
+  const isSuccessful = await addCategory(targetId, {
     name,
     description,
     estimate,
@@ -61,12 +65,7 @@ export const addSubCategory = asyncHandler(async (req, res) => {
   if (!isSuccessful) {
     res.status(500).json({ message: "Error while adding Category." });
   }
-  // Should return only boolean ?
-  const category = await getCategoryDetailsById(req.body.categoryId);
-  if (!category) {
-    res.status(500).json({ message: "Category not found." });
-  }
-  res.status(200).json(category);
+  res.status(200).json(true);
 });
 
 // POST /api/projects/categories/remove-category
@@ -82,10 +81,5 @@ export const removeSubCategory = asyncHandler(async (req, res) => {
   if (!isSuccessful) {
     res.status(500).json({ message: "Error while removing Category." });
   }
-  // Should return only boolean ?
-  const category = await getCategoryDetailsById(categoryId);
-  if (!category) {
-    res.status(500).json({ message: "Category not found." });
-  }
-  res.status(200).json(category);
+  res.status(200).json(true);
 });

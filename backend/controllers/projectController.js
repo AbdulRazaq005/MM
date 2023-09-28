@@ -83,11 +83,11 @@ export const deleteProject = asyncHandler(async (req, res) => {
 
 // POST /api/projects/add-category
 export const addProjectCategory = asyncHandler(async (req, res) => {
-  if (!req.body.projectId) {
+  if (!req.body.targetId) {
     res.status(400).json({ message: "Project id cannot be empty." });
   }
-  const { projectId, name, description, estimate } = req.body;
-  const isSuccessful = await addCategory(projectId, {
+  const { targetId, name, description, estimate } = req.body;
+  const isSuccessful = await addCategory(targetId, {
     name,
     description,
     estimate,
@@ -95,12 +95,7 @@ export const addProjectCategory = asyncHandler(async (req, res) => {
   if (!isSuccessful) {
     res.status(500).json({ message: "Error while adding Category." });
   }
-  // Should return only boolean ?
-  const project = await getProjectDetailsById(projectId);
-  if (!project) {
-    res.status(500).json({ message: "Project not found." });
-  }
-  res.status(200).json(project);
+  res.status(200).json(true);
 });
 
 // POST /api/projects/remove-category
@@ -116,10 +111,5 @@ export const removeProjectCategory = asyncHandler(async (req, res) => {
   if (!isSuccessful) {
     res.status(500).json({ message: "Error while removing Category." });
   }
-  // Should return only boolean ?
-  const project = await getProjectDetailsById(projectId);
-  if (!project) {
-    res.status(500).json({ message: "Project not found." });
-  }
-  res.status(200).json(project);
+  res.status(200).json(true);
 });

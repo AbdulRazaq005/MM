@@ -57,7 +57,7 @@ export default function AppTable({
                     <TableRow key={row[columns[0]]}>
                       {columns.map((column) => {
                         return (
-                          <TableCell>
+                          <TableCell key={column}>
                             <Typography sx={{ fontSize: 17, color: "#555" }}>
                               {slot(column, row)}
                             </Typography>

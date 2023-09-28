@@ -4,7 +4,7 @@ import axios from "axios";
 export async function getAsync(url = "", params = {}) {
   try {
     const response = await axios.get(url, params);
-    console.info("ApiHandlerResponse: ", response);
+    // console.info("ApiHandlerResponse: ", response);
     return successHandler(response);
   } catch (error) {
     console.error({ error });
