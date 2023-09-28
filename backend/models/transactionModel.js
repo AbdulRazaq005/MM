@@ -56,7 +56,7 @@ const transactionSchema = mongoose.Schema(
     },
     bankEnum: {
       type: String,
-      enum: Object.values(BankAccount),
+      enum: [...Object.values(BankAccount), ""],
     },
     moduleEnum: {
       type: String,

@@ -4,6 +4,8 @@ import { TransactionsUrl } from "../Constants";
 import { modalContainerStyle } from "../helpers/styles";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { Box, Button, TextField, Typography, MenuItem } from "@mui/material";
+import { useAtomValue } from "jotai";
+import { contactsAtom } from "../store";
 import {
   BankAccountOptions,
   ModuleTypeEnum,
@@ -14,6 +16,7 @@ import {
 } from "../helpers/enums";
 
 function CreateTransactionModal({ targetId, closeModal, forceRender }) {
+  const contacts = useAtomValue(contactsAtom);
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [fromContactId, setFromContactId] = useState("");
@@ -27,10 +30,30 @@ function CreateTransactionModal({ targetId, closeModal, forceRender }) {
 
   const submitAddNewTransaction = (e) => {
     e.preventDefault();
-    if (!(name && description)) {
-      setMessage("Please complete all fields");
+    console.log("submitted:.......");
+    const isUpi = [
+      PaymentModeTypeEnum.Upi,
+      PaymentModeTypeEnum.BankAccountTransfer,
+    ].includes(paymentModeEnum);
+    if (
+      !(
+        name &&
+        description &&
+        fromContactId &&
+        toContactId &&
+        transactionTypeEnum &&
+        paymentModeEnum &&
+        transactionDate &&
+        transactionAmount
+      )
+    ) {
+      setMessage("Please complete all fields.");
     } else if (isNaN(Number(transactionAmount))) {
-      setMessage("Please enter a valid Transaction Amount");
+      setMessage("Please enter a valid Transaction Amount.");
+    } else if (isUpi && !bankEnum) {
+      setMessage("Please select bank account for UPI transaction.");
+    } else if (fromContactId === toContactId) {
+      setMessage("From party and To party cannot be same.");
     } else {
       axios
         .post(TransactionsUrl, {
@@ -60,12 +83,21 @@ function CreateTransactionModal({ targetId, closeModal, forceRender }) {
     }
   };
 
+  function getContactDisplayName(contact) {
+    return (
+      contact.name +
+      (contact.designation ? " (" + contact.designation + ")" : "")
+    );
+  }
+
   return (
     <Box
+      component="form"
+      noValidate
+      onSubmit={submitAddNewTransaction}
       sx={{
         ...modalContainerStyle,
         px: 6,
-        // width: "50rem",
         display: "flex",
         flexDirection: "column",
         justifyContent: "center",
@@ -75,8 +107,6 @@ function CreateTransactionModal({ targetId, closeModal, forceRender }) {
         Add Transaction
       </Typography>
       <Box
-        component="form"
-        noValidate
         sx={{
           mt: 1,
           display: "flex",
@@ -88,7 +118,6 @@ function CreateTransactionModal({ targetId, closeModal, forceRender }) {
             xs: "column",
           },
         }}
-        onSubmit={submitAddNewTransaction}
       >
         <Box sx={{ width: "21rem", mx: "1rem" }}>
           <TextField
@@ -135,18 +164,18 @@ function CreateTransactionModal({ targetId, closeModal, forceRender }) {
               PaymentModeTypeEnum.BankAccountTransfer,
             ].includes(paymentModeEnum)}
             fullWidth
-            name="bank-name"
-            label="Bank Account"
+            name="from-contact"
+            label="From Party"
             size="small"
             select
             sx={{ bgcolor: "#fff" }}
             onChange={(e) => {
-              setBankEnum(e.target.value);
+              setFromContactId(e.target.value);
             }}
           >
-            {BankAccountOptions.map((option) => (
-              <MenuItem key={option.value} value={option.value}>
-                {option.label}
+            {contacts.map((contact) => (
+              <MenuItem key={contact._id} value={contact._id}>
+                {getContactDisplayName(contact)}
               </MenuItem>
             ))}
           </TextField>
@@ -157,18 +186,18 @@ function CreateTransactionModal({ targetId, closeModal, forceRender }) {
               PaymentModeTypeEnum.BankAccountTransfer,
             ].includes(paymentModeEnum)}
             fullWidth
-            name="bank-name"
-            label="Bank Account"
+            name="to-contact"
+            label="To Party"
             size="small"
             select
             sx={{ bgcolor: "#fff" }}
             onChange={(e) => {
-              setBankEnum(e.target.value);
+              setToContactId(e.target.value);
             }}
           >
-            {BankAccountOptions.map((option) => (
-              <MenuItem key={option.value} value={option.value}>
-                {option.label}
+            {contacts.map((contact) => (
+              <MenuItem key={contact._id} value={contact._id}>
+                {getContactDisplayName(contact)}
               </MenuItem>
             ))}
           </TextField>
@@ -243,7 +272,7 @@ function CreateTransactionModal({ targetId, closeModal, forceRender }) {
         </Box>
       </Box>
 
-      <Typography sx={{ color: "red" }}>{message}</Typography>
+      <Typography sx={{ color: "red", ml: 2, mt: 1 }}>{message}</Typography>
 
       <Box sx={{ display: "flex", justifyContent: "flex-end", mt: 0, mb: 2 }}>
         <Button

@@ -145,6 +145,7 @@ function CategoryDetails() {
       {/* Add new Transaction Modal */}
       <Modal open={isAddTransactionMode} onClose={closeAddTransactionModal}>
         <CreateTransactionModal
+          targetId={id}
           forceRender={reRender}
           closeModal={closeAddTransactionModal}
         />

@@ -3,8 +3,8 @@ import { ContactsUrl } from "../../Constants";
 import { Box, Button, Divider, TextField, Typography } from "@mui/material";
 import ContactsCard from "../../components/ContactsCard";
 import axios from "axios";
-import { contactsAtom } from "../../App";
 import { useAtomValue } from "jotai";
+import { contactsAtom } from "../../store";
 
 function Contacts() {
   const contacts = useAtomValue(contactsAtom);

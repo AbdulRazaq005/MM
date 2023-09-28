@@ -5,6 +5,11 @@ import { ThemeProvider, createTheme } from "@mui/material/styles";
 import Sidebar from "./Sidebar";
 import Main from "./Main";
 import menuListItems from "../menu";
+import { useEffect } from "react";
+import { getAsync } from "../services/apiHandlerService";
+import { ContactsUrl } from "../Constants";
+import { useAtom } from "jotai";
+import InitStateValues, { contactsAtom } from "../store";
 
 const darkTheme = createTheme({
   palette: {
@@ -29,6 +34,17 @@ export default function AppLayout() {
   const handleDrawerToggle = () => {
     setMenuOpen(!menuOpen);
   };
+
+  const [_, setContacts] = useAtom(contactsAtom);
+  useEffect(() => {
+    InitStateValues();
+  }, []);
+  async function InitStateValues() {
+    const response = await getAsync(ContactsUrl);
+    if (response.success) {
+      setContacts(response.payload);
+    }
+  }
 
   return (
     <ThemeProvider theme={darkTheme}>
@@ -62,7 +78,15 @@ export default function AppLayout() {
               menuListItems={menuListItems}
             />
           </Box>
-          <Box sx={{ flexGrow: 1, px: 2, overflowY: "scroll", maxWidth: "1200px", marginX: "auto" }}>
+          <Box
+            sx={{
+              flexGrow: 1,
+              px: 2,
+              overflowY: "scroll",
+              maxWidth: "1200px",
+              marginX: "auto",
+            }}
+          >
             <Main />
           </Box>
         </Box>
