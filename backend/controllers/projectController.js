@@ -59,10 +59,10 @@ export const updateProjectDetails = asyncHandler(async (req, res) => {
   if (!req.params.id) {
     res.status(400).json({ message: "Project id cannot be empty." });
   }
-  const { name, description, estimate, events, details, contact } = req.body;
+  const { name, description, estimate, events, details, vendor } = req.body;
   updateProject(
     req.params.id,
-    { name, description, estimate, contact },
+    { name, description, estimate, vendor },
     events,
     details
   );

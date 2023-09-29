@@ -18,6 +18,7 @@ const projectSchema = mongoose.Schema(
     vendor: {
       type: mongoose.Types.ObjectId,
       ref: "Contact",
+      default: null,
     },
     categories: [
       {

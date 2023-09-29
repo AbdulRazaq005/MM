@@ -30,7 +30,7 @@ function CreateTransactionModal({ targetId, closeModal, forceRender }) {
 
   const submitAddNewTransaction = (e) => {
     e.preventDefault();
-    console.log("submitted:.......");
+    // console.log("submitted:.......");
     const isUpi = [
       PaymentModeTypeEnum.Upi,
       PaymentModeTypeEnum.BankAccountTransfer,
@@ -265,7 +265,10 @@ function CreateTransactionModal({ targetId, closeModal, forceRender }) {
           </TextField>
           <DatePicker
             size="small"
-            label="Controlled picker"
+            label="Transaction Date"
+            slotProps={{
+              textField: { size: "small", fullWidth: true },
+            }}
             sx={{ bgcolor: "#fff", width: "100%", mt: 2 }}
             onChange={(moment) => setTransactionDate(moment.toISOString())}
           />

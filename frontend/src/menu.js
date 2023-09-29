@@ -59,14 +59,14 @@ const menuListItems = [
     },
     {
       label: "Outings",
-      path: "/register",
+      path: "",
       icon: <CommuteIcon />,
     },
   ],
   [
     {
       label: "Settings",
-      path: "/login",
+      path: "projects/64f8a4db270a73adf70f091a/edit",
       icon: <SettingsIcon />,
     },
   ],

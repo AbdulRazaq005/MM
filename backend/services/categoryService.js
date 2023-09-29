@@ -3,7 +3,9 @@ import mongoose from "mongoose";
 
 export async function getCategoryDetailsById(id) {
   const category = await Category.findById(id)
-    .select("id name description categories events details estimate level")
+    .select(
+      "id name description categories events details estimate vendor level"
+    )
     .lean()
     .populate({
       path: "categories",
@@ -23,7 +25,7 @@ export async function updateCategory(id, categoryDetails, events, details) {
   if (!category) {
     throw new Error("Category not found.");
   }
-  const { name, description, estimate, contact } = categoryDetails;
+  const { name, description, estimate, vendor } = categoryDetails;
   category.name = name || category.name;
   category.description = description || category.description;
   category.estimate = estimate || category.estimate;
@@ -44,8 +46,8 @@ export async function updateCategory(id, categoryDetails, events, details) {
     });
     category.details = details;
   }
-  if (contact) {
-    category.vendor = mongoose.Types.ObjectId(contact);
+  if (vendor) {
+    category.vendor = mongoose.Types.ObjectId(vendor);
   }
   await category.save();
   return true;

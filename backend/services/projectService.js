@@ -10,7 +10,7 @@ export async function getAllProjectDetails() {
 
 export async function getProjectDetailsById(id) {
   const project = await Project.findById(id)
-    .select("id name description categories events details estimate")
+    .select("id name description categories events details estimate vendor")
     .lean()
     .populate({
       path: "categories",
@@ -41,7 +41,7 @@ export async function updateProject(id, projectDetails, events, details) {
   if (!project) {
     throw new Error("Project not found.");
   }
-  const { name, description, estimate, contact } = projectDetails;
+  const { name, description, estimate, vendor } = projectDetails;
   project.name = name || project.name;
   project.description = description || project.description;
   project.estimate = estimate || project.estimate;
@@ -62,8 +62,8 @@ export async function updateProject(id, projectDetails, events, details) {
     });
     project.details = details;
   }
-  if (contact) {
-    project.vendor = mongoose.Types.ObjectId(contact);
+  if (vendor) {
+    project.vendor = new mongoose.Types.ObjectId(vendor);
   }
   await project.save();
   return true;

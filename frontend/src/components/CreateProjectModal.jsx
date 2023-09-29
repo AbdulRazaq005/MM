@@ -59,7 +59,7 @@ function CreateProjectModal({ targetId, path, closeModal, forceRender }) {
           margin="normal"
           required
           fullWidth
-          name="category-name"
+          name="project-name"
           label="Name"
           size="small"
           sx={{ bgcolor: "#fff" }}
@@ -71,7 +71,7 @@ function CreateProjectModal({ targetId, path, closeModal, forceRender }) {
           margin="normal"
           required
           fullWidth
-          name="description"
+          name="project-description"
           label="Description"
           size="small"
           multiline
@@ -84,7 +84,7 @@ function CreateProjectModal({ targetId, path, closeModal, forceRender }) {
           margin="normal"
           required
           fullWidth
-          name="estimate"
+          name="project-estimate"
           label="Estimate"
           size="small"
           sx={{ bgcolor: "#fff" }}
