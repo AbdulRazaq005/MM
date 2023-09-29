@@ -401,7 +401,9 @@ function EditProjectDetails() {
           color="grey"
           variant="contained"
           sx={{ mt: 2, mb: 2, mr: 2, bgcolor: "#fff" }}
-          onClick={() => {}}
+          onClick={() => {
+            navigate(-1);
+          }}
         >
           Cancel
         </Button>

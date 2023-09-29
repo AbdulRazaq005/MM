@@ -66,7 +66,7 @@ const menuListItems = [
   [
     {
       label: "Settings",
-      path: "projects/64f8a4db270a73adf70f091a/edit",
+      path: "settings/",
       icon: <SettingsIcon />,
     },
   ],
