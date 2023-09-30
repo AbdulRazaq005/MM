@@ -79,8 +79,11 @@ export const createNewTransaction = asyncHandler(async (req, res) => {
   res.status(200).json(result);
 });
 
-// PUT /api/transactions
+// PUT /api/transactions/:id
 export const updateTransactionById = asyncHandler(async (req, res) => {
+  if (!req.params.id) {
+    res.status(400).json({ message: "Transaction id cannot be empty." });
+  }
   const {
     targetId,
     name,
@@ -100,7 +103,7 @@ export const updateTransactionById = asyncHandler(async (req, res) => {
       message: "Bank Account is required for UPI transaction.",
     });
   }
-  let result = await updateTransaction({
+  let result = await updateTransaction(req.params.id, {
     targetId,
     name,
     description,

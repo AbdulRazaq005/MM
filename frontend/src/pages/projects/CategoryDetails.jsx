@@ -9,6 +9,7 @@ import { displayDate } from "../../helpers/dateTimeHelpers";
 import { Box, Button, Divider, Typography, Modal } from "@mui/material";
 import CreateCategoryModal from "../../components/CreateCategoryModal";
 import CreateTransactionModal from "../../components/CreateTransactionModal";
+import EditTransactionModal from "../../components/EditTransactionModal";
 
 function CategoryDetails() {
   let { id } = useParams();
@@ -20,6 +21,9 @@ function CategoryDetails() {
   const closeCreateCaregoryModal = () => setCreateCaregoryMode(false);
   const [isAddTransactionMode, setAddTransactionMode] = useState(false);
   const closeAddTransactionModal = () => setAddTransactionMode(false);
+  const [activeEditTransaction, setActiveEditTransaction] = useState({});
+  const [isEditTransactionMode, setEditTransactionMode] = useState(false);
+  const closeEditTransactionModal = () => setEditTransactionMode(false);
 
   useEffect(() => {
     async function fetchData() {
@@ -33,6 +37,24 @@ function CategoryDetails() {
   }, [id, render]);
 
   const transactionSlots = {
+    name: ({ data, rowData }) => {
+      return (
+        <Typography
+          color={"primary"}
+          sx={{
+            fontSize: 18,
+            fontWeight: 550,
+            ":hover": { cursor: "pointer" },
+          }}
+          onClick={() => {
+            setActiveEditTransaction(rowData);
+            setEditTransactionMode(true);
+          }}
+        >
+          {data}
+        </Typography>
+      );
+    },
     fromContact: ({ data }) => data.name,
     toContact: ({ data }) => data.name,
     date: ({ data }) => displayDate(data),
@@ -166,6 +188,15 @@ function CategoryDetails() {
           targetId={id}
           forceRender={reRender}
           closeModal={closeAddTransactionModal}
+        />
+      </Modal>
+
+      {/* Edit Transaction Modal */}
+      <Modal open={isEditTransactionMode} onClose={closeEditTransactionModal}>
+        <EditTransactionModal
+          data={activeEditTransaction}
+          forceRender={reRender}
+          closeModal={closeEditTransactionModal}
         />
       </Modal>
     </Box>

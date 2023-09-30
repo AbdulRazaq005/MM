@@ -20,6 +20,7 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
+import ConfirmationModal from "../../components/ConfirmationModal";
 
 function EditProjectDetails() {
   let { id } = useParams();
@@ -484,39 +485,20 @@ function EditProjectDetails() {
 
       {/* Delete Category Modal */}
       <Modal open={isDeleteMode} onClose={closeDeleteModal}>
-        <Box
-          sx={{
-            ...modalContainerStyle,
-          }}
-        >
-          <Typography variant="h6" sx={{ mt: 1 }}>
-            Are you sure you want to delete{" "}
-            <Typography variant="a" sx={{ color: "blue" }}>
-              {activeDeleteCategory.name}
-            </Typography>{" "}
-            category ?
-          </Typography>
-          <Typography sx={{ color: "red", mt: 1 }}>{deleteMessage}</Typography>
-
-          <Box sx={{ display: "flex", justifyContent: "center" }}>
-            <Button
-              color="grey"
-              variant="contained"
-              sx={{ mt: 2, mb: 2, mr: 2, bgcolor: "#fff" }}
-              onClick={closeDeleteModal}
-            >
-              Cancel
-            </Button>
-            <Button
-              variant="contained"
-              color="error"
-              sx={{ mt: 2, mb: 2 }}
-              onClick={(e) => submitDeleteCategory(e, activeDeleteCategory)}
-            >
-              Confirm Delete
-            </Button>
-          </Box>
-        </Box>
+        <ConfirmationModal
+          errorText={deleteMessage}
+          confirmationText={
+            <Typography variant="h6" sx={{ mt: 1 }}>
+              Are you sure you want to Delete{" "}
+              <Typography variant="a" sx={{ color: "blue" }}>
+                {activeDeleteCategory.name}
+              </Typography>{" "}
+              category ?
+            </Typography>
+          }
+          onCancel={closeDeleteModal}
+          onConfirm={(e) => submitDeleteCategory(e, activeDeleteCategory)}
+        />
       </Modal>
     </Box>
   );

@@ -103,7 +103,7 @@ export async function updateTransaction(id, transactionDetails) {
     fromContactId,
     toContactId,
   } = transactionDetails;
-  transaction.targetId = mongoose.Types.ObjectId(targetId);
+  transaction.targetId = new mongoose.Types.ObjectId(targetId);
   transaction.name = name;
   transaction.designation = designation;
   transaction.typeEnum = typeEnum;
@@ -112,8 +112,8 @@ export async function updateTransaction(id, transactionDetails) {
   transaction.statusEnum = statusEnum;
   transaction.date = date;
   transaction.amount = amount;
-  (transaction.fromContact = mongoose.Types.ObjectId(fromContactId)),
-    (transaction.toContact = mongoose.Types.ObjectId(toContactId)),
+  (transaction.fromContact = new mongoose.Types.ObjectId(fromContactId)),
+    (transaction.toContact = new mongoose.Types.ObjectId(toContactId)),
     await transaction.save();
   return true;
 }
@@ -147,8 +147,7 @@ export async function getTotalCost(targetIds) {
     let amount = transaction.amount;
     if (transaction.typeEnum === TransactionType.Credit)
       return cumulativeTotal - amount;
-    else
-      return cumulativeTotal + amount;
+    else return cumulativeTotal + amount;
   }, 0);
 }
 
