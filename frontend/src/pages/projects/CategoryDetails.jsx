@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { getAsync } from "../../services/apiHandlerService";
 import { CategoriesUrl } from "../../Constants";
 import Details from "../../components/Details";
@@ -60,9 +60,27 @@ function CategoryDetails() {
       </Typography>
       <Divider />
 
-      <Typography variant="h4" sx={{ mt: 3 }}>
-        {data.name}
-      </Typography>
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+        }}
+      >
+        <Typography variant="h4" sx={{ mt: 3 }}>
+          {data.name}
+        </Typography>
+        <Link to={window.location.pathname + "/edit"} sx={{ mt: "auto" }}>
+          <Button
+            variant="contained"
+            size="small"
+            color="warning"
+            sx={{ height: "fit-content" }}
+          >
+            Edit Details
+          </Button>
+        </Link>
+      </Box>
       <Typography paragraph="true" variant="h6" sx={{ mt: 0 }}>
         {data.description}
       </Typography>

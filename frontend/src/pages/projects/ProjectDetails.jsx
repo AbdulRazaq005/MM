@@ -8,9 +8,13 @@ import AppCard from "../../components/AppCard";
 import { displayDate } from "../../helpers/dateTimeHelpers";
 import { Box, Modal, Divider, Typography, Button } from "@mui/material";
 import CreateCategoryModal from "../../components/CreateCategoryModal";
+import { modalContainerStyle } from "../../helpers/styles";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 function ProjectDetails() {
   let { id } = useParams();
+  const navigate = useNavigate();
   const categoriesNavigateUrl = "/projects/categories";
   const [data, setData] = useState({});
   const [render, setRender] = useState(0);
@@ -18,6 +22,12 @@ function ProjectDetails() {
   const [isCreateCaregoryMode, setCreateCaregoryMode] = useState(false);
   const closeCreateCaregoryModal = () =>
     setCreateCaregoryMode(!isCreateCaregoryMode);
+  const [isDeleteMode, setIsDeleteMode] = useState(false);
+  const closeDeleteModal = () => {
+    setDeleteMessage("");
+    setIsDeleteMode(false);
+  };
+  const [deleteMessage, setDeleteMessage] = useState("");
 
   useEffect(() => {
     async function fetchData() {
@@ -34,6 +44,30 @@ function ProjectDetails() {
     date: ({ data }) => displayDate(data),
   };
 
+  function submitDeleteProject(e) {
+    e.preventDefault();
+    let isDeleteAllowed = true;
+    if (data.categories?.length) {
+      setDeleteMessage("Project having sub-categories cannot be deleted.");
+      isDeleteAllowed = false;
+      return;
+    }
+    if (isDeleteAllowed) {
+      axios
+        .delete(ProjectsUrl + `/${id}`)
+        .then((response) => {
+          setDeleteMessage("Project Deleted Successfully");
+          console.log(response);
+          setIsDeleteMode(false);
+          navigate("/projects");
+        })
+        .catch((error) => {
+          setDeleteMessage(error.response.data.message);
+          console.log(error);
+        });
+    }
+  }
+
   return (
     <Box sx={{ p: 4, color: "#444" }}>
       <Typography variant="h5" color="gray">
@@ -41,11 +75,17 @@ function ProjectDetails() {
       </Typography>
       <Divider />
 
-      <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+        }}
+      >
         <Typography variant="h4" sx={{ mt: 3 }}>
           {data.name}
         </Typography>
-        <Link to={window.location.pathname + "/edit"}>
+        <Link to={window.location.pathname + "/edit"} sx={{ mt: "auto" }}>
           <Button
             variant="contained"
             size="small"
@@ -74,7 +114,7 @@ function ProjectDetails() {
         slots={eventSlots}
       />
 
-      <Box sx={{ mt: 5 }}>
+      <Box sx={{ mt: 5, mb: 2 }}>
         <Typography
           sx={{ fontSize: 23, fontWeight: "600", color: "#555", mb: 0 }}
         >
@@ -105,6 +145,18 @@ function ProjectDetails() {
         </Box>
       </Box>
 
+      <Divider />
+      <Box sx={{ display: "flex" }}>
+        <Button
+          color="error"
+          variant="outlined"
+          sx={{ my: 2, ml: "auto" }}
+          onClick={() => setIsDeleteMode(true)}
+        >
+          Delete Project
+        </Button>
+      </Box>
+
       {/* Create new Category Modal */}
       <Modal open={isCreateCaregoryMode} onClose={closeCreateCaregoryModal}>
         <CreateCategoryModal
@@ -113,6 +165,43 @@ function ProjectDetails() {
           forceRender={reRender}
           closeModal={closeCreateCaregoryModal}
         />
+      </Modal>
+
+      {/* Delete Category Modal */}
+      <Modal open={isDeleteMode} onClose={closeDeleteModal}>
+        <Box
+          sx={{
+            ...modalContainerStyle,
+          }}
+        >
+          <Typography variant="h6" sx={{ mt: 1 }}>
+            Are you sure you want to delete{" "}
+            <Typography variant="a" sx={{ color: "blue" }}>
+              {data.name}
+            </Typography>{" "}
+            project ?
+          </Typography>
+          <Typography sx={{ color: "red", mt: 1 }}>{deleteMessage}</Typography>
+
+          <Box sx={{ display: "flex", justifyContent: "center" }}>
+            <Button
+              color="grey"
+              variant="contained"
+              sx={{ mt: 2, mb: 2, mr: 2, bgcolor: "#fff" }}
+              onClick={closeDeleteModal}
+            >
+              Cancel
+            </Button>
+            <Button
+              variant="contained"
+              color="error"
+              sx={{ mt: 2, mb: 2 }}
+              onClick={(e) => submitDeleteProject(e)}
+            >
+              Confirm Delete
+            </Button>
+          </Box>
+        </Box>
       </Modal>
     </Box>
   );

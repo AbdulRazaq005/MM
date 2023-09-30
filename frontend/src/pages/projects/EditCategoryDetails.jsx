@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { ProjectsUrl } from "../../Constants";
+import { CategoriesUrl } from "../../Constants";
 import { getAsync } from "../../services/apiHandlerService";
 import { DatePicker } from "@mui/x-date-pickers";
 import { toMoment } from "../../helpers/dateTimeHelpers";
@@ -21,7 +21,7 @@ import {
   Typography,
 } from "@mui/material";
 
-function EditProjectDetails() {
+function EditCategoryDetails() {
   let { id } = useParams();
   const navigate = useNavigate();
   const contacts = useAtomValue(contactsAtom);
@@ -44,7 +44,7 @@ function EditProjectDetails() {
 
   useEffect(() => {
     async function fetchData() {
-      const url = ProjectsUrl + `/${id}`;
+      const url = CategoriesUrl + `/${id}`;
       const response = await getAsync(url);
       if (response.success) {
         setName(response.payload.name);
@@ -100,13 +100,13 @@ function EditProjectDetails() {
     );
   }
 
-  const submitEditProjectDetails = (e) => {
+  const submitEditCategoryDetails = (e) => {
     e.preventDefault();
     console.log("submitted:.......");
     const isPayloadValid = validatePayloadData();
     if (isPayloadValid) {
       axios
-        .put(ProjectsUrl + `/${id}`, {
+        .put(CategoriesUrl + `/${id}`, {
           name,
           description,
           estimate,
@@ -115,9 +115,9 @@ function EditProjectDetails() {
           events,
         })
         .then((response) => {
-          setMessage("Project details Updated Successfully");
+          setMessage("Category details Updated Successfully");
           console.log(response);
-          navigate(`/projects/${id}`);
+          navigate(`/projects/categories/${id}`);
         })
         .catch((error) => {
           setMessage(error.response.data.message);
@@ -173,9 +173,9 @@ function EditProjectDetails() {
     }
     if (isDeleteAllowed) {
       axios
-        .post(ProjectsUrl + "/remove-category", {
-          categoryId: categoryToDelete?._id,
-          projectId: id,
+        .post(CategoriesUrl + "/remove-category", {
+          subCategoryId: categoryToDelete?._id,
+          categoryId: id,
         })
         .then((response) => {
           console.log(response);
@@ -214,7 +214,7 @@ function EditProjectDetails() {
     <Box
       component="form"
       noValidate
-      onSubmit={submitEditProjectDetails}
+      onSubmit={submitEditCategoryDetails}
       sx={{
         p: 4,
         display: "flex",
@@ -223,7 +223,7 @@ function EditProjectDetails() {
       }}
     >
       <Typography variant="h6" color="gray">
-        Edit Project Details
+        Edit Category Details
       </Typography>
       <Divider />
       <Box
@@ -522,4 +522,4 @@ function EditProjectDetails() {
   );
 }
 
-export default EditProjectDetails;
+export default EditCategoryDetails;

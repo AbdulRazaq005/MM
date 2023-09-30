@@ -6,14 +6,14 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
-import { Box, Typography } from "@mui/material";
+import { Box, Typography, Button } from "@mui/material";
 import { toTitleCase } from "../helpers/tableHelpers";
 
 export default function AppTable({
   name,
   data,
   columns,
-  slots = {}, // Should be object of functions with names same as column names and all functions take column value as parameter.
+  slots = {}, // Should be object of functions with names same as column names and all functions take (column value, row) as parameter.
   customColumns = {}, // Should be object of strings with key names same as column names.
 }) {
   function slot(column, row = {}) {

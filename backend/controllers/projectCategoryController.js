@@ -77,9 +77,12 @@ export const removeSubCategory = asyncHandler(async (req, res) => {
     res.status(400).json({ message: "SubCategory id cannot be empty." });
   }
   const { categoryId, subCategoryId } = req.body;
-  const isSuccessful = await removeCategory(categoryId, subCategoryId);
+  const { isSuccessful, category } = await removeCategory(
+    categoryId,
+    subCategoryId
+  );
   if (!isSuccessful) {
     res.status(500).json({ message: "Error while removing Category." });
   }
-  res.status(200).json(true);
+  res.status(200).json(category);
 });

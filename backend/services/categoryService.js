@@ -47,7 +47,7 @@ export async function updateCategory(id, categoryDetails, events, details) {
     category.details = details;
   }
   if (vendor) {
-    category.vendor = mongoose.Types.ObjectId(vendor);
+    category.vendor = new mongoose.Types.ObjectId(vendor);
   }
   await category.save();
   return true;
@@ -75,11 +75,21 @@ export async function removeCategory(categoryId, subCategoryId) {
   if (!category) {
     throw new Error("Category not found.");
   }
+  var categoryToDelete = await Category.findById(subCategoryId);
+  if (!categoryToDelete) {
+    throw new Error("Sub-Category not found.");
+  }
+  if (categoryToDelete.categories.length !== 0) {
+    throw new Error("Category having sub-categories cannot be deleted.");
+  }
   var index = category.categories.indexOf(subCategoryId);
   if (index !== -1) {
     category.categories.splice(index, 1);
     await category.save();
-    return true;
+
+    const res = await Category.deleteOne({ _id: subCategoryId });
+    const updatedCategory = await getCategoryDetailsById(categoryId);
+    return { isSuccessful: res.deletedCount === 1, category: updatedCategory };
   }
   return false;
 }

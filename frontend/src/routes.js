@@ -8,6 +8,7 @@ import Register from "./pages/Register";
 import CategoryDetails from "./pages/projects/CategoryDetails";
 import Contacts from "./pages/projects/Contacts";
 import EditProjectDetails from "./pages/projects/EditProjectDetails";
+import EditCategoryDetails from "./pages/projects/EditCategoryDetails";
 
 const routes = [
   {
@@ -41,6 +42,10 @@ const routes = [
       {
         path: "projects/categories/:id",
         element: <CategoryDetails />,
+      },
+      {
+        path: "projects/categories/:id/edit",
+        element: <EditCategoryDetails />,
       },
       {
         path: "contacts",

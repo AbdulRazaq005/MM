@@ -96,11 +96,21 @@ export async function removeCategory(projectId, categoryId) {
   if (!project) {
     throw new Error("Project not found.");
   }
+  var categoryToDelete = await Category.findById(categoryId);
+  if (!categoryToDelete) {
+    throw new Error("Category not found.");
+  }
+  if (categoryToDelete.categories.length !== 0) {
+    throw new Error("Category having sub-categories cannot be deleted.");
+  }
   var index = project.categories.indexOf(categoryId);
   if (index !== -1) {
     project.categories.splice(index, 1);
     await project.save();
-    return true;
+
+    const res = await Category.deleteOne({ _id: categoryId });
+    const updatedProject = await getProjectDetailsById(projectId);
+    return { isSuccessful: res.deletedCount === 1, project: updatedProject };
   }
   return false;
 }
