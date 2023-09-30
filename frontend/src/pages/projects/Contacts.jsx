@@ -3,11 +3,11 @@ import { ContactsUrl } from "../../Constants";
 import { Box, Button, Divider, TextField, Typography } from "@mui/material";
 import ContactsCard from "../../components/ContactsCard";
 import axios from "axios";
-import { useAtomValue } from "jotai";
+import { useAtom } from "jotai";
 import { contactsAtom } from "../../store";
 
 function Contacts() {
-  const contacts = useAtomValue(contactsAtom);
+  const [contacts, setContacts] = useAtom(contactsAtom);
   const [isCreateContact, setIsCreateContact] = useState(false);
   const [render, setRender] = useState(0);
   const [name, setName] = useState("");
@@ -23,6 +23,8 @@ function Contacts() {
       setMessage("Please complete all fields");
     } else if (isNaN(Number(contactNo))) {
       setMessage("Please enter a valid Contact no.");
+    } else if (contactNo.length !== 10) {
+      setMessage("Please enter 10 digit Contact no.");
     } else {
       axios
         .post(ContactsUrl, {
@@ -36,6 +38,7 @@ function Contacts() {
           setMessage("Contact Created Successfully.");
           console.log(response);
           setRender(render + 1);
+          setContacts(response.data);
         })
         .catch((error) => {
           setMessage(error.response.data.message);
@@ -151,6 +154,7 @@ function Contacts() {
           color={isCreateContact ? "error" : "success"}
           size="small"
           onClick={() => {
+            setMessage("");
             setIsCreateContact(!isCreateContact);
           }}
         >

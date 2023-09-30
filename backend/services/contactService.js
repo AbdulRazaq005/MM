@@ -1,7 +1,7 @@
 import Contact from "../models/contactModel.js";
 
 export async function getContacts() {
-  let contacts = await Contact.find({ isActive: true});
+  let contacts = await Contact.find({ isActive: true });
   return contacts;
 }
 
@@ -16,7 +16,7 @@ export async function createContact(contactDetails) {
     address,
     projectId,
   });
-  return true;
+  return await getContacts();
 }
 
 export async function updateContact(id, contactDetails) {
