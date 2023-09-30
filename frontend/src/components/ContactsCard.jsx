@@ -5,11 +5,14 @@ import Typography from "@mui/material/Typography";
 import { CardActionArea } from "@mui/material";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 
-export default function ContactsCard({ data }) {
+export default function ContactsCard({ data, onClickAction }) {
   return (
     <>
       {data && (
-        <Card sx={{ width: "18.5rem", mr: 4, mt: 2, bgcolor: "#eee" }}>
+        <Card
+          sx={{ width: "18.5rem", mr: 4, mt: 2, bgcolor: "#eee" }}
+          onClick={onClickAction}
+        >
           <CardActionArea
             sx={{ display: "flex", flexDirection: "column", pt: 2 }}
           >

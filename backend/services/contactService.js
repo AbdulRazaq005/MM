@@ -33,22 +33,19 @@ export async function updateContact(id, contactDetails) {
   contact.address = address;
   contact.projectId = projectId;
   await contact.save();
-  return true;
+  return await getContacts();
 }
 
 export async function deleteContact(id, isHardDelete = false) {
   let contact = await Contact.findById(id);
-  let result;
   if (!contact) {
     throw new Error("Contact not found.");
   }
   if (isHardDelete) {
-    const res = await Contact.deleteOne({ _id: id });
-    result = res.deletedCount === 1;
+    await Contact.deleteOne({ _id: id });
   } else {
     contact.isActive = false;
-    result = true;
     await contact.save();
   }
-  return result;
+  return await getContacts();
 }

@@ -1,21 +1,36 @@
 import React, { useState } from "react";
 import { ContactsUrl } from "../../Constants";
-import { Box, Button, Divider, TextField, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  Divider,
+  Modal,
+  TextField,
+  Typography,
+} from "@mui/material";
 import ContactsCard from "../../components/ContactsCard";
 import axios from "axios";
 import { useAtom } from "jotai";
 import { contactsAtom } from "../../store";
+import EditContactModal from "../../components/EditContactModal";
 
 function Contacts() {
   const [contacts, setContacts] = useAtom(contactsAtom);
   const [isCreateContact, setIsCreateContact] = useState(false);
+  const closeCreateContact = () => setIsCreateContact(false);
   const [render, setRender] = useState(0);
+  const reRender = () => setRender(render + 1);
+
   const [name, setName] = useState("");
   const [designation, setDesignation] = useState("");
   const [contactNo, setContactNo] = useState("");
   const [email, setEmail] = useState("");
   const [address, setAddress] = useState("");
   const [message, setMessage] = useState("");
+
+  const [activeEditContact, setActiveEditContact] = useState({});
+  const [isEditContactMode, setEditContactMode] = useState(false);
+  const closeEditContactModal = () => setEditContactMode(false);
 
   const submitCreateNewContact = (e) => {
     e.preventDefault();
@@ -39,6 +54,7 @@ function Contacts() {
           console.log(response);
           setRender(render + 1);
           setContacts(response.data);
+          closeCreateContact();
         })
         .catch((error) => {
           setMessage(error.response.data.message);
@@ -129,15 +145,20 @@ function Contacts() {
               }}
             />
             <Typography sx={{ color: "red" }}>{message}</Typography>
-            <Button
-              type="submit"
-              fullWidth
-              color="success"
-              variant="contained"
-              sx={{ mt: 2, mb: 2 }}
-            >
-              CREATE
-            </Button>
+
+            <Box sx={{ display: "flex", justifyContent: "center" }}>
+              <Button
+                color="grey"
+                variant="contained"
+                sx={{ mt: 2, mb: 2, mr: 2, bgcolor: "#fff" }}
+                onClick={closeCreateContact}
+              >
+                Cancel
+              </Button>
+              <Button type="submit" variant="contained" sx={{ mt: 2, mb: 2 }}>
+                CREATE
+              </Button>
+            </Box>
           </Box>
         </Box>
       );
@@ -149,16 +170,18 @@ function Contacts() {
     <Box sx={{ p: 4 }}>
       <Box sx={{ display: "flex", justifyContent: "space-between", my: 1 }}>
         <Typography variant="h4">Contacts</Typography>
+
         <Button
           variant="contained"
-          color={isCreateContact ? "error" : "success"}
+          color="warning"
           size="small"
+          sx={{ height: "fit-content" }}
           onClick={() => {
             setMessage("");
             setIsCreateContact(!isCreateContact);
           }}
         >
-          {isCreateContact ? "Cancel" : "Create Contact"}
+          Create Contact
         </Button>
       </Box>
       <Divider />
@@ -172,9 +195,27 @@ function Contacts() {
         }}
       >
         {contacts.map((contact) => {
-          return <ContactsCard data={contact} key={contact._id} />;
+          return (
+            <ContactsCard
+              data={contact}
+              key={contact._id}
+              onClickAction={() => {
+                setActiveEditContact(contact);
+                setEditContactMode(true);
+              }}
+            />
+          );
         })}
       </Box>
+
+      {/* Edit Contact Modal */}
+      <Modal open={isEditContactMode} onClose={closeEditContactModal}>
+        <EditContactModal
+          data={activeEditContact}
+          forceRender={reRender}
+          closeModal={closeEditContactModal}
+        />
+      </Modal>
     </Box>
   );
 }

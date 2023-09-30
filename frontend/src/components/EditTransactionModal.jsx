@@ -39,7 +39,7 @@ function EditTransactionModal({ data, closeModal, forceRender }) {
   const [transactionDate, setTransactionDate] = useState(data?.date);
   const [transactionAmount, setTransactionAmount] = useState(data?.amount);
   const [message, setMessage] = useState(
-    data ? "" : "Something went wrong. Invalid transaction data."
+    data ? "" : "Invalid transaction data."
   );
 
   const [isDeleteMode, setIsDeleteMode] = useState(false);
@@ -114,13 +114,13 @@ function EditTransactionModal({ data, closeModal, forceRender }) {
         isHardDelete: true,
       })
       .then((response) => {
-        setMessage("Transaction Deleted Successfully.");
+        setDeleteMessage("Transaction Deleted Successfully.");
         console.log(response);
         closeModal();
         forceRender();
       })
       .catch((error) => {
-        setMessage(error.response.data.message);
+        setDeleteMessage(error.response.data.message);
         console.log(error);
       });
   };
