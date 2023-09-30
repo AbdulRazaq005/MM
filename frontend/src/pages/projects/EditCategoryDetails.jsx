@@ -52,7 +52,7 @@ function EditCategoryDetails() {
         setName(response.payload.name);
         setDescription(response.payload.description);
         setEstimate(response.payload.estimate);
-        setVendorContactId(response.payload.vendor);
+        setVendorContactId(response.payload.vendor?._id);
         setDetails(response.payload.details);
         setEvents(response.payload.events);
         setCategories(response.payload.categories);
@@ -294,6 +294,7 @@ function EditCategoryDetails() {
               setVendorContactId(e.target.value);
             }}
           >
+            <MenuItem value={""}>-</MenuItem>
             {contacts.map((contact) => (
               <MenuItem key={contact._id} value={contact._id}>
                 {getContactDisplayName(contact)}

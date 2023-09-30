@@ -99,6 +99,11 @@ function ProjectDetails() {
       <Typography paragraph="true" variant="h6" sx={{ mt: 0 }}>
         {data.description}
       </Typography>
+      {data.vendor?.name && (
+        <Typography variant="h6" sx={{ mt: 0 }}>
+          Vendor : {data.vendor?.name}
+        </Typography>
+      )}
       <Typography variant="h6" sx={{ mt: 0, color: "green" }}>
         Estimate : {data.estimate}
       </Typography>

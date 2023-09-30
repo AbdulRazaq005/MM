@@ -8,6 +8,10 @@ export async function getCategoryDetailsById(id) {
     )
     .lean()
     .populate({
+      path: "vendor",
+      model: "Contact",
+    })
+    .populate({
       path: "categories",
       model: "Category",
       select: "id name description categories estimate",
@@ -48,6 +52,8 @@ export async function updateCategory(id, categoryDetails, events, details) {
   }
   if (vendor) {
     category.vendor = new mongoose.Types.ObjectId(vendor);
+  } else {
+    category.vendor = null;
   }
   await category.save();
   return true;

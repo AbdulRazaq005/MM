@@ -13,6 +13,10 @@ export async function getProjectDetailsById(id) {
     .select("id name description categories events details estimate vendor")
     .lean()
     .populate({
+      path: "vendor",
+      model: "Contact",
+    })
+    .populate({
       path: "categories",
       model: "Category",
       select: "id name description categories estimate",
@@ -64,6 +68,8 @@ export async function updateProject(id, projectDetails, events, details) {
   }
   if (vendor) {
     project.vendor = new mongoose.Types.ObjectId(vendor);
+  } else {
+    project.vendor = null;
   }
   await project.save();
   return true;
