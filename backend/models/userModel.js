@@ -1,5 +1,5 @@
-import mongoose from 'mongoose';
-import { UserRole } from '../utils/enums.js';
+import mongoose from "mongoose";
+import { UserRole } from "../utils/enums.js";
 
 const userSchema = mongoose.Schema(
   {
@@ -19,7 +19,7 @@ const userSchema = mongoose.Schema(
     role: {
       type: String,
       required: true,
-      enum: Object.values(UserRole)
+      enum: Object.values(UserRole),
     },
     email: {
       type: String,
@@ -55,6 +55,6 @@ const userSchema = mongoose.Schema(
 //   this.password = bcrypt.hash(this.password, salt);
 // });
 
-const User = mongoose.model('User', userSchema);
+const User = mongoose.model("User", userSchema);
 
 export default User;

@@ -26,8 +26,13 @@ const loginUser = asyncHandler(async (req, res) => {
 
 // POST /api/register
 const registerUser = asyncHandler(async (req, res) => {
-  const { name, username, password, role, email, contact } = req.body;
-
+  const { name, username, password, role, email, contact, secretCode } =
+    req.body;
+  if (!secretCode || secretCode !== process.env.REGISTER_SECRET) {
+    res
+      .status(400)
+      .json({ message: "Invalid Registeration code. Please contact admin." });
+  }
   const userExists = await User.findOne({ email });
   if (userExists) {
     res.status(400).json({ message: "Already registered. Please login." });

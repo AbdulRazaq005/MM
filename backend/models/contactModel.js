@@ -13,11 +13,11 @@ const contactSchema = mongoose.Schema(
     },
     contactNo: {
       type: String,
-      unique: true,
+      // unique: true,
     },
     email: {
       type: String,
-      unique: true,
+      // unique: true,
     },
     address: {
       type: String,

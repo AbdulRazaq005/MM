@@ -32,7 +32,7 @@ const projectSchema = mongoose.Schema(
           _id: {
             type: mongoose.Types.ObjectId,
             required: true,
-            unique: true,
+            // unique: true,
           },
           key: {
             type: String,
@@ -52,7 +52,7 @@ const projectSchema = mongoose.Schema(
           _id: {
             type: mongoose.Types.ObjectId,
             required: true,
-            unique: true,
+            // unique: true,
           },
           name: {
             type: String,
