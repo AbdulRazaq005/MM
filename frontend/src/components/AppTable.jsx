@@ -58,7 +58,13 @@ export default function AppTable({
                       {columns.map((column) => {
                         return (
                           <TableCell key={column}>
-                            <Typography sx={{ fontSize: 17, color: "#555" }}>
+                            <Typography
+                              sx={{
+                                fontSize: 17,
+                                color: "#555",
+                                ml: 0,
+                              }}
+                            >
                               {slot(column, row)}
                             </Typography>
                           </TableCell>

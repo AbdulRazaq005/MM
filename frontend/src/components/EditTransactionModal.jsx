@@ -307,7 +307,6 @@ function EditTransactionModal({ data, closeModal, forceRender }) {
               setBankEnum(e.target.value);
             }}
           >
-            <MenuItem value={""}>-</MenuItem>
             {BankAccountOptions.map((option) => (
               <MenuItem key={option.value} value={option.value}>
                 {option.label}

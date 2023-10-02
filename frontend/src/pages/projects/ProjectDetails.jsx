@@ -11,6 +11,7 @@ import CreateCategoryModal from "../../components/CreateCategoryModal";
 import { modalContainerStyle } from "../../helpers/styles";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { displayCurrency } from "../../helpers/displayFormatHelpers";
 
 function ProjectDetails() {
   let { id } = useParams();
@@ -96,7 +97,11 @@ function ProjectDetails() {
           </Button>
         </Link>
       </Box>
-      <Typography paragraph="true" variant="h6" sx={{ mt: 0 }}>
+      <Typography
+        paragraph="true"
+        variant="h6"
+        sx={{ mt: 1, whiteSpace: "break-spaces" }}
+      >
         {data.description}
       </Typography>
       {data.vendor?.name && (
@@ -105,10 +110,10 @@ function ProjectDetails() {
         </Typography>
       )}
       <Typography variant="h6" sx={{ mt: 0, color: "green" }}>
-        Estimate : {data.estimate}
+        Estimate : {displayCurrency(data.estimate)}
       </Typography>
       <Typography variant="h6" sx={{ mb: 1, color: "#b84300" }}>
-        Total Cost : {data.totalCost}
+        Total Cost : {displayCurrency(data.totalCost)}
       </Typography>
 
       <Details data={data.details} />

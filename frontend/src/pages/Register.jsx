@@ -14,6 +14,8 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { RegisterUrl } from "../Constants";
+import { UserRoleOptions } from "../helpers/enums";
+import { MenuItem } from "@mui/material";
 
 const defaultTheme = createTheme();
 
@@ -23,16 +25,27 @@ export default function Register() {
   const [username, setUsername] = useState();
   const [password1, setPassword1] = useState();
   const [password2, setPassword2] = useState();
-  const [role, setRole] = useState(); // to-do: move to enums
+  const [role, setRole] = useState("USER");
   const [email, setEmail] = useState();
   const [contactNo, setContactNo] = useState();
+  const [registerationCode, setRegisterationCode] = useState("");
   const [acceptTnC, setAcceptTnC] = useState(false);
   const [message, setMessage] = useState();
 
   const submitRegister = (e) => {
     setRole("Officer");
     e.preventDefault();
-    if (!(name && username && password1 && role && email && contactNo)) {
+    if (
+      !(
+        name &&
+        username &&
+        password1 &&
+        role &&
+        email &&
+        contactNo &&
+        registerationCode
+      )
+    ) {
       setMessage("Please complete all fields");
     } else if (!acceptTnC) {
       setMessage("Please accept the terms and conditions");
@@ -49,6 +62,7 @@ export default function Register() {
           role,
           email,
           contact: contactNo,
+          secretCode: registerationCode,
         })
         .then((response) => {
           setMessage("Registeration Successful.");
@@ -175,6 +189,39 @@ export default function Register() {
                   setContactNo(e.target.value);
                 }}
               />
+              <TextField
+                margin="normal"
+                required
+                fullWidth
+                name="registeration-code"
+                label="Registeration Code"
+                size="small"
+                value={registerationCode}
+                onChange={(e) => {
+                  setRegisterationCode(e.target.value);
+                }}
+              />
+              <TextField
+                margin="normal"
+                value={role}
+                defaultValue={role}
+                required
+                fullWidth
+                name="user-role"
+                label="Role"
+                size="small"
+                select
+                sx={{ bgcolor: "#fff" }}
+                onChange={(e) => {
+                  setRole(e.target.value);
+                }}
+              >
+                {UserRoleOptions.map((option) => (
+                  <MenuItem key={option.value} value={option.value}>
+                    {option.label}
+                  </MenuItem>
+                ))}
+              </TextField>
               <FormControlLabel
                 control={
                   <Checkbox

@@ -123,6 +123,10 @@ export const BankAccountOptions = [
     label: "Axis Bank",
     value: "AXIS",
   },
+  {
+    label: "-",
+    value: "",
+  },
 ];
 
 export const ModuleTypeOptions = [

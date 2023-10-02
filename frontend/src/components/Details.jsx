@@ -5,7 +5,16 @@ function Details({ data }) {
   return (
     <>
       {data && Array.isArray(data) && data.length !== 0 && (
-        <Box sx={{ my: 2, display: "flex", flexDirection: "column", bgcolor: "#fff", border: "solid 1px #eee", borderRadius: 2 }}>
+        <Box
+          sx={{
+            my: 2,
+            display: "flex",
+            flexDirection: "column",
+            bgcolor: "#fff",
+            border: "solid 1px #eee",
+            borderRadius: 2,
+          }}
+        >
           <Box sx={{ mx: 2.2, my: 1, p: 0 }}>
             {data.map((detail) => {
               return (
@@ -18,8 +27,9 @@ function Details({ data }) {
                       {detail.key}
                     </Tooltip>
                   </Typography>
+                  :
                   <Typography sx={{ ml: 3, p: 0, fontSize: 18 }}>
-                    : {detail.value}
+                    {detail.value}
                   </Typography>
                 </Box>
               );

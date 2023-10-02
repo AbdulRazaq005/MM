@@ -166,14 +166,15 @@ function getObjectCategoryIds(object, cumulativeIds) {
   }
 }
 
-export function getTransactionsByIds(targetIds) {
+export async function getTransactionsByIds(targetIds) {
   let query = Transaction.where({ isActive: true });
   if (targetIds && Array.isArray(targetIds)) {
     query = query.where({ targetId: { $in: targetIds } });
   }
-  return query
+  let transactions = await query
     .lean()
     .populate("fromContact toContact")
     .select("-isActive -__v")
     .exec();
+  return transactions.sort((t1, t2) => t1.date - t2.date);
 }

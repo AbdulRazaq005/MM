@@ -10,6 +10,7 @@ import { Box, Button, Divider, Typography, Modal } from "@mui/material";
 import CreateCategoryModal from "../../components/CreateCategoryModal";
 import CreateTransactionModal from "../../components/CreateTransactionModal";
 import EditTransactionModal from "../../components/EditTransactionModal";
+import { displayCurrency } from "../../helpers/displayFormatHelpers";
 
 function CategoryDetails() {
   let { id } = useParams();
@@ -62,19 +63,22 @@ function CategoryDetails() {
       return (
         <Typography
           color={rowData.typeEnum === "DEBIT" ? "red" : "green"}
-          sx={{ fontSize: 18, fontWeight: 550 }}
+          sx={{ fontSize: 18, fontWeight: 550, ml: 0 }}
         >
-          {data}
+          {displayCurrency(data)}
         </Typography>
       );
     },
   };
-  const customColumns = {
+  const transactionCustomColumns = {
     fromContact: "From",
     toContact: "To",
     paymentModeEnum: "Mode",
   };
 
+  const eventSlots = {
+    date: ({ data }) => displayDate(data),
+  };
   return (
     <Box sx={{ p: 4 }}>
       <Typography variant="h5" color="gray">
@@ -103,7 +107,11 @@ function CategoryDetails() {
           </Button>
         </Link>
       </Box>
-      <Typography paragraph="true" variant="h6" sx={{ mt: 0 }}>
+      <Typography
+        paragraph="true"
+        variant="h6"
+        sx={{ mt: 1, whiteSpace: "break-spaces" }}
+      >
         {data.description}
       </Typography>
       {data.vendor?.name && (
@@ -112,16 +120,17 @@ function CategoryDetails() {
         </Typography>
       )}
       <Typography variant="h6" sx={{ mt: 0, color: "green" }}>
-        Estimate : {data.estimate}
+        Estimate : {displayCurrency(data.estimate)}
       </Typography>
       <Typography variant="h6" sx={{ mb: 1, color: "#b84300" }}>
-        Total Cost : {data.totalCost}
+        Total Cost : {displayCurrency(data.totalCost)}
       </Typography>
 
       <Details data={data.details} />
       <AppTable
         name="Event Details"
         data={data.events}
+        slots={eventSlots}
         columns={["name", "date", "description"]}
       />
 
@@ -165,7 +174,7 @@ function CategoryDetails() {
           "paymentModeEnum",
         ]}
         slots={transactionSlots}
-        customColumns={customColumns}
+        customColumns={transactionCustomColumns}
       />
       <Box sx={{ display: "flex" }}>
         <Button

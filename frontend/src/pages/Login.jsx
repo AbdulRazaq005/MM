@@ -104,10 +104,10 @@ export default function Login() {
                   setPassword(e.target.value);
                 }}
               />
-              <FormControlLabel
+              {/* <FormControlLabel
                 control={<Checkbox value="remember" color="primary" />}
                 label="Remember me"
-              />
+              /> */}
               <Typography sx={{ color: "red" }}>{message}</Typography>
               <Button
                 type="submit"

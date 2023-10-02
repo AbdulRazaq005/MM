@@ -34,7 +34,11 @@ export default function AppCard({ data, url, actionText, action }) {
             <Typography gutterBottom variant="h5" component="div">
               {data.name}
             </Typography>
-            <Typography variant="body2" color="text.secondary">
+            <Typography
+              variant="body2"
+              color="text.secondary"
+              sx={{ whiteSpace: "break-spaces" }}
+            >
               {data.description}
             </Typography>
           </CardContent>
