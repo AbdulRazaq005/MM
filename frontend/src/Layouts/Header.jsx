@@ -26,7 +26,13 @@ function AppHeader({ handleDrawerToggle }) {
   return (
     <Box sx={{ display: "flex", p: 0, m: 0, height: "100%" }}>
       <AppBar position="fixed" sx={{ py: 1, px: 3, height: "10%" }}>
-        <Toolbar sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+        <Toolbar
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+          }}
+        >
           <IconButton
             color="inherit"
             aria-label="open drawer"
@@ -37,14 +43,14 @@ function AppHeader({ handleDrawerToggle }) {
             <MenuIcon />
           </IconButton>
           <Typography sx={{ ml: "5%" }} variant="h5">
-            Monetary Management
+            Expense Management
           </Typography>
           <Box>
             <Button
               variant="contained"
               color="inherit"
               size="small"
-              sx={{color: "#222", fontWeight:550}}
+              sx={{ color: "#222", fontWeight: 550 }}
               onClick={submitLogout}
             >
               LOGOUT
