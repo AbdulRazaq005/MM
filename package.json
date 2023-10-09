@@ -8,7 +8,7 @@
     "node": "16.x"
   },
   "scripts": {
-    "start": "node backend/index.js",
+    "start": "node index.js",
     "server": "node backend/index.js",
     "client": "npm run start --prefix frontend",
     "dev": "nodemon backend/index.js",
