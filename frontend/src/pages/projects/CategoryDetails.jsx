@@ -6,15 +6,18 @@ import Details from "../../components/Details";
 import AppTable from "../../components/AppTable";
 import AppCard from "../../components/AppCard";
 import { displayDate } from "../../helpers/dateTimeHelpers";
-import { Box, Button, Divider, Typography, Modal } from "@mui/material";
+import { Box, Button, Divider, Typography, Modal, CardMedia } from "@mui/material";
 import CreateCategoryModal from "../../components/CreateCategoryModal";
 import CreateTransactionModal from "../../components/CreateTransactionModal";
 import EditTransactionModal from "../../components/EditTransactionModal";
 import { displayCurrency } from "../../helpers/displayFormatHelpers";
+import { modalContainerStyle } from "../../helpers/styles";
+import loadingGif from "../../assets/images/loading1.gif"
 
 function CategoryDetails() {
   let { id } = useParams();
   const categoriesNavigateUrl = "/projects/categories";
+  const [isLoading, setIsLoading] = useState(false);
   const [data, setData] = useState({});
   const [render, setRender] = useState(0);
   const reRender = () => setRender(render + 1);
@@ -29,8 +32,10 @@ function CategoryDetails() {
   useEffect(() => {
     async function fetchData() {
       const url = CategoriesUrl + `/${id}`;
+      setIsLoading(true);
       const response = await getAsync(url);
       setData(response.payload);
+      setIsLoading(false);
       // console.log("pageData: ", data);
     }
     fetchData();
@@ -212,6 +217,24 @@ function CategoryDetails() {
           forceRender={reRender}
           closeModal={closeEditTransactionModal}
         />
+      </Modal>
+
+      {/* Loading Modal */}
+      <Modal open={isLoading}>
+        <Box
+          sx={{
+            ...modalContainerStyle,
+            height: "15rem",
+            width: "15rem",
+            bgcolor: "transparent",
+            boxShadow: 0,
+          }}
+        >
+          <CardMedia component="img" image={loadingGif} alt="Loading..." />
+          <Typography variant="h4" color="white">
+            LOADING...
+          </Typography>
+        </Box>
       </Modal>
     </Box>
   );

@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import { ProjectsUrl } from "../../Constants";
 import { getAsync } from "../../services/apiHandlerService";
 import { DatePicker } from "@mui/x-date-pickers";
-import { toMoment } from "../../helpers/dateTimeHelpers";
+import { parseDateTime, toMoment } from "../../helpers/dateTimeHelpers";
 import { contactsAtom } from "../../store";
 import { useAtomValue } from "jotai";
 import axios from "axios";
@@ -11,6 +11,7 @@ import { useNavigate } from "react-router-dom";
 import moment from "moment";
 import AppTable from "../../components/AppTable";
 import { modalContainerStyle } from "../../helpers/styles";
+import loadingGif from "../../assets/images/loading1.gif";
 import {
   Box,
   Button,
@@ -19,11 +20,13 @@ import {
   Modal,
   TextField,
   Typography,
+  CardMedia,
 } from "@mui/material";
 import ConfirmationModal from "../../components/ConfirmationModal";
 
 function EditProjectDetails() {
   let { id } = useParams();
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
   const contacts = useAtomValue(contactsAtom);
   const [name, setName] = useState("");
@@ -46,6 +49,7 @@ function EditProjectDetails() {
   useEffect(() => {
     async function fetchData() {
       const url = ProjectsUrl + `/${id}`;
+      setIsLoading(true);
       const response = await getAsync(url);
       if (response.success) {
         setName(response.payload.name);
@@ -56,6 +60,7 @@ function EditProjectDetails() {
         setEvents(response.payload.events);
         setCategories(response.payload.categories);
       }
+      setIsLoading(false);
       // console.log("pageData: ", data);
     }
     fetchData();
@@ -106,6 +111,7 @@ function EditProjectDetails() {
     console.log("submitted:.......");
     const isPayloadValid = validatePayloadData();
     if (isPayloadValid) {
+      setIsLoading(true);
       axios
         .put(ProjectsUrl + `/${id}`, {
           name,
@@ -118,6 +124,7 @@ function EditProjectDetails() {
         .then((response) => {
           setMessage("Project details Updated Successfully");
           console.log(response);
+          setIsLoading(false);
           navigate(`/projects/${id}`);
         })
         .catch((error) => {
@@ -173,6 +180,7 @@ function EditProjectDetails() {
       return;
     }
     if (isDeleteAllowed) {
+      setIsLoading(true);
       axios
         .post(ProjectsUrl + "/remove-category", {
           categoryId: categoryToDelete?._id,
@@ -184,6 +192,7 @@ function EditProjectDetails() {
           setActiveDeleteCategory({});
           setDeleteMessage("");
           setIsDeleteMode(false);
+          setIsLoading(false);
         })
         .catch((error) => {
           setDeleteMessage(error.response.data.message);
@@ -365,7 +374,7 @@ function EditProjectDetails() {
                     },
                   }}
                   onChange={(moment) =>
-                    setEventValues(moment?.toISOString(), index, "date")
+                    setEventValues(parseDateTime(moment), index, "date")
                   }
                 />
                 <Button
@@ -500,6 +509,24 @@ function EditProjectDetails() {
           onCancel={closeDeleteModal}
           onConfirm={(e) => submitDeleteCategory(e, activeDeleteCategory)}
         />
+      </Modal>
+
+      {/* Loading Modal */}
+      <Modal open={isLoading}>
+        <Box
+          sx={{
+            ...modalContainerStyle,
+            height: "15rem",
+            width: "15rem",
+            bgcolor: "transparent",
+            boxShadow: 0,
+          }}
+        >
+          <CardMedia component="img" image={loadingGif} alt="Loading..." />
+          <Typography variant="h4" color="white">
+            LOADING...
+          </Typography>
+        </Box>
       </Modal>
     </Box>
   );
