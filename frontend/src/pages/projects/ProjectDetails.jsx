@@ -6,17 +6,19 @@ import Details from "../../components/Details";
 import AppTable from "../../components/AppTable";
 import AppCard from "../../components/AppCard";
 import { displayDate } from "../../helpers/dateTimeHelpers";
-import { Box, Modal, Divider, Typography, Button } from "@mui/material";
+import { Box, Modal, Divider, Typography, Button, CardMedia } from "@mui/material";
 import CreateCategoryModal from "../../components/CreateCategoryModal";
 import { modalContainerStyle } from "../../helpers/styles";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { displayCurrency } from "../../helpers/displayFormatHelpers";
+import loadingGif from "../../assets/images/loading1.gif";
 
 function ProjectDetails() {
   let { id } = useParams();
   const navigate = useNavigate();
   const categoriesNavigateUrl = "/projects/categories";
+  const [isLoading, setIsLoading] = useState(false);
   const [data, setData] = useState({});
   const [render, setRender] = useState(0);
   const reRender = () => setRender(render + 1);
@@ -33,8 +35,10 @@ function ProjectDetails() {
   useEffect(() => {
     async function fetchData() {
       const url = ProjectsUrl + `/${id}`;
+      setIsLoading(true);
       const response = await getAsync(url);
       setData(response.payload);
+      setIsLoading(false);
       // console.log("pageData: ", data);
     }
     fetchData();
@@ -211,6 +215,24 @@ function ProjectDetails() {
               Confirm Delete
             </Button>
           </Box>
+        </Box>
+      </Modal>
+
+      {/* Loading Modal */}
+      <Modal open={isLoading}>
+        <Box
+          sx={{
+            ...modalContainerStyle,
+            height: "15rem",
+            width: "15rem",
+            bgcolor: "transparent",
+            boxShadow: 0,
+          }}
+        >
+          <CardMedia component="img" image={loadingGif} alt="Loading..." />
+          <Typography variant="h4" color="white">
+            LOADING...
+          </Typography>
         </Box>
       </Modal>
     </Box>
