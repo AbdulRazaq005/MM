@@ -14,6 +14,7 @@ import {
   TransactionStatusEnum,
   TransactionTypeOptions,
 } from "../helpers/enums";
+import { parseDateTime } from "../helpers/dateTimeHelpers";
 
 function CreateTransactionModal({ targetId, closeModal, forceRender }) {
   const contacts = useAtomValue(contactsAtom);
@@ -270,7 +271,7 @@ function CreateTransactionModal({ targetId, closeModal, forceRender }) {
               textField: { size: "small", fullWidth: true },
             }}
             sx={{ bgcolor: "#fff", width: "100%", mt: 2 }}
-            onChange={(moment) => setTransactionDate(moment.toISOString())}
+            onChange={(moment) => setTransactionDate(parseDateTime(moment))}
           />
         </Box>
       </Box>

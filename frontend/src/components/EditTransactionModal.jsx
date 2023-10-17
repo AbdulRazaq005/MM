@@ -21,7 +21,7 @@ import {
   TransactionStatusEnum,
   TransactionTypeOptions,
 } from "../helpers/enums";
-import { toMoment } from "../helpers/dateTimeHelpers";
+import { parseDateTime, toMoment } from "../helpers/dateTimeHelpers";
 import ConfirmationModal from "./ConfirmationModal";
 
 function EditTransactionModal({ data, closeModal, forceRender }) {
@@ -321,7 +321,7 @@ function EditTransactionModal({ data, closeModal, forceRender }) {
               textField: { size: "small", fullWidth: true },
             }}
             sx={{ bgcolor: "#fff", width: "100%", mt: 2 }}
-            onChange={(moment) => setTransactionDate(moment.toISOString())}
+            onChange={(moment) => setTransactionDate(parseDateTime(moment))}
           />
         </Box>
       </Box>
