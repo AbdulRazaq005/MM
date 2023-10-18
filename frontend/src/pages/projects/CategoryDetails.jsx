@@ -6,13 +6,12 @@ import Details from "../../components/Details";
 import AppTable from "../../components/AppTable";
 import AppCard from "../../components/AppCard";
 import { displayDate } from "../../helpers/dateTimeHelpers";
-import { Box, Button, Divider, Typography, Modal, CardMedia } from "@mui/material";
+import { Box, Button, Divider, Typography, Modal } from "@mui/material";
 import CreateCategoryModal from "../../components/CreateCategoryModal";
 import CreateTransactionModal from "../../components/CreateTransactionModal";
 import EditTransactionModal from "../../components/EditTransactionModal";
 import { displayCurrency } from "../../helpers/displayFormatHelpers";
-import { modalContainerStyle } from "../../helpers/styles";
-import loadingGif from "../../assets/images/loading1.gif"
+import Loading from "../../components/Loading";
 
 function CategoryDetails() {
   let { id } = useParams();
@@ -221,20 +220,7 @@ function CategoryDetails() {
 
       {/* Loading Modal */}
       <Modal open={isLoading}>
-        <Box
-          sx={{
-            ...modalContainerStyle,
-            height: "15rem",
-            width: "15rem",
-            bgcolor: "transparent",
-            boxShadow: 0,
-          }}
-        >
-          <CardMedia component="img" image={loadingGif} alt="Loading..." />
-          <Typography variant="h4" color="white">
-            LOADING...
-          </Typography>
-        </Box>
+        <Loading />
       </Modal>
     </Box>
   );

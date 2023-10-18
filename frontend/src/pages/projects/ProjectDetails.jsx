@@ -6,13 +6,13 @@ import Details from "../../components/Details";
 import AppTable from "../../components/AppTable";
 import AppCard from "../../components/AppCard";
 import { displayDate } from "../../helpers/dateTimeHelpers";
-import { Box, Modal, Divider, Typography, Button, CardMedia } from "@mui/material";
+import { Box, Modal, Divider, Typography, Button } from "@mui/material";
 import CreateCategoryModal from "../../components/CreateCategoryModal";
 import { modalContainerStyle } from "../../helpers/styles";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { displayCurrency } from "../../helpers/displayFormatHelpers";
-import loadingGif from "../../assets/images/loading1.gif";
+import Loading from "../../components/Loading";
 
 function ProjectDetails() {
   let { id } = useParams();
@@ -220,20 +220,7 @@ function ProjectDetails() {
 
       {/* Loading Modal */}
       <Modal open={isLoading}>
-        <Box
-          sx={{
-            ...modalContainerStyle,
-            height: "15rem",
-            width: "15rem",
-            bgcolor: "transparent",
-            boxShadow: 0,
-          }}
-        >
-          <CardMedia component="img" image={loadingGif} alt="Loading..." />
-          <Typography variant="h4" color="white">
-            LOADING...
-          </Typography>
-        </Box>
+        <Loading />
       </Modal>
     </Box>
   );
