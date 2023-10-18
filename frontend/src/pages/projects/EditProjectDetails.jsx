@@ -10,8 +10,6 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import moment from "moment";
 import AppTable from "../../components/AppTable";
-import { modalContainerStyle } from "../../helpers/styles";
-import loadingGif from "../../assets/images/loading1.gif";
 import {
   Box,
   Button,
@@ -20,9 +18,9 @@ import {
   Modal,
   TextField,
   Typography,
-  CardMedia,
 } from "@mui/material";
 import ConfirmationModal from "../../components/ConfirmationModal";
+import Loading from "../../components/Loading";
 
 function EditProjectDetails() {
   let { id } = useParams();
@@ -513,20 +511,7 @@ function EditProjectDetails() {
 
       {/* Loading Modal */}
       <Modal open={isLoading}>
-        <Box
-          sx={{
-            ...modalContainerStyle,
-            height: "15rem",
-            width: "15rem",
-            bgcolor: "transparent",
-            boxShadow: 0,
-          }}
-        >
-          <CardMedia component="img" image={loadingGif} alt="Loading..." />
-          <Typography variant="h4" color="white">
-            LOADING...
-          </Typography>
-        </Box>
+        <Loading />
       </Modal>
     </Box>
   );

@@ -10,11 +10,9 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import moment from "moment";
 import AppTable from "../../components/AppTable";
-import { modalContainerStyle } from "../../helpers/styles";
 import {
   Box,
   Button,
-  CardMedia,
   Divider,
   MenuItem,
   Modal,
@@ -22,7 +20,7 @@ import {
   Typography,
 } from "@mui/material";
 import ConfirmationModal from "../../components/ConfirmationModal";
-import loadingGif from "../../assets/images/loading1.gif"
+import Loading from "../../components/Loading";
 
 function EditCategoryDetails() {
   let { id } = useParams();
@@ -131,6 +129,7 @@ function EditCategoryDetails() {
         .catch((error) => {
           setMessage(error.response.data.message);
           console.log(error);
+          setIsLoading(false);
         });
     }
   };
@@ -198,6 +197,7 @@ function EditCategoryDetails() {
         .catch((error) => {
           setDeleteMessage(error.response.data.message);
           console.log(error);
+          setIsLoading(false);
         });
     }
   }
@@ -512,23 +512,10 @@ function EditCategoryDetails() {
         />
       </Modal>
 
-{/* Loading Modal */}
-<Modal open={isLoading}>
-  <Box
-    sx={{
-      ...modalContainerStyle,
-      height: "15rem",
-      width: "15rem",
-      bgcolor: "transparent",
-      boxShadow: 0,
-    }}
-  >
-    <CardMedia component="img" image={loadingGif} alt="Loading..." />
-    <Typography variant="h4" color="white">
-      LOADING...
-    </Typography>
-  </Box>
-</Modal>
+      {/* Loading Modal */}
+      <Modal open={isLoading}>
+        <Loading />
+      </Modal>
     </Box>
   );
 }

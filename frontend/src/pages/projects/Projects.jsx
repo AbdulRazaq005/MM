@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { getAsync } from "../../services/apiHandlerService";
 import { ProjectsUrl } from "../../Constants";
-import { Box, CardMedia, Divider, Modal, Typography } from "@mui/material";
+import { Box, Divider, Modal, Typography } from "@mui/material";
 import AppCard from "../../components/AppCard";
 import CreateProjectModal from "../../components/CreateProjectModal";
-import { modalContainerStyle } from "../../helpers/styles";
-import loadingGif from "../../assets/images/loading1.gif"
+import Loading from "../../components/Loading";
 
 function Projects() {
   const categoriesNavigateUrl = "/projects";
@@ -65,24 +64,7 @@ function Projects() {
 
       {/* Loading Modal */}
       <Modal open={isLoading}>
-        <Box
-          sx={{
-            ...modalContainerStyle,
-            height: "15rem",
-            width: "15rem",
-            bgcolor: "transparent",
-            boxShadow: 0,
-          }}
-        >
-          <CardMedia
-            component="img"
-            image={loadingGif}
-            alt="Loading..."
-          />
-          <Typography variant="h4" color="white">
-            LOADING...
-          </Typography>
-        </Box>
+        <Loading />
       </Modal>
     </Box>
   );
