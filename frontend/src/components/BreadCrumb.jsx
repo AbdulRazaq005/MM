@@ -18,24 +18,44 @@ const BreadCrumb = () => {
   };
 
   return (
-    <Box sx={{ mt: 2, ml: 4 }}>
-      <Breadcrumbs separator="/">
-        {breadCrumbs.map((bc, index) => {
-          if (index === breadCrumbs.length - 1)
-            return <Typography color="text.primary">{bc.name}</Typography>;
-          else
-            return (
-              <Link
-                underline="hover"
-                href={bc.href}
-                onClick={(e) => handleClick(e, index)}
-              >
-                {bc.name}
-              </Link>
-            );
-        })}
-      </Breadcrumbs>
-    </Box>
+    <>
+      {breadCrumbs && breadCrumbs.length !== 0 ? (
+        <Box sx={{ my: 3, ml: 4 }}>
+          <Breadcrumbs separator="/">
+            {breadCrumbs.map((bc, index) => {
+              return (
+                <Box
+                  sx={{
+                    py: 0.25,
+                    px: 1,
+                    border: "solid #eee 0.1rem",
+                    borderRadius: 2,
+                    bgcolor: "#f1f1f1",
+                  }}
+                >
+                  {index === breadCrumbs.length - 1 ? (
+                    <Typography color="text.primary" fontSize={20}>
+                      {bc.name}
+                    </Typography>
+                  ) : (
+                    <Link
+                      fontSize={20}
+                      underline="hover"
+                      href={bc.href}
+                      onClick={(e) => handleClick(e, index)}
+                    >
+                      {bc.name}
+                    </Link>
+                  )}
+                </Box>
+              );
+            })}
+          </Breadcrumbs>
+        </Box>
+      ) : (
+        <></>
+      )}
+    </>
   );
 };
 

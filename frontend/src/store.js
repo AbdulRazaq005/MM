@@ -8,7 +8,7 @@ const useGlobalStore = create((set) => ({
   setContacts: (_contacts) =>
     set((state) => ({ ...state, contacts: _contacts })),
 
-  breadCrumbs: [{ name: "Home", href: "/" }],
+  breadCrumbs: [{ name: "Projects", href: "/projects" }],
   setBreadCrumbs: (_breadCrumbs) =>
     set((state) => ({ ...state, breadCrumbs: _breadCrumbs })),
   addBreadCrumb: (name, href) =>
