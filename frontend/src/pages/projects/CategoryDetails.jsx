@@ -84,7 +84,7 @@ function CategoryDetails() {
     date: ({ data }) => displayDate(data),
   };
   return (
-    <Box sx={{ p: 4 }}>
+    <Box sx={{ px: 4, py: 2 }}>
       <Typography variant="h5" color="gray">
         Category Details
       </Typography>

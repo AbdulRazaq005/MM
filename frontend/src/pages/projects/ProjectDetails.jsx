@@ -74,7 +74,7 @@ function ProjectDetails() {
   }
 
   return (
-    <Box sx={{ p: 4, color: "#444" }}>
+    <Box sx={{ px: 4, py: 2, color: "#444" }}>
       <Typography variant="h5" color="gray">
         Project Details
       </Typography>

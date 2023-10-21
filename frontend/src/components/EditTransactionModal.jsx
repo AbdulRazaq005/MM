@@ -11,8 +11,7 @@ import {
   MenuItem,
   Modal,
 } from "@mui/material";
-import { useAtomValue } from "jotai";
-import { contactsAtom } from "../store";
+import useGlobalStore from "../store";
 import {
   BankAccountOptions,
   ModuleTypeEnum,
@@ -26,7 +25,7 @@ import ConfirmationModal from "./ConfirmationModal";
 
 function EditTransactionModal({ data, closeModal, forceRender }) {
   console.log("tran Data: ", data);
-  const contacts = useAtomValue(contactsAtom);
+  const contacts = useGlobalStore((state) => state.contacts);
   const [name, setName] = useState(data?.name);
   const [description, setDescription] = useState(data?.description);
   const [fromContactId, setFromContactId] = useState(data?.fromContact._id);
