@@ -24,10 +24,6 @@ const routes = [
     element: <AppLayout />,
     children: [
       {
-        path: "*",
-        element: <Dashboard />,
-      },
-      {
         path: "projects",
         element: <Projects />,
       },
@@ -54,6 +50,14 @@ const routes = [
       {
         path: "test",
         element: <Test />,
+      },
+      {
+        path: "home",
+        element: <Dashboard />,
+      },
+      {
+        path: "*",
+        element: <Projects />,
       },
     ],
   },
