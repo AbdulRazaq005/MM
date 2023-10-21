@@ -10,12 +10,14 @@ import {
 } from "@mui/material";
 import ContactsCard from "../../components/ContactsCard";
 import axios from "axios";
-import { useAtom } from "jotai";
-import { contactsAtom } from "../../store";
+import useGlobalStore from "../../store";
 import EditContactModal from "../../components/EditContactModal";
 
 function Contacts() {
-  const [contacts, setContacts] = useAtom(contactsAtom);
+  const [contacts, setContacts] = useGlobalStore((state) => [
+    state.contacts,
+    state.setContacts,
+  ]);
   const [isCreateContact, setIsCreateContact] = useState(false);
   const closeCreateContact = () => setIsCreateContact(false);
   const [render, setRender] = useState(0);
