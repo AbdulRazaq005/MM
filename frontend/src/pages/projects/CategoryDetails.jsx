@@ -11,10 +11,12 @@ import CreateCategoryModal from "../../components/CreateCategoryModal";
 import CreateTransactionModal from "../../components/CreateTransactionModal";
 import EditTransactionModal from "../../components/EditTransactionModal";
 import { displayCurrency } from "../../helpers/displayFormatHelpers";
+import Loading from "../../components/Loading";
 
 function CategoryDetails() {
   let { id } = useParams();
   const categoriesNavigateUrl = "/projects/categories";
+  const [isLoading, setIsLoading] = useState(false);
   const [data, setData] = useState({});
   const [render, setRender] = useState(0);
   const reRender = () => setRender(render + 1);
@@ -29,8 +31,10 @@ function CategoryDetails() {
   useEffect(() => {
     async function fetchData() {
       const url = CategoriesUrl + `/${id}`;
+      setIsLoading(true);
       const response = await getAsync(url);
       setData(response.payload);
+      setIsLoading(false);
       // console.log("pageData: ", data);
     }
     fetchData();
@@ -212,6 +216,11 @@ function CategoryDetails() {
           forceRender={reRender}
           closeModal={closeEditTransactionModal}
         />
+      </Modal>
+
+      {/* Loading Modal */}
+      <Modal open={isLoading}>
+        <Loading />
       </Modal>
     </Box>
   );

@@ -4,9 +4,11 @@ import { ProjectsUrl } from "../../Constants";
 import { Box, Divider, Modal, Typography } from "@mui/material";
 import AppCard from "../../components/AppCard";
 import CreateProjectModal from "../../components/CreateProjectModal";
+import Loading from "../../components/Loading";
 
 function Projects() {
   const categoriesNavigateUrl = "/projects";
+  const [isLoading, setIsLoading] = useState(false);
   const [projects, setProjects] = useState([]);
   const [isCreateProjectMode, setCreateProjectMode] = useState(false);
   const closeCreateProjectModal = () => setCreateProjectMode(false);
@@ -15,8 +17,10 @@ function Projects() {
 
   useEffect(() => {
     async function fetchData() {
+      setIsLoading(true);
       const response = await getAsync(ProjectsUrl);
       setProjects(response.payload);
+      setIsLoading(false);
       // console.log({projects});
     }
     fetchData();
@@ -56,6 +60,11 @@ function Projects() {
           forceRender={reRender}
           closeModal={closeCreateProjectModal}
         />
+      </Modal>
+
+      {/* Loading Modal */}
+      <Modal open={isLoading}>
+        <Loading />
       </Modal>
     </Box>
   );

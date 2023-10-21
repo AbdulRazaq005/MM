@@ -12,11 +12,13 @@ import { modalContainerStyle } from "../../helpers/styles";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { displayCurrency } from "../../helpers/displayFormatHelpers";
+import Loading from "../../components/Loading";
 
 function ProjectDetails() {
   let { id } = useParams();
   const navigate = useNavigate();
   const categoriesNavigateUrl = "/projects/categories";
+  const [isLoading, setIsLoading] = useState(false);
   const [data, setData] = useState({});
   const [render, setRender] = useState(0);
   const reRender = () => setRender(render + 1);
@@ -33,8 +35,10 @@ function ProjectDetails() {
   useEffect(() => {
     async function fetchData() {
       const url = ProjectsUrl + `/${id}`;
+      setIsLoading(true);
       const response = await getAsync(url);
       setData(response.payload);
+      setIsLoading(false);
       // console.log("pageData: ", data);
     }
     fetchData();
@@ -212,6 +216,11 @@ function ProjectDetails() {
             </Button>
           </Box>
         </Box>
+      </Modal>
+
+      {/* Loading Modal */}
+      <Modal open={isLoading}>
+        <Loading />
       </Modal>
     </Box>
   );

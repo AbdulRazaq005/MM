@@ -3,14 +3,13 @@ import { useParams } from "react-router-dom";
 import { CategoriesUrl } from "../../Constants";
 import { getAsync } from "../../services/apiHandlerService";
 import { DatePicker } from "@mui/x-date-pickers";
-import { toMoment } from "../../helpers/dateTimeHelpers";
+import { parseDateTime, toMoment } from "../../helpers/dateTimeHelpers";
 import { contactsAtom } from "../../store";
 import { useAtomValue } from "jotai";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import moment from "moment";
 import AppTable from "../../components/AppTable";
-import { modalContainerStyle } from "../../helpers/styles";
 import {
   Box,
   Button,
@@ -21,9 +20,11 @@ import {
   Typography,
 } from "@mui/material";
 import ConfirmationModal from "../../components/ConfirmationModal";
+import Loading from "../../components/Loading";
 
 function EditCategoryDetails() {
   let { id } = useParams();
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
   const contacts = useAtomValue(contactsAtom);
   const [name, setName] = useState("");
@@ -47,6 +48,7 @@ function EditCategoryDetails() {
   useEffect(() => {
     async function fetchData() {
       const url = CategoriesUrl + `/${id}`;
+      setIsLoading(true);
       const response = await getAsync(url);
       if (response.success) {
         setName(response.payload.name);
@@ -57,6 +59,7 @@ function EditCategoryDetails() {
         setEvents(response.payload.events);
         setCategories(response.payload.categories);
       }
+      setIsLoading(false);
       // console.log("pageData: ", data);
     }
     fetchData();
@@ -107,6 +110,7 @@ function EditCategoryDetails() {
     console.log("submitted:.......");
     const isPayloadValid = validatePayloadData();
     if (isPayloadValid) {
+      setIsLoading(true);
       axios
         .put(CategoriesUrl + `/${id}`, {
           name,
@@ -119,11 +123,13 @@ function EditCategoryDetails() {
         .then((response) => {
           setMessage("Category details Updated Successfully");
           console.log(response);
+          setIsLoading(false);
           navigate(`/projects/categories/${id}`);
         })
         .catch((error) => {
           setMessage(error.response.data.message);
           console.log(error);
+          setIsLoading(false);
         });
     }
   };
@@ -174,6 +180,7 @@ function EditCategoryDetails() {
       return;
     }
     if (isDeleteAllowed) {
+      setIsLoading(true);
       axios
         .post(CategoriesUrl + "/remove-category", {
           subCategoryId: categoryToDelete?._id,
@@ -185,10 +192,12 @@ function EditCategoryDetails() {
           setActiveDeleteCategory({});
           setDeleteMessage("");
           setIsDeleteMode(false);
+          setIsLoading(false);
         })
         .catch((error) => {
           setDeleteMessage(error.response.data.message);
           console.log(error);
+          setIsLoading(false);
         });
     }
   }
@@ -366,7 +375,7 @@ function EditCategoryDetails() {
                     },
                   }}
                   onChange={(moment) =>
-                    setEventValues(moment?.toISOString(), index, "date")
+                    setEventValues(parseDateTime(moment), index, "date")
                   }
                 />
                 <Button
@@ -501,6 +510,11 @@ function EditCategoryDetails() {
           onCancel={closeDeleteModal}
           onConfirm={(e) => submitDeleteCategory(e, activeDeleteCategory)}
         />
+      </Modal>
+
+      {/* Loading Modal */}
+      <Modal open={isLoading}>
+        <Loading />
       </Modal>
     </Box>
   );
