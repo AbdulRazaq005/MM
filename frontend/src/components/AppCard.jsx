@@ -5,12 +5,17 @@ import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
 import { CardActionArea } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import useGlobalStore from "../store";
 
 export default function AppCard({ data, url, actionText, action }) {
   const navigate = useNavigate();
+  const addBreadCrumb = useGlobalStore((state) => state.addBreadCrumb);
+
   function onClickAction() {
     if (url) {
-      navigate(url + `/${data._id}`);
+      const href = url + "/" + data._id;
+      addBreadCrumb(data.name, href);
+      navigate(href);
     }
     if (action) {
       action();

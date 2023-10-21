@@ -8,8 +8,7 @@ import menuListItems from "../menu";
 import { useEffect } from "react";
 import { getAsync } from "../services/apiHandlerService";
 import { ContactsUrl } from "../Constants";
-import { useAtom } from "jotai";
-import InitStateValues, { contactsAtom } from "../store";
+import useGlobalStore from "../store";
 
 const darkTheme = createTheme({
   palette: {
@@ -35,7 +34,7 @@ export default function AppLayout() {
     setMenuOpen(!menuOpen);
   };
 
-  const [_, setContacts] = useAtom(contactsAtom);
+  const setContacts = useGlobalStore((state) => state.setContacts);
   useEffect(() => {
     InitStateValues();
   }, []);

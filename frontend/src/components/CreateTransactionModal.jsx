@@ -4,8 +4,7 @@ import { TransactionsUrl } from "../Constants";
 import { modalContainerStyle } from "../helpers/styles";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { Box, Button, TextField, Typography, MenuItem } from "@mui/material";
-import { useAtomValue } from "jotai";
-import { contactsAtom } from "../store";
+import useGlobalStore from "../store";
 import {
   BankAccountOptions,
   ModuleTypeEnum,
@@ -17,7 +16,7 @@ import {
 import { parseDateTime } from "../helpers/dateTimeHelpers";
 
 function CreateTransactionModal({ targetId, closeModal, forceRender }) {
-  const contacts = useAtomValue(contactsAtom);
+  const contacts = useGlobalStore((state) => state.contacts);
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [fromContactId, setFromContactId] = useState("");

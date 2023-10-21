@@ -4,8 +4,7 @@ import { CategoriesUrl } from "../../Constants";
 import { getAsync } from "../../services/apiHandlerService";
 import { DatePicker } from "@mui/x-date-pickers";
 import { parseDateTime, toMoment } from "../../helpers/dateTimeHelpers";
-import { contactsAtom } from "../../store";
-import { useAtomValue } from "jotai";
+import useGlobalStore from "../../store";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import moment from "moment";
@@ -26,7 +25,7 @@ function EditCategoryDetails() {
   let { id } = useParams();
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
-  const contacts = useAtomValue(contactsAtom);
+  const contacts = useGlobalStore((state) => state.contacts);
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [estimate, setEstimate] = useState(0);

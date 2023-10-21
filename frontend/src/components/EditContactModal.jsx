@@ -3,12 +3,11 @@ import axios from "axios";
 import { ContactsUrl } from "../Constants";
 import { modalContainerStyle } from "../helpers/styles";
 import { Box, Button, TextField, Typography, Modal } from "@mui/material";
-import { useAtom } from "jotai";
-import { contactsAtom } from "../store";
+import useGlobalStore from "../store";
 import ConfirmationModal from "./ConfirmationModal";
 
 function EditContactModal({ data, closeModal, forceRender }) {
-  const [_, setContacts] = useAtom(contactsAtom);
+  const setContacts = useGlobalStore((state) => state.setContacts);
 
   const [name, setName] = useState(data?.name);
   const [designation, setDesignation] = useState(data?.designation);
