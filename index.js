@@ -28,7 +28,7 @@ app.use("/api/transactions", transactionRoutes);
 
 if (process.env.NODE_ENV === "production") {
   const __dirname = path.resolve();
-  app.use(express.static(path.join(__dirname, "/frontend/public")));
+  // app.use(express.static(path.join(__dirname, "/frontend/dist")));
 
   app.get("*", (req, res) => {
     // needed to send static files to handle reloads on paths other than root path
