@@ -16,7 +16,7 @@ function Loading({}) {
 
   useEffect(() => {
     async function fetchData() {
-      const response = await getAsync("/loading1.gif", {
+      const response = await getAsync("/loading.gif", {
         responseType: "arraybuffer",
       });
       var base64 = arrayBufferToBase64(response.payload);
