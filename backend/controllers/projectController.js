@@ -12,6 +12,7 @@ import {
   getAllNestedTargetIds,
   getTotalCost,
 } from "../services/transactionService.js";
+import { UserRole } from "../utils/enums.js";
 
 // GET /api/projects
 export const getAllProjects = asyncHandler(async (req, res) => {
@@ -73,6 +74,12 @@ export const updateProjectDetails = asyncHandler(async (req, res) => {
 export const deleteProject = asyncHandler(async (req, res) => {
   if (!req.params.id) {
     res.status(400).json({ message: "Project id cannot be empty." });
+  }
+  const role = req.user.role;
+  if (role !== UserRole.Admin) {
+    res
+      .status(401)
+      .json({ message: "Only Admins are allowed to delete a Project." });
   }
   let isDeleted = await deleteProjectById(req.params.id);
   if (!isDeleted) {
