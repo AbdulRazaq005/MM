@@ -11,7 +11,7 @@
     "start": "node index.js",
     "server": "node backend/index.js",
     "client": "npm run start --prefix frontend",
-    "dev": "nodemon backend/index.js",
+    "dev": "nodemon index.js",
     "app": "concurrently \"npm run dev\" \"npm run client\"",
     "build": "npm run build --prefix frontend",
     "winBuild": "npm run winBuild --prefix frontend"

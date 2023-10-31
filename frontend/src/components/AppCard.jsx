@@ -6,6 +6,7 @@ import Typography from "@mui/material/Typography";
 import { CardActionArea } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import useGlobalStore from "../store";
+import { displayCurrency } from "../helpers/displayFormatHelpers";
 
 export default function AppCard({ data, url, actionText, action }) {
   const navigate = useNavigate();
@@ -46,6 +47,11 @@ export default function AppCard({ data, url, actionText, action }) {
             >
               {data.description}
             </Typography>
+            {data.estimate !== undefined &&(
+              <Typography sx={{ mt: 1, color: "green" }}>
+                Estimate : {displayCurrency(data.estimate)}
+              </Typography>
+            )}
           </CardContent>
         </CardActionArea>
       ) : (

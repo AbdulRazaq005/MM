@@ -37,15 +37,17 @@ function Projects() {
           flexFlow: "wrap",
         }}
       >
-        {projects.map((project) => {
-          return (
-            <AppCard
-              data={project}
-              url={categoriesNavigateUrl}
-              key={project._id}
-            />
-          );
-        })}
+        {projects &&
+          projects.length !== 0 &&
+          projects.map((project) => {
+            return (
+              <AppCard
+                data={project}
+                url={categoriesNavigateUrl}
+                key={project._id}
+              />
+            );
+          })}
 
         <AppCard
           action={() => setCreateProjectMode(true)}
