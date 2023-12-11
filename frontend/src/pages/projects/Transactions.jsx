@@ -2,6 +2,7 @@ import {
   BankAccountOptions,
   PaymentModeTypeEnum,
   PaymentModeTypeOptions,
+  TransactionTypeEnum,
 } from "../../helpers/enums";
 import { useState } from "react";
 import useGlobalStore from "../../store";
@@ -24,7 +25,8 @@ import Loading from "../../components/Loading";
 import Modal from "@mui/material/Modal";
 
 export default function Transactions() {
-  const [data, setData] = useState({});
+  const [data, setData] = useState([]);
+  const [total, setTotal] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const contacts = useGlobalStore((state) => state.contacts);
   const [name, setName] = useState("");
@@ -77,8 +79,20 @@ export default function Transactions() {
     setIsLoading(true);
     const response = await getAsync(TransactionsUrl, params);
     setIsLoading(false);
-    if (response.success) setData(response.payload);
-    else setErrorMessage(response.payload.message);
+    if (response.success) {
+      setData(response.payload);
+      calculateTotal(response.payload);
+    } else setErrorMessage(response.payload.message);
+  };
+
+  const calculateTotal = (transactions) => {
+    let total = transactions.reduce((cumulativeTotal, transaction) => {
+      let amount = transaction.amount;
+      if (transaction.typeEnum === TransactionTypeEnum.Credit)
+        return cumulativeTotal - amount;
+      else return cumulativeTotal + amount;
+    }, 0);
+    setTotal(total);
   };
 
   const clearInputs = () => {
@@ -142,7 +156,6 @@ export default function Transactions() {
     <Box sx={{ p: 4 }}>
       <Typography variant="h4">Transactions</Typography>
       <Divider />
-
       <Box
         component="form"
         onSubmit={submitGetTransactions}
@@ -197,10 +210,6 @@ export default function Transactions() {
           />
           <TextField
             margin="normal"
-            required={[
-              PaymentModeTypeEnum.Upi,
-              PaymentModeTypeEnum.BankAccountTransfer,
-            ].includes(paymentModeEnum)}
             fullWidth
             name="from-contact"
             label="From Party"
@@ -210,6 +219,7 @@ export default function Transactions() {
             onChange={(e) => {
               setFromContactId(e.target.value);
             }}
+            value={fromContactId}
           >
             {contacts.map((contact) => (
               <MenuItem key={contact._id} value={contact._id}>
@@ -219,10 +229,6 @@ export default function Transactions() {
           </TextField>
           <TextField
             margin="normal"
-            required={[
-              PaymentModeTypeEnum.Upi,
-              PaymentModeTypeEnum.BankAccountTransfer,
-            ].includes(paymentModeEnum)}
             fullWidth
             name="to-contact"
             label="To Party"
@@ -232,6 +238,7 @@ export default function Transactions() {
             onChange={(e) => {
               setToContactId(e.target.value);
             }}
+            value={toContactId}
           >
             {contacts.map((contact) => (
               <MenuItem key={contact._id} value={contact._id}>
@@ -268,6 +275,7 @@ export default function Transactions() {
             onChange={(e) => {
               setPaymentModeEnum(e.target.value);
             }}
+            value={paymentModeEnum}
           >
             {PaymentModeTypeOptions.map((option) => (
               <MenuItem key={option.value} value={option.value}>
@@ -277,10 +285,6 @@ export default function Transactions() {
           </TextField>
           <TextField
             margin="normal"
-            required={[
-              PaymentModeTypeEnum.Upi,
-              PaymentModeTypeEnum.BankAccountTransfer,
-            ].includes(paymentModeEnum)}
             fullWidth
             name="bank-name"
             label="Bank Account"
@@ -290,6 +294,7 @@ export default function Transactions() {
             onChange={(e) => {
               setBankEnum(e.target.value);
             }}
+            value={bankEnum}
           >
             {BankAccountOptions.map((option) => (
               <MenuItem key={option.value} value={option.value}>
@@ -356,7 +361,6 @@ export default function Transactions() {
           </Button>
         </Box>
       </Box>
-
       <AppTable
         name="Transactions"
         data={data}
@@ -371,6 +375,21 @@ export default function Transactions() {
         slots={transactionSlots}
         customColumns={transactionCustomColumns}
       />
+
+      {total && (
+        <Typography
+          sx={{
+            m: "1rem",
+            pr: "2rem",
+            fontSize: 20,
+            width: "100%",
+            textAlign: "right",
+            fontWeight: 600,
+          }}
+        >
+          Total : {displayCurrency(total)}
+        </Typography>
+      )}
 
       {/* Loading Modal */}
       <Modal open={isLoading}>
