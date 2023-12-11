@@ -9,6 +9,7 @@ import CategoryDetails from "./pages/projects/CategoryDetails";
 import Contacts from "./pages/projects/Contacts";
 import EditProjectDetails from "./pages/projects/EditProjectDetails";
 import EditCategoryDetails from "./pages/projects/EditCategoryDetails";
+import Transactions from "./pages/projects/Transactions";
 
 const routes = [
   {
@@ -54,6 +55,10 @@ const routes = [
       {
         path: "home",
         element: <Dashboard />,
+      },
+      {
+        path: "transactions",
+        element: <Transactions />,
       },
       {
         path: "*",
