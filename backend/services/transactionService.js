@@ -27,10 +27,10 @@ export async function getTransactions(filters) {
     query = query.where({ name: { $regex: name, $options: "i" } }); // 'i' for case insensitive.
   }
   if (fromDate && toDate) {
-    query = query.where({ date: { $gt: fromDate, $lt: toDate } });
+    query = query.where({ date: { $gte: fromDate, $lte: toDate } });
   }
   if (minAmount && maxAmount) {
-    query = query.where({ amount: { $gt: minAmount, $lt: maxAmount } });
+    query = query.where({ amount: { $gte: minAmount, $lte: maxAmount } });
   }
   if (fromContactIds && Array.isArray(fromContactIds)) {
     query = query.where({ fromContact: { $in: fromContactIds } });
@@ -50,7 +50,10 @@ export async function getTransactions(filters) {
   if (statusEnum) {
     query = query.where({ typeEnum: statusEnum });
   }
-  return query.exec();
+  return query.lean()
+  .populate("fromContact toContact")
+  .select("-isActive -__v")
+  .exec();;
 }
 
 export async function createTransaction(transactionDetails) {

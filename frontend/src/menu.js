@@ -8,6 +8,7 @@ import BarChartIcon from "@mui/icons-material/BarChart";
 import SettingsIcon from "@mui/icons-material/Settings";
 import FlightIcon from "@mui/icons-material/Flight";
 import CommuteIcon from "@mui/icons-material/Commute";
+import PaidIcon from '@mui/icons-material/Paid';
 
 // Find Icons names : https://mui.com/material-ui/material-icons/
 
@@ -17,6 +18,11 @@ const menuListItems = [
       label: "Projects",
       path: "projects",
       icon: <DomainAddIcon />,
+    },
+    {
+      label: "Transactions",
+      path: "transactions",
+      icon: <PaidIcon />,
     },
     {
       label: "Contacts",
