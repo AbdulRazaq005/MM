@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { modalContainerStyle } from "../helpers/styles";
-import { Box, CardMedia, Typography } from "@mui/material";
+import { Box, CardMedia, LinearProgress, Typography } from "@mui/material";
 import { getAsync } from "../services/apiHandlerService";
 
 function arrayBufferToBase64(buffer) {
@@ -34,22 +34,14 @@ function Loading({}) {
     <Box
       sx={{
         ...modalContainerStyle,
-        height: "15rem",
-        width: "15rem",
+        width: "100%",
+        top: 0,
+        px: 0,
         bgcolor: "transparent",
         boxShadow: 0,
       }}
     >
-      {localStorage["loadingBase64"] && (
-        <CardMedia
-          component="img"
-          image={localStorage["loadingBase64"]}
-          alt="Loading..."
-        />
-      )}
-      <Typography variant="h4" color="white">
-        LOADING...
-      </Typography>
+      <LinearProgress color="warning" />
     </Box>
   );
 }
