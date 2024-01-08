@@ -28,7 +28,7 @@ app.use("/api/transactions", transactionRoutes);
 
 if (process.env.NODE_ENV === "production") {
   const __dirname = path.resolve();
-  // app.use(express.static(path.join(__dirname, "/frontend/dist")));
+  app.use(express.static(path.join(__dirname, "/frontend/dist")));
 
   app.get("*", (req, res) => {
     // needed to send static files to handle reloads on paths other than root path
@@ -42,21 +42,13 @@ if (process.env.NODE_ENV === "production") {
         req.url.split("/static/").pop()
       );
       var exist = fs.existsSync(filePath);
-      res.sendFile(filePath);
-    } else {
-      // this block is for sending any other static asstes like favicon, images,... if they exist
-      var filePath = path.resolve(
-        __dirname,
-        "frontend",
-        "dist",
-        req.url.split("/").pop()
-      );
-      if (req.url !== "/" && fs.existsSync(filePath)) {
+      if (exist) {
+        console.log("exists", "filePath : ", filePath);
         res.sendFile(filePath);
-      } else
-        res.sendFile(path.resolve(__dirname, "frontend", "dist", "index.html"));
+      }
+    } else {
+      res.sendFile(path.resolve(__dirname, "frontend", "dist", "index.html"));
     }
-    // res.sendFile(path.resolve(__dirname, "frontend", "dist", "index.html"));
   });
 } else {
   app.get("/", (req, res) => {
