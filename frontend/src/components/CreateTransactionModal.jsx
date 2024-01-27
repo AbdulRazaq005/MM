@@ -31,6 +31,10 @@ function CreateTransactionModal({ targetId, closeModal, forceRender }) {
   const submitAddNewTransaction = (e) => {
     e.preventDefault();
     // console.log("submitted:.......");
+
+    // If description not entered set same as transaction name
+    if (description === "") description = name;
+
     const isUpi = [
       PaymentModeTypeEnum.Upi,
       PaymentModeTypeEnum.BankAccountTransfer,

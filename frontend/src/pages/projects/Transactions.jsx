@@ -23,6 +23,7 @@ import { parseDateTime } from "../../helpers/dateTimeHelpers";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import Loading from "../../components/Loading";
 import Modal from "@mui/material/Modal";
+import moment from "moment";
 
 export default function Transactions() {
   const [data, setData] = useState([]);
@@ -178,6 +179,7 @@ export default function Transactions() {
           <TextField
             margin="normal"
             fullWidth
+            value={name}
             name="transaction-name"
             label="Name"
             size="small"
@@ -189,6 +191,7 @@ export default function Transactions() {
           <TextField
             margin="normal"
             fullWidth
+            value={minAmount ? minAmount : ""}
             name="minAmount"
             label="Min Amount"
             size="small"
@@ -200,6 +203,7 @@ export default function Transactions() {
           <TextField
             margin="normal"
             fullWidth
+            value={maxAmount ? maxAmount : ""}
             name="maxAmount"
             label="Max Amount"
             size="small"
@@ -305,6 +309,7 @@ export default function Transactions() {
           <DatePicker
             size="small"
             label="From Date"
+            value={fromDate ? moment(fromDate) : null}
             slotProps={{
               textField: { size: "small", fullWidth: true },
             }}
@@ -320,6 +325,7 @@ export default function Transactions() {
           <DatePicker
             size="small"
             label="To Date"
+            value={toDate ? moment(toDate) : null}
             slotProps={{
               textField: { size: "small", fullWidth: true },
             }}
