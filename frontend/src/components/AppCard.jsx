@@ -47,9 +47,19 @@ export default function AppCard({ data, url, actionText, action }) {
             >
               {data.description}
             </Typography>
-            {data.estimate !== undefined &&(
-              <Typography sx={{ mt: 1, color: "green" }}>
+            {data.estimate !== undefined && (
+              <Typography sx={{ mt: 1, color: "grey" }}>
                 Estimate : {displayCurrency(data.estimate)}
+              </Typography>
+            )}
+            {data.totalCost !== undefined && (
+              <Typography sx={{ mt: 0, color: "red" }}>
+                Total Cost : {displayCurrency(data.totalCost)}
+              </Typography>
+            )}
+            {data.totalCost !== undefined && data.estimate !== undefined && (
+              <Typography sx={{ mt: 0, color: "green" }}>
+                Remaining : {displayCurrency(data.estimate - data.totalCost)}
               </Typography>
             )}
           </CardContent>
