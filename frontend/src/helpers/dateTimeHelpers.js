@@ -2,6 +2,7 @@ import { isDate } from "lodash";
 import moment from "moment";
 
 export function toMoment(datetimeValue) {
+  if (!datetimeValue) return null;
   if (isDate(datetimeValue)) {
     return moment(datetimeValue);
   } else {

@@ -50,10 +50,13 @@ export async function getTransactions(filters) {
   if (statusEnum) {
     query = query.where({ typeEnum: statusEnum });
   }
-  return query.lean()
-  .populate("fromContact toContact")
-  .select("-isActive -__v")
-  .exec();;
+  let transactions = await query
+    .lean()
+    .populate("fromContact toContact")
+    .select("-isActive -__v")
+    .exec();
+
+  return transactions.sort((t1, t2) => t2.date - t1.date);
 }
 
 export async function createTransaction(transactionDetails) {
