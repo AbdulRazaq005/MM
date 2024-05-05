@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { TransactionsUrl } from "../Constants";
+import { LastTransactionKey, TransactionsUrl } from "../Constants";
 import { modalContainerStyle } from "../helpers/styles";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { Box, Button, TextField, Typography, MenuItem } from "@mui/material";
@@ -13,7 +13,7 @@ import {
   TransactionStatusEnum,
   TransactionTypeOptions,
 } from "../helpers/enums";
-import { parseDateTime } from "../helpers/dateTimeHelpers";
+import { parseDateTime, toMoment } from "../helpers/dateTimeHelpers";
 
 function CreateTransactionModal({ targetId, closeModal, forceRender }) {
   const contacts = useGlobalStore((state) => state.contacts);
@@ -33,7 +33,7 @@ function CreateTransactionModal({ targetId, closeModal, forceRender }) {
     // console.log("submitted:.......");
 
     // If description not entered set same as transaction name
-    if (description === "") description = name;
+    if (description === "") setDescription(name);
 
     const isUpi = [
       PaymentModeTypeEnum.Upi,
@@ -42,7 +42,7 @@ function CreateTransactionModal({ targetId, closeModal, forceRender }) {
     if (
       !(
         name &&
-        description &&
+        // description &&
         fromContactId &&
         toContactId &&
         transactionTypeEnum &&
@@ -77,6 +77,13 @@ function CreateTransactionModal({ targetId, closeModal, forceRender }) {
         .then((response) => {
           setMessage("Transaction Added Successfully.");
           console.log(response);
+          saveTransactionToLocalStorage({
+            transactionTypeEnum: transactionTypeEnum,
+            paymentModeEnum: paymentModeEnum,
+            bankEnum: bankEnum,
+            transactionDate: transactionDate,
+            fromContactId,
+          });
           closeModal();
           forceRender();
         })
@@ -92,6 +99,35 @@ function CreateTransactionModal({ targetId, closeModal, forceRender }) {
       contact.name +
       (contact.designation ? " (" + contact.designation + ")" : "")
     );
+  }
+
+  function saveTransactionToLocalStorage(transaction) {
+    let transactionStr = JSON.stringify(transaction);
+    localStorage.setItem(LastTransactionKey, transactionStr);
+  }
+  function loadTransactionFromLocalStorage(transaction) {
+    let transactionStr = localStorage[LastTransactionKey];
+    try {
+      console.log("transactionStr", transactionStr);
+
+      if (!transactionStr) {
+        setMessage("Cannot find any last saved transactions.");
+        console.log("Cannot find any last saved transactions.");
+        return;
+      }
+      let transaction = JSON.parse(transactionStr);
+      console.log("transaction", transaction);
+      setTransactionTypeEnum(transaction.transactionTypeEnum);
+      setPaymentModeEnum(transaction.paymentModeEnum);
+      setBankEnum(transaction.bankEnum);
+      setTransactionDate(transaction.transactionDate);
+      // setTransactionAmount(transactionAmount);
+      setFromContactId(transaction.fromContactId);
+      // setToContactId(toContactId);
+    } catch (error) {
+      setMessage("Error while loading last saved transaction.");
+      console.error(error);
+    }
   }
 
   return (
@@ -163,6 +199,7 @@ function CreateTransactionModal({ targetId, closeModal, forceRender }) {
           />
           <TextField
             margin="normal"
+            value={fromContactId}
             required={[
               PaymentModeTypeEnum.Upi,
               PaymentModeTypeEnum.BankAccountTransfer,
@@ -209,6 +246,7 @@ function CreateTransactionModal({ targetId, closeModal, forceRender }) {
         <Box sx={{ width: "21rem", mx: "1rem" }}>
           <TextField
             margin="normal"
+            value={transactionTypeEnum}
             required
             fullWidth
             name="typeEnum"
@@ -228,6 +266,7 @@ function CreateTransactionModal({ targetId, closeModal, forceRender }) {
           </TextField>
           <TextField
             margin="normal"
+            value={paymentModeEnum}
             required
             fullWidth
             name="paymentMode"
@@ -247,6 +286,7 @@ function CreateTransactionModal({ targetId, closeModal, forceRender }) {
           </TextField>
           <TextField
             margin="normal"
+            value={bankEnum}
             required={[
               PaymentModeTypeEnum.Upi,
               PaymentModeTypeEnum.BankAccountTransfer,
@@ -269,9 +309,11 @@ function CreateTransactionModal({ targetId, closeModal, forceRender }) {
           </TextField>
           <DatePicker
             size="small"
+            value={toMoment(transactionDate)}
             label="Transaction Date"
             slotProps={{
-              textField: { size: "small", fullWidth: true },
+              textField: { size: "small" },
+              required: false,
             }}
             sx={{ bgcolor: "#fff", width: "100%", mt: 2 }}
             onChange={(moment) => setTransactionDate(parseDateTime(moment))}
@@ -279,9 +321,17 @@ function CreateTransactionModal({ targetId, closeModal, forceRender }) {
         </Box>
       </Box>
 
-      <Typography sx={{ color: "red", ml: 2, mt: 1 }}>{message}</Typography>
+      <Typography sx={{ color: "red", ml: 2, my: 1 }}>{message}</Typography>
 
       <Box sx={{ display: "flex", justifyContent: "flex-end", mt: 0, mb: 2 }}>
+        <Button
+          onClick={() => loadTransactionFromLocalStorage()}
+          variant="contained"
+          color="warning"
+          sx={{ mr: 2 }}
+        >
+          Load Last Transaction
+        </Button>
         <Button
           color="grey"
           variant="contained"

@@ -7,3 +7,5 @@ export const ProjectsUrl = `/api/projects`;
 export const CategoriesUrl = `/api/projects/categories`;
 export const ContactsUrl = `/api/contacts`;
 export const TransactionsUrl = `/api/transactions`;
+
+export const LastTransactionKey = "last-transction";
