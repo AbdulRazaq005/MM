@@ -31,7 +31,7 @@ const registerUser = asyncHandler(async (req, res) => {
   if (!secretCode || secretCode !== process.env.REGISTER_SECRET) {
     res
       .status(400)
-      .json({ message: "Invalid Registeration code. Please contact admin." });
+      .json({ message: "Invalid Registration code. Please contact admin." });
   }
   const userExists = await User.findOne({ email });
   if (userExists) {
