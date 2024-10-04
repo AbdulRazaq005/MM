@@ -1,5 +1,7 @@
+import Contact from "../models/contactModel.js";
 import Loan from "../models/loanModel.js";
 import mongoose from "mongoose";
+import { ContactType } from "../utils/enums.js";
 
 export async function getAllLoanDetails() {
   const loans = await Loan.find({}).select("id name description");
@@ -9,87 +11,91 @@ export async function getAllLoanDetails() {
 export async function getUserLoanDetails(userId) {
   const loans = await Loan.find({
     loanUsers: { $elemMatch: { $eq: userId } },
-  }).select("id name description");
+  })
+    .select("-createdAt -updatedAt")
+    .lean();
   return loans;
 }
 
-// export async function getLoanDetailsById(id) {
-//   const project = await Project.findById(id)
-//     .select("id name description categories events details estimate vendor")
-//     .lean()
-//     .populate({
-//       path: "vendor",
-//       model: "Contact",
-//     })
-//     .populate({
-//       path: "categories",
-//       model: "Category",
-//       select: "id name description categories estimate",
-//       populate: {
-//         path: "categories",
-//         model: "Category",
-//         select: "id categories",
-//         populate: {
-//           path: "categories",
-//           model: "Category",
-//           select: "id categories",
-//         },
-//       },
-//     });
-//   return project;
-// }
-
-export async function createLoan(loanDetails, userId) {
-  const { name, description, loanAmount, tenure, interestRate, emiAmount } =
-    loanDetails;
-  const loan = await Loan.create({
-    name,
-    description,
-    loanAmount,
-    tenure,
-    interestRate,
-    emiAmount,
-    loanUsers: [userId],
-  });
+export async function getLoanDetailsById(id) {
+  const loan = await Loan.findById(id).select("-createdAt -updatedAt").lean();
   return loan;
 }
 
-// export async function updateProject(id, projectDetails, events, details) {
-//   let project = await Project.findById(id);
-//   if (!project) {
-//     throw new Error("Project not found.");
-//   }
-//   const { name, description, estimate, vendor } = projectDetails;
-//   project.name = name || project.name;
-//   project.description = description || project.description;
-//   project.estimate = estimate || project.estimate;
+export async function createLoan(loanDetails, userId) {
+  const {
+    name,
+    description,
+    bankEnum,
+    loanAmount,
+    sanctionedDate,
+    tenure,
+    interestRate,
+    repaymentStartDate,
+    principalAmountPaid,
+    interestAmountPaid,
+    emiAmount,
+  } = loanDetails;
+  const loan = await Loan.create({
+    name,
+    description,
+    bankEnum,
+    loanAmount,
+    sanctionedDate,
+    tenure,
+    interestRate,
+    repaymentStartDate,
+    principalAmountPaid,
+    interestAmountPaid,
+    emiAmount,
+    loanUsers: [userId],
+  });
 
-//   if (events && Array.isArray(events)) {
-//     events.forEach((event) => {
-//       if (!event._id) {
-//         event._id = new mongoose.Types.ObjectId();
-//       }
-//     });
-//     project.events = events;
-//   }
-//   if (details && Array.isArray(details)) {
-//     details.forEach((detail) => {
-//       if (!detail._id) {
-//         detail._id = new mongoose.Types.ObjectId();
-//       }
-//     });
-//     project.details = details;
-//   }
-//   if (vendor) {
-//     project.vendor = new mongoose.Types.ObjectId(vendor);
-//   } else {
-//     project.vendor = null;
-//   }
-//   await project.save();
-//   return true;
-// }
+  if (loan) {
+    let contact = await Contact.create({
+      name: name,
+      contactType: ContactType.Bank,
+      designation: bankEnum,
+    });
+    loan.bankContact = contact;
+    await user.save();
+  }
+  return loan;
+}
 
-// export async function deleteProjectById(projectId) {
-//   const res = await Project.deleteOne({ _id: projectId });
-//   return res.deletedCount == 1;
-// }
+export async function updateLoan(id, loanDetails) {
+  let loan = await Loan.findById(id);
+  if (!loan) {
+    throw new Error("Loan not found.");
+  }
+  const {
+    name,
+    description,
+    loanAmount,
+    sanctionedDate,
+    tenure,
+    interestRate,
+    repaymentStartDate,
+    principalAmountPaid,
+    interestAmountPaid,
+    emiAmount,
+  } = loanDetails;
+  loan.name = name || loan.name;
+  loan.description = description || loan.description;
+  loan.loanAmount = loanAmount || loan.loanAmount;
+  loan.sanctionedDate = sanctionedDate || loan.sanctionedDate;
+  loan.tenure = tenure || loan.tenure;
+  loan.interestRate = interestRate || loan.interestRate;
+  loan.repaymentStartDate = repaymentStartDate || loan.repaymentStartDate;
+  loan.principalAmountPaid = principalAmountPaid || loan.principalAmountPaid;
+  loan.interestAmountPaid = interestAmountPaid || loan.interestAmountPaid;
+  loan.emiAmount = emiAmount || loan.emiAmount;
+
+  await loan.save();
+  return true;
+}
+
+export async function deleteLoanById(id) {
+  const res = await Loan.deleteOne({ _id: id });
+  return res.deletedCount == 1;
+}

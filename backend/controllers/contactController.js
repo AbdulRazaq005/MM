@@ -22,6 +22,7 @@ export const createNewContact = asyncHandler(async (req, res) => {
     email,
     address,
     projectId,
+    ContactType,
   });
   res.status(200).json(result);
 });
@@ -39,6 +40,7 @@ export const updateContactById = asyncHandler(async (req, res) => {
     email,
     address,
     projectId,
+    ContactType,
   });
   res.status(200).json(result);
 });

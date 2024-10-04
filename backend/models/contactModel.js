@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import { ContactType } from "../utils/enums.js";
 
 const contactSchema = mongoose.Schema(
   {
@@ -14,6 +15,10 @@ const contactSchema = mongoose.Schema(
     contactNo: {
       type: String,
       // unique: true,
+    },
+    contactType: {
+      type: String,
+      enum: Object.values(ContactType),
     },
     email: {
       type: String,

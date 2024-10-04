@@ -28,7 +28,7 @@ export default function Register() {
   const [role, setRole] = useState("USER");
   const [email, setEmail] = useState();
   const [contactNo, setContactNo] = useState();
-  const [registerationCode, setRegisterationCode] = useState("");
+  const [registrationCode, setRegistrationCode] = useState("");
   const [acceptTnC, setAcceptTnC] = useState(false);
   const [message, setMessage] = useState();
 
@@ -43,7 +43,7 @@ export default function Register() {
         role &&
         email &&
         contactNo &&
-        registerationCode
+        registrationCode
       )
     ) {
       setMessage("Please complete all fields");
@@ -52,7 +52,7 @@ export default function Register() {
     } else if (isNaN(Number(contactNo))) {
       setMessage("Please enter a valid Contact no.");
     } else if (password1 !== password2) {
-      setMessage("Passowrds do not match. Please check again");
+      setMessage("Passwords do not match. Please check again");
     } else {
       axios
         .post(RegisterUrl, {
@@ -61,11 +61,11 @@ export default function Register() {
           password: password1,
           role,
           email,
-          contact: contactNo,
-          secretCode: registerationCode,
+          contactNo,
+          secretCode: registrationCode,
         })
         .then((response) => {
-          setMessage("Registeration Successful.");
+          setMessage("Registration Successful.");
           // console.log(response);
           navigate("/projects");
         })
@@ -198,7 +198,7 @@ export default function Register() {
                 size="small"
                 value={registerationCode}
                 onChange={(e) => {
-                  setRegisterationCode(e.target.value);
+                  setRegistrationCode(e.target.value);
                 }}
               />
               <TextField

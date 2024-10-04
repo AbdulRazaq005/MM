@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import { BankAccount } from "../utils/enums.js";
 
 const loanSchema = mongoose.Schema(
   {
@@ -9,6 +10,15 @@ const loanSchema = mongoose.Schema(
     },
     description: {
       type: String,
+    },
+    bankEnum: {
+      type: String,
+      enum: [...Object.values(BankAccount), ""],
+    },
+    bankContact: {
+      type: mongoose.Types.ObjectId,
+      ref: "Contact",
+      required: true,
     },
     loanAmount: {
       type: Number,

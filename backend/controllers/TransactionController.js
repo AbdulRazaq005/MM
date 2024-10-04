@@ -22,6 +22,7 @@ export const getFilteredTransactions = asyncHandler(async (req, res) => {
     paymentModeEnum,
     bankEnum,
     statusEnum,
+    moduleEnum,
   } = req.query;
   const contacts = await getTransactions({
     targetIds,
@@ -36,6 +37,7 @@ export const getFilteredTransactions = asyncHandler(async (req, res) => {
     paymentModeEnum,
     bankEnum,
     statusEnum,
+    moduleEnum,
   });
   res.status(200).json(contacts);
 });

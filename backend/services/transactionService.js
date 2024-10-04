@@ -16,6 +16,7 @@ export async function getTransactions(filters) {
     paymentModeEnum,
     bankEnum,
     statusEnum,
+    moduleEnum,
   } = filters;
 
   let query = Transaction.where({ isActive: true });
@@ -50,6 +51,9 @@ export async function getTransactions(filters) {
   if (statusEnum) {
     query = query.where({ typeEnum: statusEnum });
   }
+  if (moduleEnum) {
+    query = query.where({ moduleEnum: moduleEnum });
+  }
   let transactions = await query
     .lean()
     .populate("fromContact toContact")
@@ -70,11 +74,13 @@ export async function createTransaction(transactionDetails) {
     statusEnum,
     date,
     amount,
+    principalAmount,
+    interestAmount,
     fromContactId,
     toContactId,
     moduleEnum,
   } = transactionDetails;
-  let transaction = await Transaction.create({
+  await Transaction.create({
     targetId: new mongoose.Types.ObjectId(targetId),
     name,
     description,
@@ -84,6 +90,8 @@ export async function createTransaction(transactionDetails) {
     statusEnum,
     date,
     amount,
+    principalAmount,
+    interestAmount,
     fromContact: new mongoose.Types.ObjectId(fromContactId),
     toContact: new mongoose.Types.ObjectId(toContactId),
     moduleEnum,
@@ -106,6 +114,8 @@ export async function updateTransaction(id, transactionDetails) {
     statusEnum,
     date,
     amount,
+    principalAmount,
+    interestAmount,
     fromContactId,
     toContactId,
   } = transactionDetails;
@@ -118,6 +128,8 @@ export async function updateTransaction(id, transactionDetails) {
   transaction.statusEnum = statusEnum;
   transaction.date = date;
   transaction.amount = amount;
+  transaction.principalAmount = principalAmount;
+  transaction.interestAmount = interestAmount;
   (transaction.fromContact = new mongoose.Types.ObjectId(fromContactId)),
     (transaction.toContact = new mongoose.Types.ObjectId(toContactId)),
     await transaction.save();

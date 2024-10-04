@@ -3,6 +3,12 @@ export const UserRoleEnum = Object.freeze({
   User: "USER",
 });
 
+export const ContactTypeEnum = Object.freeze({
+  User: "USER",
+  Bank: "BANK",
+  ThirdParty: "TP",
+});
+
 export const TransactionTypeEnum = Object.freeze({
   Debit: "DEBIT",
   Credit: "CREDIT",
@@ -10,7 +16,7 @@ export const TransactionTypeEnum = Object.freeze({
 
 export const TransactionStatusEnum = Object.freeze({
   Pending: "PENDING",
-  Succssful: "SUCCESSFUL",
+  Successful: "SUCCESSFUL",
   Revoked: "REVOKED",
 });
 
@@ -27,12 +33,13 @@ export const BankAccountEnum = Object.freeze({
   Canara: "CANARA",
   BankOfBaroda: "BOB",
   PragathiKrishna: "PKGB",
-  TungaBadhra: "TBGB",
+  TungaBhadra: "TBGB",
   Axis: "AXIS",
 });
 
 export const ModuleTypeEnum = Object.freeze({
   Projects: "PROJECTS",
+  Loans: "LOANS",
   Banking: "BANKING",
 });
 
