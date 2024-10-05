@@ -1,6 +1,5 @@
 import AppLayout from "./Layouts/AppLayout";
 import Dashboard from "./pages/Dashboard";
-import Test from "./pages/Test";
 import Projects from "./pages/projects/Projects";
 import ProjectDetails from "./pages/projects/ProjectDetails";
 import Login from "./pages/Login";
@@ -10,6 +9,7 @@ import Contacts from "./pages/projects/Contacts";
 import EditProjectDetails from "./pages/projects/EditProjectDetails";
 import EditCategoryDetails from "./pages/projects/EditCategoryDetails";
 import Transactions from "./pages/projects/Transactions";
+import Loans from "./pages/loans/Loans";
 
 const routes = [
   {
@@ -49,8 +49,8 @@ const routes = [
         element: <Contacts />,
       },
       {
-        path: "test",
-        element: <Test />,
+        path: "loans",
+        element: <Loans />,
       },
       {
         path: "home",

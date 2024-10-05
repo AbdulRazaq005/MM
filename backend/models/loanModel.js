@@ -14,11 +14,11 @@ const loanSchema = mongoose.Schema(
     bankEnum: {
       type: String,
       enum: [...Object.values(BankAccount), ""],
+      required: true,
     },
     bankContact: {
       type: mongoose.Types.ObjectId,
       ref: "Contact",
-      required: true,
     },
     loanAmount: {
       type: Number,

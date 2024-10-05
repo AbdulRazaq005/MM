@@ -8,4 +8,7 @@ export const CategoriesUrl = `/api/projects/categories`;
 export const ContactsUrl = `/api/contacts`;
 export const TransactionsUrl = `/api/transactions`;
 
+// loans
+export const LoansUrl = `/api/loans`;
+
 export const LastTransactionKey = "last-transction";

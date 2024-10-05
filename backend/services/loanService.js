@@ -58,7 +58,7 @@ export async function createLoan(loanDetails, userId) {
       designation: bankEnum,
     });
     loan.bankContact = contact;
-    await user.save();
+    await loan.save();
   }
   return loan;
 }

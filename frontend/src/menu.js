@@ -8,7 +8,7 @@ import BarChartIcon from "@mui/icons-material/BarChart";
 import SettingsIcon from "@mui/icons-material/Settings";
 import FlightIcon from "@mui/icons-material/Flight";
 import CommuteIcon from "@mui/icons-material/Commute";
-import PaidIcon from '@mui/icons-material/Paid';
+import PaidIcon from "@mui/icons-material/Paid";
 
 // Find Icons names : https://mui.com/material-ui/material-icons/
 
@@ -29,16 +29,18 @@ const menuListItems = [
       path: "/contacts",
       icon: <ContactPhoneIcon />,
     },
+  ],
+  [
     {
       label: "Loans",
-      path: "project-details/657665365465",
+      path: "loans",
       icon: <AccountBalanceWalletIcon />,
     },
   ],
   [
     {
       label: "Expenditures",
-      path: "test",
+      path: "",
       icon: <CurrencyRupeeIcon />,
     },
     {
@@ -72,7 +74,7 @@ const menuListItems = [
   [
     {
       label: "Settings",
-      path: "settings/",
+      path: "",
       icon: <SettingsIcon />,
     },
   ],
