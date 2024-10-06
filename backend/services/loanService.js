@@ -18,7 +18,10 @@ export async function getUserLoanDetails(userId) {
 }
 
 export async function getLoanDetailsById(id) {
-  const loan = await Loan.findById(id).select("-createdAt -updatedAt").lean();
+  const loan = await Loan.findById(id)
+    .select("-createdAt -updatedAt")
+    .lean()
+    .populate("loanUsers", "name");
   return loan;
 }
 

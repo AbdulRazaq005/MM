@@ -136,6 +136,11 @@ export const BankAccountOptions = [
   },
 ];
 
+export const GetBankNameFromEnum = function (bankEnum) {
+  var result = BankAccountOptions.find((ele) => ele.value === bankEnum);
+  return result?.label;
+};
+
 export const ModuleTypeOptions = [
   {
     label: "Projects",

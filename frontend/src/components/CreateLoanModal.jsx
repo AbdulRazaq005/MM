@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import { modalContainerStyle } from "../helpers/styles";
 import { Box, Button, MenuItem, TextField, Typography } from "@mui/material";
-import { BankAccountEnum, BankAccountOptions } from "../helpers/enums";
+import { BankAccountOptions } from "../helpers/enums";
 import { DatePicker } from "@mui/x-date-pickers";
 import { parseDateTime, toMoment } from "../helpers/dateTimeHelpers";
 
@@ -15,8 +15,6 @@ function CreateLoanModal({ path, closeModal, forceRender }) {
   const [tenure, setTenure] = useState(0);
   const [interestRate, setInterestRate] = useState(0);
   const [repaymentStartDate, setRepaymentStartDate] = useState("");
-  //const [principalAmountPaid, setPrincipalAmountPaid] = useState(0);
-  //const [interestAmountPaid, setInterestAmountPaid] = useState(0);
   const [emiAmount, setEmiAmount] = useState(0);
   const [message, setMessage] = useState("");
 
@@ -50,8 +48,6 @@ function CreateLoanModal({ path, closeModal, forceRender }) {
           sanctionedDate,
           repaymentStartDate,
           emiAmount,
-          //principalAmountPaid,
-          //interestAmountPaid,
         })
         .then((response) => {
           setMessage("Loan Created Successfully.");
@@ -73,7 +69,6 @@ function CreateLoanModal({ path, closeModal, forceRender }) {
       sx={{
         ...modalContainerStyle,
         px: 6,
-        // width: "25rem",
         display: "flex",
         flexDirection: "column",
         justifyContent: "center",

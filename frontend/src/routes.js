@@ -10,6 +10,7 @@ import EditProjectDetails from "./pages/projects/EditProjectDetails";
 import EditCategoryDetails from "./pages/projects/EditCategoryDetails";
 import Transactions from "./pages/projects/Transactions";
 import Loans from "./pages/loans/Loans";
+import LoanDetails from "./pages/loans/LoanDetails";
 
 const routes = [
   {
@@ -53,8 +54,8 @@ const routes = [
         element: <Loans />,
       },
       {
-        path: "home",
-        element: <Dashboard />,
+        path: "loans/:id",
+        element: <LoanDetails />,
       },
       {
         path: "transactions",
