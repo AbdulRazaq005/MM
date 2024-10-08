@@ -34,16 +34,6 @@ export const getLoanDetails = asyncHandler(async (req, res) => {
   if (!loan) {
     res.status(404).json({ message: "Loan not found." });
   }
-  // let loanCost = 0;
-  // if (project.categories && Array.isArray(project.categories)) {
-  //   for (let category of project.categories) {
-  //     const targetIds = getAllNestedTargetIds(category);
-  //     const totalCost = await getTotalCost(targetIds);
-  //     category.totalCost = totalCost;
-  //     projectCost += totalCost;
-  //   }
-  // }
-  // project.totalCost = projectCost;
   res.status(200).json(loan);
 });
 

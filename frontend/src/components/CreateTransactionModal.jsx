@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { LastTransactionKey, TransactionsUrl } from "../Constants";
 import { modalContainerStyle } from "../helpers/styles";
@@ -11,22 +11,64 @@ import {
   PaymentModeTypeEnum,
   PaymentModeTypeOptions,
   TransactionStatusEnum,
+  TransactionTypeEnum,
   TransactionTypeOptions,
 } from "../helpers/enums";
 import { parseDateTime, toMoment } from "../helpers/dateTimeHelpers";
+import { toNumber } from "lodash";
+import moment from "moment";
 
-function CreateTransactionModal({ targetId, closeModal, forceRender }) {
+function CreateTransactionModal({
+  targetId,
+  closeModal,
+  forceRender,
+  loanName,
+  moduleType,
+  fromContact,
+  toContact,
+}) {
   const contacts = useGlobalStore((state) => state.contacts);
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
-  const [fromContactId, setFromContactId] = useState("");
-  const [toContactId, setToContactId] = useState("");
+  const [fromContactId, setFromContactId] = useState(fromContact);
+  const [toContactId, setToContactId] = useState(toContact);
   const [transactionTypeEnum, setTransactionTypeEnum] = useState("");
   const [paymentModeEnum, setPaymentModeEnum] = useState("");
   const [bankEnum, setBankEnum] = useState("");
+  const [moduleTypeEnum, setModuleTypeEnum] = useState("");
   const [transactionDate, setTransactionDate] = useState("");
-  const [transactionAmount, setTransactionAmount] = useState(0);
+  const [transactionAmount, setTransactionAmount] = useState("");
+  const [principalAmount, setPrincipalAmount] = useState(0);
+  const [interestAmount, setInterestAmount] = useState(0);
   const [message, setMessage] = useState("");
+
+  // initialization based on module
+  useEffect(() => {
+    let m = moment();
+    setTransactionDate(parseDateTime(m));
+    setModuleTypeEnum(moduleType ?? ModuleTypeEnum.Projects);
+
+    if (moduleType === ModuleTypeEnum.Loans) {
+      let name = m.format("YYYY MMMM");
+      setName(name + (loanName ? ` - ${loanName}` : ""));
+      setTransactionTypeEnum(TransactionTypeEnum.Debit);
+      setPaymentModeEnum(PaymentModeTypeEnum.BankAccountTransfer);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (principalAmount || interestAmount)
+      setTransactionAmount(
+        toNumber(principalAmount) + toNumber(interestAmount)
+      );
+  }, [principalAmount, interestAmount]);
+
+  function isFromAndToContactsVisible() {
+    return moduleTypeEnum === ModuleTypeEnum.Projects;
+  }
+  function isPrincipalAndInterestAmountsVisible() {
+    return moduleTypeEnum === ModuleTypeEnum.Loans;
+  }
 
   const submitAddNewTransaction = (e) => {
     e.preventDefault();
@@ -69,21 +111,26 @@ function CreateTransactionModal({ targetId, closeModal, forceRender }) {
           bankEnum: bankEnum,
           date: transactionDate,
           amount: transactionAmount,
+          principalAmount,
+          interestAmount,
           fromContactId,
           toContactId,
-          moduleEnum: ModuleTypeEnum.Projects,
-          statusEnum: TransactionStatusEnum.Succssful,
+          moduleEnum: moduleTypeEnum,
+          statusEnum: TransactionStatusEnum.Successful,
         })
         .then((response) => {
           setMessage("Transaction Added Successfully.");
-          console.log(response);
-          saveTransactionToLocalStorage({
-            transactionTypeEnum: transactionTypeEnum,
-            paymentModeEnum: paymentModeEnum,
-            bankEnum: bankEnum,
-            transactionDate: transactionDate,
-            fromContactId,
-          });
+          // console.log(response);
+
+          if (moduleTypeEnum === ModuleTypeEnum.Projects) {
+            saveTransactionToLocalStorage({
+              transactionTypeEnum: transactionTypeEnum,
+              paymentModeEnum: paymentModeEnum,
+              bankEnum: bankEnum,
+              transactionDate: transactionDate,
+              fromContactId,
+            });
+          }
           closeModal();
           forceRender();
         })
@@ -161,6 +208,7 @@ function CreateTransactionModal({ targetId, closeModal, forceRender }) {
       >
         <Box sx={{ width: "21rem", mx: "1rem" }}>
           <TextField
+            value={name}
             margin="normal"
             required
             fullWidth
@@ -174,7 +222,6 @@ function CreateTransactionModal({ targetId, closeModal, forceRender }) {
           />
           <TextField
             margin="normal"
-            required
             fullWidth
             name="transaction-description"
             label="Description"
@@ -185,63 +232,103 @@ function CreateTransactionModal({ targetId, closeModal, forceRender }) {
               setDescription(e.target.value);
             }}
           />
+
+          {isPrincipalAndInterestAmountsVisible() && (
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              name="principal-amount"
+              label="Principal Amount"
+              size="small"
+              sx={{ bgcolor: "#fff" }}
+              onChange={(e) => {
+                // setTransactionAmount(principalAmount + interestAmount);
+                setPrincipalAmount(e.target.value);
+              }}
+            />
+          )}
+          {isPrincipalAndInterestAmountsVisible() && (
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              name="interest-amount"
+              label="Interest Amount"
+              size="small"
+              sx={{ bgcolor: "#fff" }}
+              onChange={(e) => {
+                setInterestAmount(e.target.value);
+                // setTransactionAmount(principalAmount + interestAmount);
+              }}
+            />
+          )}
+
           <TextField
+            value={transactionAmount}
             margin="normal"
             required
             fullWidth
             name="amount"
-            label="Amount"
+            label={
+              isPrincipalAndInterestAmountsVisible() ? "Total Amount" : "Amount"
+            }
             size="small"
             sx={{ bgcolor: "#fff" }}
             onChange={(e) => {
               setTransactionAmount(e.target.value);
             }}
           />
-          <TextField
-            margin="normal"
-            value={fromContactId}
-            required={[
-              PaymentModeTypeEnum.Upi,
-              PaymentModeTypeEnum.BankAccountTransfer,
-            ].includes(paymentModeEnum)}
-            fullWidth
-            name="from-contact"
-            label="From Party"
-            size="small"
-            select
-            sx={{ bgcolor: "#fff" }}
-            onChange={(e) => {
-              setFromContactId(e.target.value);
-            }}
-          >
-            {contacts.map((contact) => (
-              <MenuItem key={contact._id} value={contact._id}>
-                {getContactDisplayName(contact)}
-              </MenuItem>
-            ))}
-          </TextField>
-          <TextField
-            margin="normal"
-            required={[
-              PaymentModeTypeEnum.Upi,
-              PaymentModeTypeEnum.BankAccountTransfer,
-            ].includes(paymentModeEnum)}
-            fullWidth
-            name="to-contact"
-            label="To Party"
-            size="small"
-            select
-            sx={{ bgcolor: "#fff" }}
-            onChange={(e) => {
-              setToContactId(e.target.value);
-            }}
-          >
-            {contacts.map((contact) => (
-              <MenuItem key={contact._id} value={contact._id}>
-                {getContactDisplayName(contact)}
-              </MenuItem>
-            ))}
-          </TextField>
+          {isFromAndToContactsVisible() && (
+            <TextField
+              margin="normal"
+              value={fromContactId}
+              required={[
+                PaymentModeTypeEnum.Upi,
+                PaymentModeTypeEnum.BankAccountTransfer,
+              ].includes(paymentModeEnum)}
+              fullWidth
+              name="from-contact"
+              label="From Party"
+              size="small"
+              select
+              sx={{ bgcolor: "#fff" }}
+              onChange={(e) => {
+                setFromContactId(e.target.value);
+              }}
+            >
+              {contacts.map((contact) => (
+                <MenuItem key={contact._id} value={contact._id}>
+                  {getContactDisplayName(contact)}
+                </MenuItem>
+              ))}
+            </TextField>
+          )}
+          {isFromAndToContactsVisible() && (
+            <TextField
+              margin="normal"
+              value={toContactId}
+              required={[
+                PaymentModeTypeEnum.Upi,
+                PaymentModeTypeEnum.BankAccountTransfer,
+              ].includes(paymentModeEnum)}
+              fullWidth
+              name="to-contact"
+              label="To Party"
+              size="small"
+              select
+              sx={{ bgcolor: "#fff" }}
+              onChange={(e) => {
+                setToContactId(e.target.value);
+              }}
+            >
+              {contacts.map((contact) => (
+                <MenuItem key={contact._id} value={contact._id}>
+                  {getContactDisplayName(contact)}
+                </MenuItem>
+              ))}
+            </TextField>
+          )}
         </Box>
         <Box sx={{ width: "21rem", mx: "1rem" }}>
           <TextField
@@ -324,14 +411,16 @@ function CreateTransactionModal({ targetId, closeModal, forceRender }) {
       <Typography sx={{ color: "red", ml: 2, my: 1 }}>{message}</Typography>
 
       <Box sx={{ display: "flex", justifyContent: "flex-end", mt: 0, mb: 2 }}>
-        <Button
-          onClick={() => loadTransactionFromLocalStorage()}
-          variant="contained"
-          color="warning"
-          sx={{ mr: 2 }}
-        >
-          Load Last Transaction
-        </Button>
+        {moduleTypeEnum === ModuleTypeEnum.Projects && (
+          <Button
+            onClick={() => loadTransactionFromLocalStorage()}
+            variant="contained"
+            color="warning"
+            sx={{ mr: 2 }}
+          >
+            Load Last Transaction
+          </Button>
+        )}
         <Button
           color="grey"
           variant="contained"

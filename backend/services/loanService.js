@@ -1,7 +1,7 @@
 import Contact from "../models/contactModel.js";
 import Loan from "../models/loanModel.js";
-import mongoose from "mongoose";
 import { ContactType } from "../utils/enums.js";
+import { getTransactionsByIds } from "./transactionService.js";
 
 export async function getAllLoanDetails() {
   const loans = await Loan.find({}).select("id name description");
@@ -22,6 +22,8 @@ export async function getLoanDetailsById(id) {
     .select("-createdAt -updatedAt")
     .lean()
     .populate("loanUsers", "name");
+  let transactions = await getTransactionsByIds([loan._id]);
+  loan.transactions = transactions;
   return loan;
 }
 

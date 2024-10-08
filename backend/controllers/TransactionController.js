@@ -54,6 +54,8 @@ export const createNewTransaction = asyncHandler(async (req, res) => {
     statusEnum,
     date,
     amount,
+    principalAmount,
+    interestAmount,
     fromContactId,
     toContactId,
     moduleEnum,
@@ -74,6 +76,8 @@ export const createNewTransaction = asyncHandler(async (req, res) => {
     statusEnum,
     date,
     amount,
+    principalAmount,
+    interestAmount,
     fromContactId,
     toContactId,
     moduleEnum,
@@ -96,8 +100,11 @@ export const updateTransactionById = asyncHandler(async (req, res) => {
     statusEnum,
     date,
     amount,
+    principalAmount,
+    interestAmount,
     fromContactId,
     toContactId,
+    moduleEnum,
   } = req.body;
 
   if (paymentModeEnum === PaymentModeType.Upi && !bankEnum) {
@@ -115,8 +122,11 @@ export const updateTransactionById = asyncHandler(async (req, res) => {
     statusEnum,
     date,
     amount,
+    principalAmount,
+    interestAmount,
     fromContactId,
     toContactId,
+    moduleEnum,
   });
   res.status(200).json(result);
 });

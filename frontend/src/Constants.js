@@ -1,6 +1,7 @@
 export const RegisterUrl = `/api/register`;
 export const LoginUrl = `/api/login`;
 export const LogoutUrl = `/api/logout`;
+export const UserProfileUrl = `/api/users/profile`;
 
 // projects
 export const ProjectsUrl = `/api/projects`;

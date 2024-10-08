@@ -37,6 +37,8 @@ function EditTransactionModal({ data, closeModal, forceRender }) {
   const [bankEnum, setBankEnum] = useState(data?.bankEnum);
   const [transactionDate, setTransactionDate] = useState(data?.date);
   const [transactionAmount, setTransactionAmount] = useState(data?.amount);
+  const [principalAmount, setPrincipalAmount] = useState(data?.principalAmount);
+  const [interestAmount, setInterestAmount] = useState(data?.interestAmount);
   const [message, setMessage] = useState(
     data ? "" : "Invalid transaction data."
   );
@@ -47,6 +49,13 @@ function EditTransactionModal({ data, closeModal, forceRender }) {
     setIsDeleteMode(false);
   };
   const [deleteMessage, setDeleteMessage] = useState("");
+
+  function isFromAndToContactsVisible() {
+    return data?.moduleEnum === ModuleTypeEnum.Projects;
+  }
+  function isPrincipalAndInterestAmountsVisible() {
+    return data?.moduleEnum === ModuleTypeEnum.Loans;
+  }
 
   const submitUpdateTransaction = (e) => {
     e.preventDefault();
@@ -61,7 +70,6 @@ function EditTransactionModal({ data, closeModal, forceRender }) {
     if (
       !(
         name &&
-        description &&
         fromContactId &&
         toContactId &&
         transactionTypeEnum &&
@@ -88,10 +96,11 @@ function EditTransactionModal({ data, closeModal, forceRender }) {
           bankEnum: bankEnum,
           date: transactionDate,
           amount: transactionAmount,
+          principalAmount,
+          interestAmount,
           fromContactId,
           toContactId,
-          moduleEnum: ModuleTypeEnum.Projects,
-          statusEnum: TransactionStatusEnum.Succssful,
+          statusEnum: TransactionStatusEnum.Successful,
         })
         .then((response) => {
           setMessage("Transaction Updated Successfully.");
@@ -177,7 +186,6 @@ function EditTransactionModal({ data, closeModal, forceRender }) {
           <TextField
             margin="normal"
             value={description}
-            required
             fullWidth
             name="transaction-description"
             label="Description"
@@ -188,6 +196,36 @@ function EditTransactionModal({ data, closeModal, forceRender }) {
               setDescription(e.target.value);
             }}
           />
+          {isPrincipalAndInterestAmountsVisible() && (
+            <TextField
+              value={principalAmount}
+              margin="normal"
+              required
+              fullWidth
+              name="principal-amount"
+              label="Principal Amount"
+              size="small"
+              sx={{ bgcolor: "#fff" }}
+              onChange={(e) => {
+                setPrincipalAmount(e.target.value);
+              }}
+            />
+          )}
+          {isPrincipalAndInterestAmountsVisible() && (
+            <TextField
+              value={interestAmount}
+              margin="normal"
+              required
+              fullWidth
+              name="interest-amount"
+              label="Interest Amount"
+              size="small"
+              sx={{ bgcolor: "#fff" }}
+              onChange={(e) => {
+                setInterestAmount(e.target.value);
+              }}
+            />
+          )}
           <TextField
             margin="normal"
             value={transactionAmount}
@@ -201,52 +239,56 @@ function EditTransactionModal({ data, closeModal, forceRender }) {
               setTransactionAmount(e.target.value);
             }}
           />
-          <TextField
-            margin="normal"
-            value={fromContactId}
-            required={[
-              PaymentModeTypeEnum.Upi,
-              PaymentModeTypeEnum.BankAccountTransfer,
-            ].includes(paymentModeEnum)}
-            fullWidth
-            name="from-contact"
-            label="From Party"
-            size="small"
-            select
-            sx={{ bgcolor: "#fff" }}
-            onChange={(e) => {
-              setFromContactId(e.target.value);
-            }}
-          >
-            {contacts.map((contact) => (
-              <MenuItem key={contact._id} value={contact._id}>
-                {getContactDisplayName(contact)}
-              </MenuItem>
-            ))}
-          </TextField>
-          <TextField
-            margin="normal"
-            value={toContactId}
-            required={[
-              PaymentModeTypeEnum.Upi,
-              PaymentModeTypeEnum.BankAccountTransfer,
-            ].includes(paymentModeEnum)}
-            fullWidth
-            name="to-contact"
-            label="To Party"
-            size="small"
-            select
-            sx={{ bgcolor: "#fff" }}
-            onChange={(e) => {
-              setToContactId(e.target.value);
-            }}
-          >
-            {contacts.map((contact) => (
-              <MenuItem key={contact._id} value={contact._id}>
-                {getContactDisplayName(contact)}
-              </MenuItem>
-            ))}
-          </TextField>
+          {isFromAndToContactsVisible() && (
+            <TextField
+              margin="normal"
+              value={fromContactId}
+              required={[
+                PaymentModeTypeEnum.Upi,
+                PaymentModeTypeEnum.BankAccountTransfer,
+              ].includes(paymentModeEnum)}
+              fullWidth
+              name="from-contact"
+              label="From Party"
+              size="small"
+              select
+              sx={{ bgcolor: "#fff" }}
+              onChange={(e) => {
+                setFromContactId(e.target.value);
+              }}
+            >
+              {contacts.map((contact) => (
+                <MenuItem key={contact._id} value={contact._id}>
+                  {getContactDisplayName(contact)}
+                </MenuItem>
+              ))}
+            </TextField>
+          )}
+          {isFromAndToContactsVisible() && (
+            <TextField
+              margin="normal"
+              value={toContactId}
+              required={[
+                PaymentModeTypeEnum.Upi,
+                PaymentModeTypeEnum.BankAccountTransfer,
+              ].includes(paymentModeEnum)}
+              fullWidth
+              name="to-contact"
+              label="To Party"
+              size="small"
+              select
+              sx={{ bgcolor: "#fff" }}
+              onChange={(e) => {
+                setToContactId(e.target.value);
+              }}
+            >
+              {contacts.map((contact) => (
+                <MenuItem key={contact._id} value={contact._id}>
+                  {getContactDisplayName(contact)}
+                </MenuItem>
+              ))}
+            </TextField>
+          )}
         </Box>
         <Box sx={{ width: "21rem", mx: "1rem" }}>
           <TextField

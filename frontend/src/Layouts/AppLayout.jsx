@@ -7,7 +7,7 @@ import Main from "./Main";
 import menuListItems from "../menu";
 import { useEffect } from "react";
 import { getAsync } from "../services/apiHandlerService";
-import { ContactsUrl } from "../Constants";
+import { ContactsUrl, UserProfileUrl } from "../Constants";
 import useGlobalStore from "../store";
 
 const darkTheme = createTheme({
@@ -35,13 +35,19 @@ export default function AppLayout() {
   };
 
   const setContacts = useGlobalStore((state) => state.setContacts);
+  const setUser = useGlobalStore((state) => state.setUser);
   useEffect(() => {
     InitStateValues();
   }, []);
+
   async function InitStateValues() {
-    const response = await getAsync(ContactsUrl);
-    if (response.success) {
-      setContacts(response.payload);
+    const userResponse = await getAsync(UserProfileUrl);
+    if (userResponse.success) {
+      setUser(userResponse.payload);
+    }
+    const contactResponse = await getAsync(ContactsUrl);
+    if (contactResponse.success) {
+      setContacts(contactResponse.payload);
     }
   }
 
@@ -82,8 +88,9 @@ export default function AppLayout() {
               flexGrow: 1,
               px: 2,
               overflowY: "scroll",
-              maxWidth: "1200px",
               marginX: "auto",
+              display: "flex",
+              justifyContent: "center",
             }}
           >
             <Main />
