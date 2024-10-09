@@ -79,7 +79,7 @@ function CreateTransactionModal({
 
     const isUpi = [
       PaymentModeTypeEnum.Upi,
-      PaymentModeTypeEnum.BankAccountTransfer,
+      // PaymentModeTypeEnum.BankAccountTransfer,
     ].includes(paymentModeEnum);
     if (
       !(
@@ -376,7 +376,7 @@ function CreateTransactionModal({
             value={bankEnum}
             required={[
               PaymentModeTypeEnum.Upi,
-              PaymentModeTypeEnum.BankAccountTransfer,
+              // PaymentModeTypeEnum.BankAccountTransfer,
             ].includes(paymentModeEnum)}
             fullWidth
             name="bank-name"

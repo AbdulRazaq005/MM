@@ -1,7 +1,7 @@
 import Contact from "../models/contactModel.js";
 import Loan from "../models/loanModel.js";
 import { ContactType } from "../utils/enums.js";
-import { getTransactionsByIds } from "./transactionService.js";
+import { deleteContact } from "./contactService.js";
 
 export async function getAllLoanDetails() {
   const loans = await Loan.find({}).select("id name description");
@@ -22,8 +22,6 @@ export async function getLoanDetailsById(id) {
     .select("-createdAt -updatedAt")
     .lean()
     .populate("loanUsers", "name");
-  let transactions = await getTransactionsByIds([loan._id]);
-  loan.transactions = transactions;
   return loan;
 }
 
@@ -54,13 +52,14 @@ export async function createLoan(loanDetails, userId) {
     interestAmountPaid,
     emiAmount,
     loanUsers: [userId],
+    createdById: userId,
   });
 
   if (loan) {
     let contact = await Contact.create({
       name: name,
       contactType: ContactType.Bank,
-      designation: bankEnum,
+      designation: bankEnum + " Bank Account",
     });
     loan.bankContact = contact;
     await loan.save();
@@ -73,6 +72,7 @@ export async function updateLoan(id, loanDetails) {
   if (!loan) {
     throw new Error("Loan not found.");
   }
+  let oldBankEnum = loan.bankEnum;
   const {
     name,
     description,
@@ -84,6 +84,7 @@ export async function updateLoan(id, loanDetails) {
     principalAmountPaid,
     interestAmountPaid,
     emiAmount,
+    bankEnum,
   } = loanDetails;
   loan.name = name || loan.name;
   loan.description = description || loan.description;
@@ -95,12 +96,40 @@ export async function updateLoan(id, loanDetails) {
   loan.principalAmountPaid = principalAmountPaid || loan.principalAmountPaid;
   loan.interestAmountPaid = interestAmountPaid || loan.interestAmountPaid;
   loan.emiAmount = emiAmount || loan.emiAmount;
+  loan.bankEnum = bankEnum || loan.bankEnum;
 
   await loan.save();
+
+  if (bankEnum && bankEnum !== oldBankEnum) {
+    let contact = await Contact.findById(loan.bankContact);
+    if (!contact) {
+      throw new Error("Bank Contact not found!");
+    }
+    contact.designation = bankEnum + " Bank Account";
+    await contact.save();
+  }
   return true;
 }
 
-export async function deleteLoanById(id) {
+export async function deleteLoanById(id, bankContactId) {
   const res = await Loan.deleteOne({ _id: id });
-  return res.deletedCount == 1;
+  let isDeleted = res.deletedCount == 1;
+  if (isDeleted) {
+    deleteContact(bankContactId, true);
+  }
+  return isDeleted;
+}
+
+export async function updateLoanForTransaction(id, loanDetails) {
+  let loan = await Loan.findById(id);
+  if (!loan) {
+    throw new Error("Loan not found.");
+  }
+
+  const { principalAmount, interestAmount } = loanDetails;
+  loan.principalAmountPaid = loan.principalAmountPaid + Number(principalAmount);
+  loan.interestAmountPaid = loan.interestAmountPaid + Number(interestAmount);
+
+  await loan.save();
+  return true;
 }

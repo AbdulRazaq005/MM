@@ -2,14 +2,18 @@ import React, { useState } from "react";
 import axios from "axios";
 import { modalContainerStyle } from "../helpers/styles";
 import { Box, Button, TextField, Typography } from "@mui/material";
+import useGlobalStore from "../store";
+import { ContactsUrl } from "../Constants";
 
 function CreateProjectModal({ targetId, path, closeModal, forceRender }) {
+  const setContacts = useGlobalStore((state) => state.setContacts);
+
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [estimate, setEstimate] = useState(0);
   const [message, setMessage] = useState("");
 
-  const submitCreateNewproject = (e) => {
+  const submitCreateNewProject = (e) => {
     e.preventDefault();
     if (!(name && description && estimate)) {
       setMessage("Please complete all fields");
@@ -26,6 +30,14 @@ function CreateProjectModal({ targetId, path, closeModal, forceRender }) {
         .then((response) => {
           setMessage("Project Created Successfully.");
           console.log(response);
+
+          axios.get(ContactsUrl).then((resp) => {
+            if (resp.status === 200 && Array.isArray(resp?.data)) {
+              console.log("get contacts resp: ", resp);
+              setContacts(resp.data);
+            }
+          });
+
           closeModal();
           forceRender();
         })
@@ -53,7 +65,7 @@ function CreateProjectModal({ targetId, path, closeModal, forceRender }) {
         component="form"
         noValidate
         sx={{ mt: 1 }}
-        onSubmit={submitCreateNewproject}
+        onSubmit={submitCreateNewProject}
       >
         <TextField
           margin="normal"

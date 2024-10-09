@@ -1,6 +1,7 @@
-import Transaction from "../models/transactionModel.js";
+import Transaction, { transactionSchema } from "../models/transactionModel.js";
 import mongoose from "mongoose";
-import { TransactionType } from "../utils/enums.js";
+import { ModuleType, TransactionType } from "../utils/enums.js";
+import { updateLoanForTransaction } from "./loanService.js";
 
 export async function getTransactions(filters) {
   const {
@@ -96,6 +97,14 @@ export async function createTransaction(transactionDetails) {
     toContact: new mongoose.Types.ObjectId(toContactId),
     moduleEnum,
   });
+
+  if (moduleEnum === ModuleType.Loans) {
+    await updateLoanForTransaction(targetId, {
+      principalAmount,
+      interestAmount,
+    });
+  }
+
   return true;
 }
 
@@ -104,6 +113,7 @@ export async function updateTransaction(id, transactionDetails) {
   if (!transaction) {
     throw new Error("Transaction not found.");
   }
+
   const {
     targetId,
     name,
@@ -119,6 +129,13 @@ export async function updateTransaction(id, transactionDetails) {
     fromContactId,
     toContactId,
   } = transactionDetails;
+
+  if (transaction.moduleEnum === ModuleType.Loans) {
+    await updateLoanForTransaction(targetId, {
+      principalAmount: Number(principalAmount) - transaction.principalAmount,
+      interestAmount: Number(interestAmount) - transaction.interestAmount,
+    });
+  }
   transaction.targetId = new mongoose.Types.ObjectId(targetId);
   transaction.name = name;
   transaction.designation = designation;
@@ -130,9 +147,10 @@ export async function updateTransaction(id, transactionDetails) {
   transaction.amount = amount;
   transaction.principalAmount = principalAmount;
   transaction.interestAmount = interestAmount;
-  (transaction.fromContact = new mongoose.Types.ObjectId(fromContactId)),
-    (transaction.toContact = new mongoose.Types.ObjectId(toContactId)),
-    await transaction.save();
+  transaction.fromContact = new mongoose.Types.ObjectId(fromContactId);
+  transaction.toContact = new mongoose.Types.ObjectId(toContactId);
+  await transaction.save();
+
   return true;
 }
 
@@ -149,6 +167,12 @@ export async function deleteTransaction(id, isHardDelete = false) {
     transaction.isActive = false;
     result = true;
     await transaction.save();
+  }
+  if (transaction.moduleEnum === ModuleType.Loans) {
+    await updateLoanForTransaction(transaction.targetId, {
+      principalAmount: -1 * transaction.principalAmount,
+      interestAmount: -1 * transaction.interestAmount,
+    });
   }
   return result;
 }
@@ -195,4 +219,14 @@ export async function getTransactionsByIds(targetIds) {
     .select("-isActive -__v")
     .exec();
   return transactions.sort((t1, t2) => t1.date - t2.date);
+}
+
+export async function markTransactionsInactiveByTargetIds(targetIds) {
+  if (targetIds && Array.isArray(targetIds)) {
+    let res = await Transaction.updateMany(
+      { targetId: { $in: targetIds } },
+      { $set: { isActive: false } },
+      { multi: true }
+    );
+  }
 }

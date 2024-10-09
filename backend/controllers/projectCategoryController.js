@@ -15,10 +15,12 @@ import {
 export const getCategoryDetails = asyncHandler(async (req, res) => {
   if (!req.params.id) {
     res.status(400).json({ message: "Category id cannot be empty." });
+    return;
   }
   const category = await getCategoryDetailsById(req.params.id);
   if (!category) {
     res.status(404).json({ message: "Category not found." });
+    return;
   }
   let categoryCost = await getTotalCost([category._id]);
   if (category.categories && Array.isArray(category.categories)) {
@@ -40,6 +42,7 @@ export const getCategoryDetails = asyncHandler(async (req, res) => {
 export const updateCategoryDetails = asyncHandler(async (req, res) => {
   if (!req.params.id) {
     res.status(400).json({ message: "Category id cannot be empty." });
+    return;
   }
   const { name, description, estimate, events, details, vendor } = req.body;
   updateCategory(
@@ -55,6 +58,7 @@ export const updateCategoryDetails = asyncHandler(async (req, res) => {
 export const addSubCategory = asyncHandler(async (req, res) => {
   if (!req.body.targetId) {
     res.status(400).json({ message: "Category id cannot be empty." });
+    return;
   }
   const { targetId, name, description, estimate } = req.body;
   const isSuccessful = await addCategory(targetId, {
@@ -64,6 +68,7 @@ export const addSubCategory = asyncHandler(async (req, res) => {
   });
   if (!isSuccessful) {
     res.status(500).json({ message: "Error while adding Category." });
+    return;
   }
   res.status(200).json(true);
 });
@@ -72,9 +77,11 @@ export const addSubCategory = asyncHandler(async (req, res) => {
 export const removeSubCategory = asyncHandler(async (req, res) => {
   if (!req.body.categoryId) {
     res.status(400).json({ message: "Category id cannot be empty." });
+    return;
   }
   if (!req.body.subCategoryId) {
     res.status(400).json({ message: "SubCategory id cannot be empty." });
+    return;
   }
   const { categoryId, subCategoryId } = req.body;
   const { isSuccessful, category } = await removeCategory(
@@ -83,6 +90,9 @@ export const removeSubCategory = asyncHandler(async (req, res) => {
   );
   if (!isSuccessful) {
     res.status(500).json({ message: "Error while removing Category." });
+    return;
   }
+  // console.log("attempt mark category transactions inactive");
+  await markTransactionsInactiveByTargetIds([req.body.categoryId]);
   res.status(200).json(category);
 });

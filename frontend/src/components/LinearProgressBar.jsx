@@ -11,14 +11,14 @@ function LinearProgressBar({ name, value }) {
         <Box sx={{ width: "20rem", height: "0.75rem", flex: 1 }}>
           <LinearProgress
             variant="determinate"
-            value
+            value={value}
             color="success"
             sx={{ height: "100%", borderRadius: "1rem", color: "#58a667" }}
           />
         </Box>
         {isNumber(value) && (
           <Typography variant="h6" sx={{ color: "text.secondary", ml: 2 }}>
-            {`${value} %`}
+            {`${value.toFixed(2)} %`}
           </Typography>
         )}
       </Box>

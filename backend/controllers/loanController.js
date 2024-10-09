@@ -6,6 +6,11 @@ import {
   getUserLoanDetails,
   updateLoan,
 } from "../services/loanService.js";
+import { UserRole } from "../utils/enums.js";
+import {
+  getTransactionsByIds,
+  markTransactionsInactiveByTargetIds,
+} from "../services/transactionService.js";
 
 // GET /api/loans
 export const getUserLoans = asyncHandler(async (req, res) => {
@@ -34,6 +39,8 @@ export const getLoanDetails = asyncHandler(async (req, res) => {
   if (!loan) {
     res.status(404).json({ message: "Loan not found." });
   }
+  let transactions = await getTransactionsByIds([loan._id]);
+  loan.transactions = transactions;
   res.status(200).json(loan);
 });
 
@@ -50,16 +57,22 @@ export const updateLoanDetails = asyncHandler(async (req, res) => {
 export const deleteLoan = asyncHandler(async (req, res) => {
   if (!req.params.id) {
     res.status(400).json({ message: "Loan id cannot be empty." });
+    return;
   }
+  const loan = await getLoanDetailsById(req.params.id);
   const role = req.user.role;
-  if (role !== UserRole.Admin) {
-    res
-      .status(401)
-      .json({ message: "Only Admins are allowed to delete a Project." });
+  if (role !== UserRole.Admin && !loan.createdById.equals(req.user._id)) {
+    res.status(401).json({
+      message: "Only Loan creators or Admins are allowed to delete a Loan.",
+    });
+    return;
   }
-  let isDeleted = await deleteLoanById(req.params.id);
+  let isDeleted = await deleteLoanById(req.params.id, loan.bankContact);
   if (!isDeleted) {
     res.status(404).json({ message: "Loan not found." });
+    return;
   }
+  console.log("attempt mark inactive");
+  await markTransactionsInactiveByTargetIds([req.params.id]);
   res.status(200).json({ message: "Loan deletion successful." });
 });

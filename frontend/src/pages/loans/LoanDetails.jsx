@@ -19,9 +19,11 @@ import useGlobalStore from "../../store";
 import AppTable from "../../components/AppTable";
 import { displayDate } from "../../helpers/dateTimeHelpers";
 import EditTransactionModal from "../../components/EditTransactionModal";
+import EditLoanModal from "../../components/EditLoanModal";
 
 function LoanDetails() {
   let { id } = useParams();
+
   const [isLoading, setIsLoading] = useState(false);
   const [data, setData] = useState({});
   const [details, setDetails] = useState([]);
@@ -31,6 +33,9 @@ function LoanDetails() {
   const [render, setRender] = useState(0);
   const reRender = () => setRender(render + 1);
   const user = useGlobalStore((state) => state.user);
+
+  const [isEditLoanMode, setIsEditLoanMode] = useState(false);
+  const closeEditLoanModal = () => setIsEditLoanMode(false);
 
   const [isAddTransactionMode, setAddTransactionMode] = useState(false);
   const closeAddTransactionModal = () => setAddTransactionMode(false);
@@ -121,6 +126,7 @@ function LoanDetails() {
             size="small"
             color="warning"
             sx={{ height: "fit-content", ml: 2 }}
+            onClick={() => setIsEditLoanMode(!isEditLoanMode)}
           >
             Edit Details
           </Button>
@@ -244,7 +250,6 @@ function LoanDetails() {
               series={[
                 {
                   data: pieChartData,
-                  // valueFormatter: (item) => `${item.value.toFixed(2)}%`,
                   valueFormatter: (item) => displayCurrency(item.value),
                   innerRadius: 50,
                   outerRadius: 100,
@@ -310,6 +315,7 @@ function LoanDetails() {
           </Box>
         </Box>
       </Box>
+
       {/* Transactions */}
       <AppTable
         name="Transactions"
@@ -317,8 +323,6 @@ function LoanDetails() {
         columns={[
           "name",
           "date",
-          // "fromContact",
-          // "toContact",
           "amount",
           "principalAmount",
           "interestAmount",
@@ -349,6 +353,16 @@ function LoanDetails() {
           data={activeEditTransaction}
           forceRender={reRender}
           closeModal={closeEditTransactionModal}
+        />
+      </Modal>
+
+      {/* Edit Loan Modal */}
+      <Modal open={isEditLoanMode} onClose={closeEditLoanModal}>
+        <EditLoanModal
+          data={data}
+          path={LoansUrl}
+          forceRender={reRender}
+          closeModal={closeEditLoanModal}
         />
       </Modal>
 
@@ -386,12 +400,12 @@ function getLoanDetails(data) {
   if (data.sanctionedDate)
     result.push({
       key: "Sanctioned Date",
-      value: data.sanctionedDate,
+      value: displayDate(data.sanctionedDate),
     });
   if (data.repaymentStartDate)
     result.push({
       key: "Repayment Start Date",
-      value: data.repaymentStartDate,
+      value: displayDate(data.repaymentStartDate),
     });
   return result;
 }

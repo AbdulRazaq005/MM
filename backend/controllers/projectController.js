@@ -19,6 +19,7 @@ export const getAllProjects = asyncHandler(async (req, res) => {
   const projects = await getAllProjectDetails();
   if (!projects) {
     res.status(500).json({ message: "Error while fetching projects." });
+    return;
   }
   res.status(200).json(projects);
 });
@@ -29,6 +30,7 @@ export const createNewProject = asyncHandler(async (req, res) => {
   const project = await createProject({ name, description, estimate });
   if (!project) {
     res.status(500).json({ message: "Error while creating project" });
+    return;
   }
   res.status(200).json(project);
 });
@@ -37,10 +39,12 @@ export const createNewProject = asyncHandler(async (req, res) => {
 export const getProjectDetails = asyncHandler(async (req, res) => {
   if (!req.params.id) {
     res.status(400).json({ message: "Project id cannot be empty." });
+    return;
   }
   const project = await getProjectDetailsById(req.params.id);
   if (!project) {
     res.status(404).json({ message: "Project not found." });
+    return;
   }
   let projectCost = 0;
   if (project.categories && Array.isArray(project.categories)) {
@@ -59,6 +63,7 @@ export const getProjectDetails = asyncHandler(async (req, res) => {
 export const updateProjectDetails = asyncHandler(async (req, res) => {
   if (!req.params.id) {
     res.status(400).json({ message: "Project id cannot be empty." });
+    return;
   }
   const { name, description, estimate, events, details, vendor } = req.body;
   updateProject(
@@ -74,16 +79,30 @@ export const updateProjectDetails = asyncHandler(async (req, res) => {
 export const deleteProject = asyncHandler(async (req, res) => {
   if (!req.params.id) {
     res.status(400).json({ message: "Project id cannot be empty." });
+    return;
   }
   const role = req.user.role;
   if (role !== UserRole.Admin) {
     res
       .status(401)
       .json({ message: "Only Admins are allowed to delete a Project." });
+    return;
   }
   let isDeleted = await deleteProjectById(req.params.id);
   if (!isDeleted) {
     res.status(404).json({ message: "Project not found." });
+    return;
+  }
+
+  const project = await getProjectDetailsById(req.params.id);
+  if (project.categories && Array.isArray(project.categories)) {
+    let allTargetIds = [];
+    for (let category of project.categories) {
+      const targetIds = getAllNestedTargetIds(category);
+      allTargetIds.concat(targetIds);
+    }
+    console.log("attempt mark all project transactions inactive");
+    await markTransactionsInactiveByTargetIds(allTargetIds);
   }
   res.status(200).json({ message: "Project deletion successful." });
 });
@@ -92,6 +111,7 @@ export const deleteProject = asyncHandler(async (req, res) => {
 export const addProjectCategory = asyncHandler(async (req, res) => {
   if (!req.body.targetId) {
     res.status(400).json({ message: "Project id cannot be empty." });
+    return;
   }
   const { targetId, name, description, estimate } = req.body;
   const isSuccessful = await addCategory(targetId, {
@@ -101,6 +121,7 @@ export const addProjectCategory = asyncHandler(async (req, res) => {
   });
   if (!isSuccessful) {
     res.status(500).json({ message: "Error while adding Category." });
+    return;
   }
   res.status(200).json(true);
 });
@@ -109,14 +130,17 @@ export const addProjectCategory = asyncHandler(async (req, res) => {
 export const removeProjectCategory = asyncHandler(async (req, res) => {
   if (!req.body.projectId) {
     res.status(400).json({ message: "Project id cannot be empty." });
+    return;
   }
   if (!req.body.categoryId) {
     res.status(400).json({ message: "Category id cannot be empty." });
+    return;
   }
   const { projectId, categoryId } = req.body;
   const { isSuccessful, project } = await removeCategory(projectId, categoryId);
   if (!isSuccessful) {
     res.status(500).json({ message: "Error while removing Category." });
+    return;
   }
   res.status(200).json(project);
 });

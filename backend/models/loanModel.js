@@ -6,7 +6,6 @@ const loanSchema = mongoose.Schema(
     name: {
       type: String,
       required: true,
-      unique: true,
     },
     description: {
       type: String,
@@ -54,6 +53,9 @@ const loanSchema = mongoose.Schema(
     emiAmount: {
       type: Number,
       default: 0,
+    },
+    createdById: {
+      type: mongoose.Types.ObjectId,
     },
     loanUsers: [
       {

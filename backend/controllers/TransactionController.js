@@ -1,5 +1,5 @@
 import asyncHandler from "express-async-handler";
-import { PaymentModeType } from "../utils/enums.js";
+import { ModuleType, PaymentModeType } from "../utils/enums.js";
 import {
   createTransaction,
   deleteTransaction,
@@ -65,6 +65,7 @@ export const createNewTransaction = asyncHandler(async (req, res) => {
     res.status(400).json({
       message: "Bank Account is required for UPI transaction.",
     });
+    return;
   }
   let result = await createTransaction({
     targetId,
@@ -82,6 +83,7 @@ export const createNewTransaction = asyncHandler(async (req, res) => {
     toContactId,
     moduleEnum,
   });
+
   res.status(200).json(result);
 });
 
@@ -89,6 +91,7 @@ export const createNewTransaction = asyncHandler(async (req, res) => {
 export const updateTransactionById = asyncHandler(async (req, res) => {
   if (!req.params.id) {
     res.status(400).json({ message: "Transaction id cannot be empty." });
+    return;
   }
   const {
     targetId,
@@ -111,6 +114,7 @@ export const updateTransactionById = asyncHandler(async (req, res) => {
     res.status(400).json({
       message: "Bank Account is required for UPI transaction.",
     });
+    return;
   }
   let result = await updateTransaction(req.params.id, {
     targetId,
@@ -128,6 +132,7 @@ export const updateTransactionById = asyncHandler(async (req, res) => {
     toContactId,
     moduleEnum,
   });
+
   res.status(200).json(result);
 });
 
@@ -135,6 +140,7 @@ export const updateTransactionById = asyncHandler(async (req, res) => {
 export const deleteTransactionById = asyncHandler(async (req, res) => {
   if (!req.params.id) {
     res.status(400).json({ message: "Transaction id cannot be empty." });
+    return;
   }
   const { isHardDelete } = req.body;
   let result = await deleteTransaction(req.params.id, isHardDelete);

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { TransactionsUrl } from "../Constants";
 import { modalContainerStyle } from "../helpers/styles";
@@ -22,6 +22,7 @@ import {
 } from "../helpers/enums";
 import { parseDateTime, toMoment } from "../helpers/dateTimeHelpers";
 import ConfirmationModal from "./ConfirmationModal";
+import { toNumber } from "lodash";
 
 function EditTransactionModal({ data, closeModal, forceRender }) {
   console.log("tran Data: ", data);
@@ -57,6 +58,13 @@ function EditTransactionModal({ data, closeModal, forceRender }) {
     return data?.moduleEnum === ModuleTypeEnum.Loans;
   }
 
+  useEffect(() => {
+    if (principalAmount || interestAmount)
+      setTransactionAmount(
+        toNumber(principalAmount) + toNumber(interestAmount)
+      );
+  }, [principalAmount, interestAmount]);
+
   const submitUpdateTransaction = (e) => {
     e.preventDefault();
     // console.log("submitted:.......");
@@ -65,7 +73,7 @@ function EditTransactionModal({ data, closeModal, forceRender }) {
     }
     const isUpi = [
       PaymentModeTypeEnum.Upi,
-      PaymentModeTypeEnum.BankAccountTransfer,
+      // PaymentModeTypeEnum.BankAccountTransfer,
     ].includes(paymentModeEnum);
     if (
       !(
@@ -270,7 +278,7 @@ function EditTransactionModal({ data, closeModal, forceRender }) {
               value={toContactId}
               required={[
                 PaymentModeTypeEnum.Upi,
-                PaymentModeTypeEnum.BankAccountTransfer,
+                // PaymentModeTypeEnum.BankAccountTransfer,
               ].includes(paymentModeEnum)}
               fullWidth
               name="to-contact"
