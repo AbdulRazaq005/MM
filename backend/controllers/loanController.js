@@ -63,7 +63,7 @@ export const deleteLoan = asyncHandler(async (req, res) => {
   const role = req.user.role;
   if (role !== UserRole.Admin && !loan.createdById.equals(req.user._id)) {
     res.status(401).json({
-      message: "Only Loan creators or Admins are allowed to delete a Loan.",
+      message: "Only Loan creator & Admins are allowed to delete a Loan.",
     });
     return;
   }
@@ -72,7 +72,7 @@ export const deleteLoan = asyncHandler(async (req, res) => {
     res.status(404).json({ message: "Loan not found." });
     return;
   }
-  console.log("attempt mark inactive");
+  // console.log("attempt mark inactive");
   await markTransactionsInactiveByTargetIds([req.params.id]);
   res.status(200).json({ message: "Loan deletion successful." });
 });

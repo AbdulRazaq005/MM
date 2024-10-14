@@ -6,7 +6,7 @@ const contactSchema = mongoose.Schema(
     name: {
       type: String,
       required: true,
-      unique: true,
+      // unique: true,
     },
     designation: {
       type: String,
@@ -19,6 +19,7 @@ const contactSchema = mongoose.Schema(
     contactType: {
       type: String,
       enum: Object.values(ContactType),
+      default: ContactType.ThirdParty,
     },
     email: {
       type: String,

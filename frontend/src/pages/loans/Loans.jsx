@@ -20,7 +20,7 @@ function Loans() {
     async function fetchData() {
       setIsLoading(true);
       const response = await getAsync(LoansUrl);
-      setLoans(response.payload);
+      if (response.success) setLoans(response.payload);
       setIsLoading(false);
       console.log(response.payload);
     }

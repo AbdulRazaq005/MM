@@ -19,7 +19,7 @@ function Projects() {
     async function fetchData() {
       setIsLoading(true);
       const response = await getAsync(ProjectsUrl);
-      setProjects(response.payload);
+      if (response.success) setProjects(response.payload);
       setIsLoading(false);
       // console.log({projects});
     }

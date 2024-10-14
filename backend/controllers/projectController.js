@@ -16,7 +16,7 @@ import { UserRole } from "../utils/enums.js";
 
 // GET /api/projects
 export const getAllProjects = asyncHandler(async (req, res) => {
-  const projects = await getAllProjectDetails();
+  const projects = await getAllProjectDetails(req.user._id);
   if (!projects) {
     res.status(500).json({ message: "Error while fetching projects." });
     return;
@@ -27,7 +27,10 @@ export const getAllProjects = asyncHandler(async (req, res) => {
 // POST /api/projects
 export const createNewProject = asyncHandler(async (req, res) => {
   const { name, description, estimate } = req.body;
-  const project = await createProject({ name, description, estimate });
+  const project = await createProject(
+    { name, description, estimate },
+    req.user._id
+  );
   if (!project) {
     res.status(500).json({ message: "Error while creating project" });
     return;
@@ -81,28 +84,29 @@ export const deleteProject = asyncHandler(async (req, res) => {
     res.status(400).json({ message: "Project id cannot be empty." });
     return;
   }
+  const project = await getProjectDetailsById(req.params.id);
   const role = req.user.role;
-  if (role !== UserRole.Admin) {
-    res
-      .status(401)
-      .json({ message: "Only Admins are allowed to delete a Project." });
-    return;
-  }
-  let isDeleted = await deleteProjectById(req.params.id);
-  if (!isDeleted) {
-    res.status(404).json({ message: "Project not found." });
+  if (role !== UserRole.Admin && !project.createdById.equals(req.user._id)) {
+    res.status(401).json({
+      message: "Only Project creator & Admins are allowed to delete a Project.",
+    });
     return;
   }
 
-  const project = await getProjectDetailsById(req.params.id);
   if (project.categories && Array.isArray(project.categories)) {
     let allTargetIds = [];
     for (let category of project.categories) {
       const targetIds = getAllNestedTargetIds(category);
       allTargetIds.concat(targetIds);
     }
-    console.log("attempt mark all project transactions inactive");
+    // console.log("attempt mark all project transactions inactive");
     await markTransactionsInactiveByTargetIds(allTargetIds);
+  }
+
+  let isDeleted = await deleteProjectById(req.params.id);
+  if (!isDeleted) {
+    res.status(404).json({ message: "Project not found." });
+    return;
   }
   res.status(200).json({ message: "Project deletion successful." });
 });

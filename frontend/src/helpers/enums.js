@@ -35,6 +35,9 @@ export const BankAccountEnum = Object.freeze({
   PragathiKrishna: "PKGB",
   TungaBhadra: "TBGB",
   Axis: "AXIS",
+  Hdfc: "HDFC",
+  Icici: "ICICI",
+  Other: "OTHER",
 });
 
 export const ModuleTypeEnum = Object.freeze({
