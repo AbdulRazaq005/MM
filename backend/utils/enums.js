@@ -44,4 +44,5 @@ export const ModuleType = Object.freeze({
   Projects: "PROJECTS",
   Loans: "LOANS",
   Banking: "BANKING",
+  Expenditure: "EXPENDITURE",
 });

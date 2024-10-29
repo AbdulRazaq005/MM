@@ -13,6 +13,7 @@ import contactRoutes from "./backend/routes/contactRoutes.js";
 import transactionRoutes from "./backend/routes/transactionRoutes.js";
 import loanRoutes from "./backend/routes/loanRoutes.js";
 import portfolioRoutes from "./backend/routes/portfolioRoutes.js";
+import expenditureRoutes from "./backend/routes/expenditureRoutes.js";
 import fs from "fs";
 
 dotenv.config();
@@ -29,6 +30,7 @@ app.use("/api/contacts", contactRoutes);
 app.use("/api/transactions", transactionRoutes);
 app.use("/api/loans", loanRoutes);
 app.use("/api/portfolio", portfolioRoutes);
+app.use("/api/expenditure", expenditureRoutes);
 
 if (process.env.NODE_ENV === "production") {
   const __dirname = path.resolve();
