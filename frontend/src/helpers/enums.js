@@ -46,6 +46,12 @@ export const ModuleTypeEnum = Object.freeze({
   Banking: "BANKING",
 });
 
+export const PortfolioTypeEnum = Object.freeze({
+  BankAccount: "BANKACCOUNT",
+  Asset: "ASSET",
+  Investment: "INVESTMENT",
+});
+
 // Options :
 
 export const UserRoleOptions = [

@@ -44,7 +44,7 @@ function EditLoanModal({ data, path, closeModal, forceRender }) {
   };
   const [deleteMessage, setDeleteMessage] = useState("");
 
-  const submitCreateNewLoan = (e) => {
+  const submitUpdateLoanDetails = (e) => {
     e.preventDefault();
     if (!(name && bankEnum && loanAmount && tenure && interestRate)) {
       setMessage("Please complete all required fields");
@@ -110,7 +110,7 @@ function EditLoanModal({ data, path, closeModal, forceRender }) {
     <Box
       component="form"
       noValidate
-      onSubmit={submitCreateNewLoan}
+      onSubmit={submitUpdateLoanDetails}
       sx={{
         ...modalContainerStyle,
         px: 6,

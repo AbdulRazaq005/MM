@@ -181,6 +181,7 @@ function LoanDetails() {
             }}
           >
             <TextInformationCard
+              width="49%"
               label={"Sanctioned Amount"}
               value={displayCurrency(data.loanAmount)}
               icon={
@@ -191,12 +192,22 @@ function LoanDetails() {
               color="#2680d4"
             />
             <TextInformationCard
+              width="49%"
               label={"Principal Amount Paid"}
               value={displayCurrency(data.principalAmountPaid)}
               icon={<PaidIcon sx={{ height: "100%", width: "100%" }} />}
               color="#28b55b"
             />
+          </Box>
+          <Box
+            sx={{
+              display: "flex",
+              flexFlow: "wrap",
+              justifyContent: "space-between",
+            }}
+          >
             <TextInformationCard
+              width="49%"
               label={"Outstanding Amount"}
               value={displayCurrency(
                 data.loanAmount - data.principalAmountPaid
@@ -207,6 +218,7 @@ function LoanDetails() {
               color="#ef8517"
             />
             <TextInformationCard
+              width="49%"
               label={"Interest Amount Paid"}
               value={displayCurrency(data.interestAmountPaid)}
               icon={

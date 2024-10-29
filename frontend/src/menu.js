@@ -43,16 +43,15 @@ const menuListItems = [
       path: "",
       icon: <CurrencyRupeeIcon />,
     },
+  ],
+  [
     {
-      label: "Banking",
-      path: "",
-      icon: <AccountBalanceIcon />,
-    },
-    {
-      label: "Investments",
-      path: "",
+      label: "Portfolio",
+      path: "/portfolio",
       icon: <MovingIcon />,
     },
+  ],
+  [
     {
       label: "Analytics",
       path: "",
@@ -64,11 +63,6 @@ const menuListItems = [
       label: "Travels",
       path: "",
       icon: <FlightIcon />,
-    },
-    {
-      label: "Outings",
-      path: "",
-      icon: <CommuteIcon />,
     },
   ],
   [

@@ -59,5 +59,5 @@ export async function upsertUserPortfolio({
   portfolio.investments = investments;
 
   await portfolio.save();
-  return true;
+  return portfolio;
 }

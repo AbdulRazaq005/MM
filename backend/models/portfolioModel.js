@@ -32,7 +32,7 @@ const portfolioSchema = mongoose.Schema(
           description: {
             type: String,
           },
-          balance: {
+          value: {
             type: Number,
             required: true,
             default: 0,
@@ -65,12 +65,12 @@ const portfolioSchema = mongoose.Schema(
             required: true,
             default: 0,
           },
-          quantity: {
-            type: Number,
-          },
-          unitValue: {
-            type: Number,
-          },
+          //   quantity: {
+          //     type: Number,
+          //   },
+          //   unitValue: {
+          //     type: Number,
+          //   },
         },
       ],
       default: [],
@@ -95,12 +95,12 @@ const portfolioSchema = mongoose.Schema(
             required: true,
             default: 0,
           },
-          quantity: {
-            type: Number,
-          },
-          unitValue: {
-            type: Number,
-          },
+          // quantity: {
+          //   type: Number,
+          // },
+          // unitValue: {
+          //   type: Number,
+          // },
         },
       ],
       default: [],

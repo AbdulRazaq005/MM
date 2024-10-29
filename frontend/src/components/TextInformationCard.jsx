@@ -1,13 +1,13 @@
 import { Box, Typography } from "@mui/material";
 import React from "react";
 
-function TextInformationCard({ label, value, icon, color }) {
+function TextInformationCard({ label, value, icon, color, width }) {
   return (
     <Box
       sx={{
         display: "flex",
         backgroundColor: "#E9E9E9",
-        width: "49%",
+        width: width,
         padding: 2,
         my: "0.75rem",
         borderRadius: 3,

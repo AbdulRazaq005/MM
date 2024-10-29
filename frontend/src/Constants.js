@@ -12,4 +12,7 @@ export const TransactionsUrl = `/api/transactions`;
 // loans
 export const LoansUrl = `/api/loans`;
 
+// portfolio
+export const PortfolioUrl = `/api/portfolio`;
+
 export const LastTransactionKey = "last-transction";
