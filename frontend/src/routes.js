@@ -12,6 +12,7 @@ import Transactions from "./pages/projects/Transactions";
 import Loans from "./pages/loans/Loans";
 import LoanDetails from "./pages/loans/LoanDetails";
 import Portfolio from "./pages/Portfolio";
+import Expenditure from "./pages/Expenditure";
 
 const routes = [
   {
@@ -57,6 +58,10 @@ const routes = [
       {
         path: "loans/:id",
         element: <LoanDetails />,
+      },
+      {
+        path: "expenditure",
+        element: <Expenditure />,
       },
       {
         path: "portfolio",

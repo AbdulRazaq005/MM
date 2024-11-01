@@ -438,7 +438,7 @@ function getPieChartData({ principalAmountPaid, interestAmountPaid }) {
       label: `Principal Amount Paid ( ${principalAmountPaidPercent.toFixed(
         2
       )} % )`,
-      color: "#00C49F",
+      color: "#28b55b",
     },
     {
       id: 1,

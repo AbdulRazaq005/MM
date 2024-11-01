@@ -4,18 +4,17 @@ import { Box, Button, Modal, TextField, Typography } from "@mui/material";
 import { PortfolioTypeEnum } from "../helpers/enums";
 import ConfirmationModal from "./ConfirmationModal";
 import axios from "axios";
-import { PortfolioUrl } from "../Constants";
+import { ExpenditureUrl } from "../Constants";
 
-function CreateUpdatePortfolioItemModal({
+function CreateUpdateExpenditureItemModal({
   data,
   action,
   closeModal,
   type,
-  resetData,
+  forceRender,
 }) {
   const [name, setName] = useState(data?.name);
   const [description, setDescription] = useState(data?.description);
-  const [value, setValue] = useState(data?.value);
   const [message, setMessage] = useState("");
 
   const [isDeleteMode, setIsDeleteMode] = useState(false);
@@ -29,34 +28,30 @@ function CreateUpdatePortfolioItemModal({
   if (type === PortfolioTypeEnum.Asset) itemName = "Asset";
   if (type === PortfolioTypeEnum.Investment) itemName = "Investment";
 
-  const submitCreateNewProject = (e) => {
+  const submitExpenditureCategory = (e) => {
     e.preventDefault();
-    if (!(name && value)) {
+    if (!name) {
       setMessage("Please complete all fields");
-    } else if (isNaN(Number(value))) {
-      setMessage("Please enter a valid Estimate amount");
     } else {
       action(type, {
         _id: data?._id,
         name,
         description,
-        value,
       });
     }
   };
 
-  const submitDeletePortfolioItem = (e) => {
+  const submitDeleteExpenditureCategory = (e) => {
     e.preventDefault();
     axios
-      .delete(PortfolioUrl + `/${type}/${data._id}`, {
-        type,
+      .delete(ExpenditureUrl + `/${data._id}`, {
         isHardDelete: true,
       })
       .then((response) => {
-        setDeleteMessage("Transaction Deleted Successfully.");
+        setDeleteMessage("Expenditure Category Deleted Successfully.");
         console.log(response);
         closeModal();
-        resetData(response.data);
+        forceRender();
       })
       .catch((error) => {
         setDeleteMessage(error.response.data.message);
@@ -82,7 +77,7 @@ function CreateUpdatePortfolioItemModal({
         component="form"
         noValidate
         sx={{ mt: 1 }}
-        onSubmit={submitCreateNewProject}
+        onSubmit={submitExpenditureCategory}
       >
         <TextField
           value={name}
@@ -108,19 +103,6 @@ function CreateUpdatePortfolioItemModal({
           sx={{ bgcolor: "#fff" }}
           onChange={(e) => {
             setDescription(e.target.value);
-          }}
-        />
-        <TextField
-          value={value}
-          margin="normal"
-          required
-          fullWidth
-          name="portfolio-item-value"
-          label="Value"
-          size="small"
-          sx={{ bgcolor: "#fff" }}
-          onChange={(e) => {
-            setValue(e.target.value);
           }}
         />
         <Typography sx={{ color: "red" }}>{message}</Typography>
@@ -153,13 +135,15 @@ function CreateUpdatePortfolioItemModal({
       <Modal open={isDeleteMode} onClose={closeDeleteModal}>
         <ConfirmationModal
           errorText={deleteMessage}
-          confirmationText={"Are you sure you want to delete ?"}
+          confirmationText={
+            "Are you sure you want to delete this Expenditure Category ?"
+          }
           onCancel={closeDeleteModal}
-          onConfirm={submitDeletePortfolioItem}
+          onConfirm={submitDeleteExpenditureCategory}
         />
       </Modal>
     </Box>
   );
 }
 
-export default CreateUpdatePortfolioItemModal;
+export default CreateUpdateExpenditureItemModal;

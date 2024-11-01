@@ -1,5 +1,5 @@
 import asyncHandler from "express-async-handler";
-import { ModuleType, PaymentModeType } from "../utils/enums.js";
+import { PaymentModeType } from "../utils/enums.js";
 import {
   createTransaction,
   deleteTransaction,

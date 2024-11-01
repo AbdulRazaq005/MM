@@ -57,17 +57,36 @@ function EditTransactionModal({ data, closeModal, forceRender }) {
   function isPrincipalAndInterestAmountsVisible() {
     return data?.moduleEnum === ModuleTypeEnum.Loans;
   }
+  function isTransactionTypeVisible() {
+    return data?.moduleEnum !== ModuleTypeEnum.Expenditure;
+  }
 
   useEffect(() => {
     if (principalAmount || interestAmount)
       setTransactionAmount(
         toNumber(principalAmount) + toNumber(interestAmount)
       );
+    // if (data?.moduleEnum === ModuleTypeEnum.Expenditure)
+    //   setToContactId(fromContact);
   }, [principalAmount, interestAmount]);
 
   const submitUpdateTransaction = (e) => {
     e.preventDefault();
-    // console.log("submitted:.......");
+    console.log("submitted edit:.......", {
+      targetId: data.targetId,
+      name,
+      description,
+      typeEnum: transactionTypeEnum,
+      paymentModeEnum: paymentModeEnum,
+      bankEnum: bankEnum,
+      date: transactionDate,
+      amount: transactionAmount,
+      principalAmount,
+      interestAmount,
+      fromContactId,
+      toContactId,
+      statusEnum: TransactionStatusEnum.Successful,
+    });
     if (!data) {
       setMessage("Invalid Transaction data");
     }
@@ -91,7 +110,10 @@ function EditTransactionModal({ data, closeModal, forceRender }) {
       setMessage("Please enter a valid Transaction Amount.");
     } else if (isUpi && !bankEnum) {
       setMessage("Please select bank account for UPI transaction.");
-    } else if (fromContactId === toContactId) {
+    } else if (
+      data?.moduleEnum !== ModuleTypeEnum.Expenditure &&
+      fromContactId === toContactId
+    ) {
       setMessage("From party and To party cannot be same.");
     } else {
       axios
@@ -299,26 +321,28 @@ function EditTransactionModal({ data, closeModal, forceRender }) {
           )}
         </Box>
         <Box sx={{ width: "21rem", mx: "1rem" }}>
-          <TextField
-            margin="normal"
-            value={transactionTypeEnum}
-            required
-            fullWidth
-            name="typeEnum"
-            label="Transaction Type"
-            size="small"
-            select
-            sx={{ bgcolor: "#fff" }}
-            onChange={(e) => {
-              setTransactionTypeEnum(e.target.value);
-            }}
-          >
-            {TransactionTypeOptions.map((option) => (
-              <MenuItem key={option.value} value={option.value}>
-                {option.label}
-              </MenuItem>
-            ))}
-          </TextField>
+          {isTransactionTypeVisible() && (
+            <TextField
+              margin="normal"
+              value={transactionTypeEnum}
+              required
+              fullWidth
+              name="typeEnum"
+              label="Transaction Type"
+              size="small"
+              select
+              sx={{ bgcolor: "#fff" }}
+              onChange={(e) => {
+                setTransactionTypeEnum(e.target.value);
+              }}
+            >
+              {TransactionTypeOptions.map((option) => (
+                <MenuItem key={option.value} value={option.value}>
+                  {option.label}
+                </MenuItem>
+              ))}
+            </TextField>
+          )}
           <TextField
             margin="normal"
             value={paymentModeEnum}

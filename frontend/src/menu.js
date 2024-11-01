@@ -40,7 +40,7 @@ const menuListItems = [
   [
     {
       label: "Expenditures",
-      path: "",
+      path: "/expenditure",
       icon: <CurrencyRupeeIcon />,
     },
   ],

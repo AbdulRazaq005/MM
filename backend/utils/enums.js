@@ -46,3 +46,14 @@ export const ModuleType = Object.freeze({
   Banking: "BANKING",
   Expenditure: "EXPENDITURE",
 });
+
+export const PortfolioType = Object.freeze({
+  BankAccount: "BANKACCOUNT",
+  Asset: "ASSET",
+  Investment: "INVESTMENT",
+});
+
+export const ExpenditureCategoryType = Object.freeze({
+  Income: "INCOME",
+  Expense: "EXPENSE",
+});

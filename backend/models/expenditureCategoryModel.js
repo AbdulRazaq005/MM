@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import { ExpenditureCategoryType } from "../utils/enums.js";
 // import { UserRole } from "../utils/enums.js";
 
 const expenditureCategorySchema = mongoose.Schema(
@@ -12,6 +13,11 @@ const expenditureCategorySchema = mongoose.Schema(
     },
     userId: {
       type: mongoose.Types.ObjectId,
+      required: true,
+    },
+    type: {
+      type: String,
+      enum: Object.values(ExpenditureCategoryType),
       required: true,
     },
     isActive: {

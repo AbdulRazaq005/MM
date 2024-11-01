@@ -20,22 +20,27 @@ import moment from "moment";
 
 function CreateTransactionModal({
   targetId,
+  targetOptions,
   closeModal,
   forceRender,
   loanName,
   moduleType,
   fromContact,
   toContact,
+  typeEnum,
 }) {
   const contacts = useGlobalStore((state) => state.contacts);
+  const [_targetId, setTargetId] = useState(targetId);
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [fromContactId, setFromContactId] = useState(fromContact);
   const [toContactId, setToContactId] = useState(toContact);
-  const [transactionTypeEnum, setTransactionTypeEnum] = useState("");
+  const [transactionTypeEnum, setTransactionTypeEnum] = useState(
+    typeEnum ?? ""
+  );
   const [paymentModeEnum, setPaymentModeEnum] = useState("");
   const [bankEnum, setBankEnum] = useState("");
-  const [moduleTypeEnum, setModuleTypeEnum] = useState("");
+  const [moduleTypeEnum, setModuleTypeEnum] = useState(moduleType);
   const [transactionDate, setTransactionDate] = useState("");
   const [transactionAmount, setTransactionAmount] = useState("");
   const [principalAmount, setPrincipalAmount] = useState(0);
@@ -69,13 +74,15 @@ function CreateTransactionModal({
   function isPrincipalAndInterestAmountsVisible() {
     return moduleTypeEnum === ModuleTypeEnum.Loans;
   }
+  function isTargetOptionsVisible() {
+    return moduleTypeEnum === ModuleTypeEnum.Expenditure;
+  }
+  function isTransactionTypeVisible() {
+    return moduleTypeEnum !== ModuleTypeEnum.Expenditure;
+  }
 
   const submitAddNewTransaction = (e) => {
     e.preventDefault();
-    // console.log("submitted:.......");
-
-    // If description not entered set same as transaction name
-    if (description === "") setDescription(name);
 
     const isUpi = [
       PaymentModeTypeEnum.Upi,
@@ -98,15 +105,23 @@ function CreateTransactionModal({
       setMessage("Please enter a valid Transaction Amount.");
     } else if (isUpi && !bankEnum) {
       setMessage("Please select bank account for UPI transaction.");
-    } else if (fromContactId === toContactId) {
+    } else if (
+      moduleTypeEnum !== ModuleTypeEnum.Expenditure &&
+      fromContactId === toContactId
+    ) {
       setMessage("From party and To party cannot be same.");
+    } else if (
+      moduleTypeEnum === ModuleTypeEnum.Expenditure &&
+      (!targetOptions || targetOptions?.length === 0)
+    ) {
+      setMessage("Please create an expenditure category");
     } else {
       axios
         .post(TransactionsUrl, {
-          targetId,
+          targetId: _targetId,
           name,
-          description,
-          typeEnum: transactionTypeEnum,
+          description: description ? description : name,
+          typeEnum: typeEnum ? typeEnum : transactionTypeEnum,
           paymentModeEnum: paymentModeEnum,
           bankEnum: bankEnum,
           date: transactionDate,
@@ -121,16 +136,14 @@ function CreateTransactionModal({
         .then((response) => {
           setMessage("Transaction Added Successfully.");
           // console.log(response);
-
-          if (moduleTypeEnum === ModuleTypeEnum.Projects) {
-            saveTransactionToLocalStorage({
-              transactionTypeEnum: transactionTypeEnum,
-              paymentModeEnum: paymentModeEnum,
-              bankEnum: bankEnum,
-              transactionDate: transactionDate,
-              fromContactId,
-            });
-          }
+          saveTransactionToLocalStorage({
+            moduleEnum: moduleTypeEnum,
+            transactionTypeEnum: transactionTypeEnum,
+            paymentModeEnum: paymentModeEnum,
+            bankEnum: bankEnum,
+            // transactionDate: transactionDate,
+            fromContactId,
+          });
           closeModal();
           forceRender();
         })
@@ -149,13 +162,31 @@ function CreateTransactionModal({
   }
 
   function saveTransactionToLocalStorage(transaction) {
-    let transactionStr = JSON.stringify(transaction);
-    localStorage.setItem(LastTransactionKey, transactionStr);
+    if (moduleTypeEnum) {
+      try {
+        let transactionStr = JSON.stringify(transaction);
+        localStorage.setItem(
+          `${LastTransactionKey}-${moduleTypeEnum}`,
+          transactionStr
+        );
+      } catch (error) {
+        console.error("Error while storing last transaction: ", error);
+      }
+    } else {
+      console.error(
+        "No 'moduleTypeEnum' in 'CreateTransactionModal', skipping last transaction storing."
+      );
+    }
   }
-  function loadTransactionFromLocalStorage(transaction) {
-    let transactionStr = localStorage[LastTransactionKey];
+  function loadTransactionFromLocalStorage() {
+    let transactionStr =
+      localStorage[`${LastTransactionKey}-${moduleTypeEnum}`];
     try {
-      console.log("transactionStr", transactionStr);
+      console.log(
+        "lastTransactionKey: ",
+        `${LastTransactionKey}-${moduleTypeEnum}`
+      );
+      console.log("lastTransactionStr: ", transactionStr);
 
       if (!transactionStr) {
         setMessage("Cannot find any last saved transactions.");
@@ -163,13 +194,28 @@ function CreateTransactionModal({
         return;
       }
       let transaction = JSON.parse(transactionStr);
-      console.log("transaction", transaction);
-      setTransactionTypeEnum(transaction.transactionTypeEnum);
-      setPaymentModeEnum(transaction.paymentModeEnum);
-      setBankEnum(transaction.bankEnum);
-      setTransactionDate(transaction.transactionDate);
+      console.log("transaction", transaction, moduleTypeEnum);
+      if (
+        !transactionTypeEnum &&
+        [ModuleTypeEnum.Projects, ModuleTypeEnum.Loans].includes(moduleTypeEnum)
+      )
+        setTransactionTypeEnum(transaction.transactionTypeEnum);
+
+      console.log(
+        "condition",
+        !transactionTypeEnum &&
+          [ModuleTypeEnum.Projects, ModuleTypeEnum.Loans].includes(
+            moduleTypeEnum
+          ),
+        transactionTypeEnum
+      );
+
+      if (!paymentModeEnum) setPaymentModeEnum(transaction.paymentModeEnum);
+      if (!bankEnum) setBankEnum(transaction.bankEnum);
+      if (!transactionDate) setTransactionDate(transaction.transactionDate);
       // setTransactionAmount(transactionAmount);
-      setFromContactId(transaction.fromContactId);
+      if (!fromContact && moduleTypeEnum === ModuleTypeEnum.Projects)
+        setFromContactId(transaction.fromContactId);
       // setToContactId(toContactId);
     } catch (error) {
       setMessage("Error while loading last saved transaction.");
@@ -207,6 +253,27 @@ function CreateTransactionModal({
         }}
       >
         <Box sx={{ width: "21rem", mx: "1rem" }}>
+          {isTargetOptionsVisible() && (
+            <TextField
+              margin="normal"
+              required={true}
+              fullWidth
+              name="transaction-category"
+              label="Category"
+              size="small"
+              select
+              sx={{ bgcolor: "#fff" }}
+              onChange={(e) => {
+                setTargetId(e.target.value);
+              }}
+            >
+              {targetOptions.map((option) => (
+                <MenuItem key={option.value} value={option.value}>
+                  {option.label}
+                </MenuItem>
+              ))}
+            </TextField>
+          )}
           <TextField
             value={name}
             margin="normal"
@@ -331,26 +398,28 @@ function CreateTransactionModal({
           )}
         </Box>
         <Box sx={{ width: "21rem", mx: "1rem" }}>
-          <TextField
-            margin="normal"
-            value={transactionTypeEnum}
-            required
-            fullWidth
-            name="typeEnum"
-            label="Transaction Type"
-            size="small"
-            select
-            sx={{ bgcolor: "#fff" }}
-            onChange={(e) => {
-              setTransactionTypeEnum(e.target.value);
-            }}
-          >
-            {TransactionTypeOptions.map((option) => (
-              <MenuItem key={option.value} value={option.value}>
-                {option.label}
-              </MenuItem>
-            ))}
-          </TextField>
+          {isTransactionTypeVisible() && (
+            <TextField
+              margin="normal"
+              value={transactionTypeEnum}
+              required
+              fullWidth
+              name="typeEnum"
+              label="Transaction Type"
+              size="small"
+              select
+              sx={{ bgcolor: "#fff" }}
+              onChange={(e) => {
+                setTransactionTypeEnum(e.target.value);
+              }}
+            >
+              {TransactionTypeOptions.map((option) => (
+                <MenuItem key={option.value} value={option.value}>
+                  {option.label}
+                </MenuItem>
+              ))}
+            </TextField>
+          )}
           <TextField
             margin="normal"
             value={paymentModeEnum}
@@ -411,16 +480,14 @@ function CreateTransactionModal({
       <Typography sx={{ color: "red", ml: 2, my: 1 }}>{message}</Typography>
 
       <Box sx={{ display: "flex", justifyContent: "flex-end", mt: 0, mb: 2 }}>
-        {moduleTypeEnum === ModuleTypeEnum.Projects && (
-          <Button
-            onClick={() => loadTransactionFromLocalStorage()}
-            variant="contained"
-            color="warning"
-            sx={{ mr: 2 }}
-          >
-            Load Last Transaction
-          </Button>
-        )}
+        <Button
+          onClick={() => loadTransactionFromLocalStorage()}
+          variant="contained"
+          color="inherit"
+          sx={{ mr: 2 }}
+        >
+          Load Last Transaction
+        </Button>
         <Button
           color="grey"
           variant="contained"

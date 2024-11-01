@@ -3,7 +3,15 @@ import React from "react";
 import { displayCurrency } from "../helpers/displayFormatHelpers";
 import EditIcon from "@mui/icons-material/Edit";
 
-function PortfolioCard({ data, color, actionText, action, type }) {
+function ExpenditureCategoryCard({
+  data,
+  value,
+  color,
+  actionText,
+  action,
+  type,
+  isEditMode,
+}) {
   function onClickAction() {
     if (action) {
       action(type, data);
@@ -18,8 +26,8 @@ function PortfolioCard({ data, color, actionText, action, type }) {
         border: "#f3f3f3 solid 0.05rem",
         borderRadius: "0.75rem",
         boxShadow: "0px 10px 15px 5px #f5f5f5",
-        px: 4,
-        py: 2,
+        px: 2.5,
+        py: 1,
         my: 1,
         display: "flex",
         justifyContent: "space-between",
@@ -28,9 +36,10 @@ function PortfolioCard({ data, color, actionText, action, type }) {
     >
       <Box>
         <Typography
-          variant="h6"
+          // variant="h7"
           sx={{
             color: "#444",
+            fontSize: "1.2rem",
             fontWeight: "600",
           }}
         >
@@ -46,10 +55,12 @@ function PortfolioCard({ data, color, actionText, action, type }) {
             {data.description}
           </Typography>
         )}
+      </Box>
+      <Box sx={{ bgcolor: "", display: "flex" }}>
         <Typography
           variant="h5"
           sx={{
-            fontSize: "1.5rem",
+            fontSize: "1.4rem",
             color: color,
             fontWeight: "550",
             mt: 1,
@@ -57,20 +68,20 @@ function PortfolioCard({ data, color, actionText, action, type }) {
             ml: "auto",
           }}
         >
-          {displayCurrency(data.value)}
+          {displayCurrency(value)}
         </Typography>
-      </Box>
-      <Box>
-        <Button
-          onClick={onClickAction}
-          sx={{
-            bgcolor: "#f5f5f5",
-            ml: 3,
-            color: "grey",
-          }}
-        >
-          <EditIcon />
-        </Button>
+        {isEditMode && (
+          <Button
+            onClick={onClickAction}
+            sx={{
+              bgcolor: "#f1f1f1",
+              ml: 3,
+              color: "grey",
+            }}
+          >
+            <EditIcon />
+          </Button>
+        )}
       </Box>
     </Box>
   ) : (
@@ -86,11 +97,13 @@ function PortfolioCard({ data, color, actionText, action, type }) {
         height: "100%",
         py: 2,
         my: 1,
+        display: "flex",
+        alignItems: "center",
       }}
     >
       <Typography
         sx={{
-          fontSize: 100,
+          fontSize: 50,
           lineHeight: 0.75,
           color: "grey",
           fontFamily: "courier",
@@ -98,7 +111,13 @@ function PortfolioCard({ data, color, actionText, action, type }) {
       >
         +
       </Typography>
-      <Typography sx={{ fontSize: 20, ml: 2, color: "grey" }}>
+      <Typography
+        sx={{
+          fontSize: 20,
+          ml: 2,
+          color: "grey",
+        }}
+      >
         {actionText}
       </Typography>
     </CardActionArea>
@@ -106,4 +125,4 @@ function PortfolioCard({ data, color, actionText, action, type }) {
 }
 // }
 
-export default PortfolioCard;
+export default ExpenditureCategoryCard;

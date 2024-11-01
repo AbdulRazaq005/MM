@@ -10,24 +10,32 @@ export async function getExpenditureDetails({ fromDate, toDate }, userId) {
 
   let query = Transaction.where({ isActive: true });
 
-  if (targetIds && Array.isArray(targetIds) && targetIds.length > 0) {
+  if (targetIds && Array.isArray(targetIds)) {
     query = query.where({ targetId: { $in: targetIds } });
   }
   if (fromDate && toDate) {
     query = query.where({ date: { $gte: fromDate, $lte: toDate } });
   }
-  let transactions = await query.lean().exec();
+  let transactions = await query
+    .lean()
+    .populate("fromContact toContact")
+    .select("-isActive -__v")
+    .exec();
   return {
     expenditureCategories: categories,
     transactions,
   };
 }
 
-export async function createExpenditureCategory({ name, description }, userId) {
+export async function createExpenditureCategory(
+  { name, description, type },
+  userId
+) {
   await ExpenditureCategory.create({
     name,
     description,
     userId: userId,
+    type,
   });
   return true;
 }

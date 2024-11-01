@@ -1,5 +1,6 @@
 import asyncHandler from "express-async-handler";
 import {
+  deletePortfolioItem,
   getCurrentMonthPortfolio,
   upsertUserPortfolio,
 } from "../services/portfolioService.js";
@@ -33,4 +34,19 @@ export const postUserPortfolio = asyncHandler(async (req, res) => {
   } else {
     res.status(400).json({ message: "Invalid data" });
   }
+});
+
+// DELETE /api/portfolio/:type/:id
+export const deleteUserPortfolioItem = asyncHandler(async (req, res) => {
+  if (!req.user._id) {
+    res.status(400).json({ message: "id cannot be empty." });
+  }
+  const { type, id } = req.params;
+  let result = await deletePortfolioItem({
+    userId: req.user._id,
+    type,
+    id,
+  });
+  res.status(200).json(result);
+  return;
 });

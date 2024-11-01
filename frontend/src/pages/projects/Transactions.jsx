@@ -1,6 +1,5 @@
 import {
   BankAccountOptions,
-  PaymentModeTypeEnum,
   PaymentModeTypeOptions,
   TransactionTypeEnum,
 } from "../../helpers/enums";
@@ -131,8 +130,8 @@ export default function Transactions() {
         </Typography>
       );
     },
-    fromContact: ({ data }) => data.name,
-    toContact: ({ data }) => data.name,
+    fromContact: ({ data }) => data?.name,
+    toContact: ({ data }) => data?.name,
     date: ({ data }) => displayDate(data),
     amount: ({ data, rowData }) => {
       return (
@@ -148,8 +147,8 @@ export default function Transactions() {
 
   function getContactDisplayName(contact) {
     return (
-      contact.name +
-      (contact.designation ? " (" + contact.designation + ")" : "")
+      contact?.name +
+      (contact?.designation ? " (" + contact?.designation + ")" : "")
     );
   }
 

@@ -18,11 +18,12 @@ export const getUserExpenditureDetails = asyncHandler(async (req, res) => {
 
 // POST /api/expenditure
 export const createUserExpenditureCategory = asyncHandler(async (req, res) => {
-  const { name, description } = req.body;
+  const { name, description, type } = req.body;
   let result = await createExpenditureCategory(
     {
       name,
       description,
+      type,
     },
     req.user._id
   );

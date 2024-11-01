@@ -22,6 +22,8 @@ function Portfolio() {
   const [activeItemData, setActiveItemData] = useState({});
   const [activeItemType, setActiveItemType] = useState("");
 
+  const [render, setRender] = useState(0);
+  const reRender = () => setRender(render + 1);
   // const user = useGlobalStore((state) => state.user);
 
   useEffect(() => {
@@ -34,7 +36,7 @@ function Portfolio() {
     }
     fetchData();
     // eslint-disable-next-line
-  }, []);
+  }, [render]);
 
   function togglePortfolioItemModal(type, itemData) {
     if (!isPortfolioItemModalOpen) {
@@ -297,6 +299,7 @@ function Portfolio() {
           closeModal={togglePortfolioItemModal}
           action={upsertPortfolioItem}
           type={activeItemType}
+          resetData={setData}
         />
       </Modal>
 

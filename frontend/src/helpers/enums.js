@@ -44,12 +44,18 @@ export const ModuleTypeEnum = Object.freeze({
   Projects: "PROJECTS",
   Loans: "LOANS",
   Banking: "BANKING",
+  Expenditure: "EXPENDITURE",
 });
 
 export const PortfolioTypeEnum = Object.freeze({
   BankAccount: "BANKACCOUNT",
   Asset: "ASSET",
   Investment: "INVESTMENT",
+});
+
+export const ExpenditureCategoryType = Object.freeze({
+  Income: "INCOME",
+  Expense: "EXPENSE",
 });
 
 // Options :
