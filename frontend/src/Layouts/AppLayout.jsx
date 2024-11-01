@@ -28,7 +28,7 @@ const darkTheme = createTheme({
 });
 
 export default function AppLayout() {
-  const drawerWidth = 240;
+  const drawerWidth = 280;
   const [menuOpen, setMenuOpen] = React.useState(false);
   const handleDrawerToggle = () => {
     setMenuOpen(!menuOpen);

@@ -1,14 +1,9 @@
-import CurrencyRupeeIcon from "@mui/icons-material/CurrencyRupee";
 import DomainAddIcon from "@mui/icons-material/DomainAdd";
 import AccountBalanceWalletIcon from "@mui/icons-material/AccountBalanceWallet";
-import MovingIcon from "@mui/icons-material/Moving";
 import ContactPhoneIcon from "@mui/icons-material/ContactPhone";
-import AccountBalanceIcon from "@mui/icons-material/AccountBalance";
 import BarChartIcon from "@mui/icons-material/BarChart";
-import SettingsIcon from "@mui/icons-material/Settings";
-import FlightIcon from "@mui/icons-material/Flight";
-import CommuteIcon from "@mui/icons-material/Commute";
 import PaidIcon from "@mui/icons-material/Paid";
+import DehazeOutlinedIcon from "@mui/icons-material/DehazeOutlined";
 
 // Find Icons names : https://mui.com/material-ui/material-icons/
 
@@ -17,61 +12,77 @@ const menuListItems = [
     {
       label: "Projects",
       path: "projects",
-      icon: <DomainAddIcon />,
-    },
-    {
-      label: "Transactions",
-      path: "transactions",
-      icon: <PaidIcon />,
-    },
-    {
-      label: "Contacts",
-      path: "/contacts",
-      icon: <ContactPhoneIcon />,
+      icon: <DomainAddIcon sx={{ fontSize: "1.8rem" }} />,
+      submenuItems: [
+        {
+          label: "Transactions",
+          path: "transactions",
+          icon: <DehazeOutlinedIcon sx={{ fontSize: "1.5rem" }} />,
+        },
+        {
+          label: "Contacts",
+          path: "/contacts",
+          icon: <ContactPhoneIcon sx={{ fontSize: "1.5rem" }} />,
+        },
+      ],
     },
   ],
   [
     {
       label: "Loans",
       path: "loans",
-      icon: <AccountBalanceWalletIcon />,
+      icon: <AccountBalanceWalletIcon sx={{ fontSize: "1.8rem" }} />,
+      submenuItems: [
+        {
+          label: "Transactions",
+          path: "transactions",
+          icon: <DehazeOutlinedIcon sx={{ fontSize: "1.5rem" }} />,
+        },
+      ],
     },
   ],
   [
     {
       label: "Expenditures",
       path: "/expenditure",
-      icon: <CurrencyRupeeIcon />,
+      icon: <BarChartIcon sx={{ fontSize: "1.8rem" }} />,
+      submenuItems: [
+        {
+          label: "Transactions",
+          path: "transactions",
+          icon: <DehazeOutlinedIcon sx={{ fontSize: "1.5rem" }} />,
+        },
+      ],
     },
   ],
   [
     {
       label: "Portfolio",
       path: "/portfolio",
-      icon: <MovingIcon />,
+      icon: <PaidIcon sx={{ fontSize: "1.8rem" }} />,
     },
   ],
-  [
-    {
-      label: "Analytics",
-      path: "",
-      icon: <BarChartIcon />,
-    },
-  ],
-  [
-    {
-      label: "Travels",
-      path: "",
-      icon: <FlightIcon />,
-    },
-  ],
-  [
-    {
-      label: "Settings",
-      path: "",
-      icon: <SettingsIcon />,
-    },
-  ],
+  // [
+  //   {
+  //     label: "Analytics",
+  //     path: "",
+  //     icon: <BarChartIcon />,
+  //   },
+  // ],
+  // [
+  //   {
+  //     label: "Travels",
+  //     path: "",
+  //     icon: <FlightIcon />,
+  //   },
+  // ],
+  // [
+  //   {
+  //     label: "Settings",
+  //     path: "",
+  //     icon: <SettingsIcon />,
+  //   },
+  // ],
 ];
 
 export default menuListItems;

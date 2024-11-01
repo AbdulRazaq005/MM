@@ -175,7 +175,7 @@ function Portfolio() {
           label={"Total Bank Balance"}
           value={displayCurrency(getTotalValue(PortfolioTypeEnum.BankAccount))}
           icon={<AccountBalanceIcon sx={{ height: "100%", width: "100%" }} />}
-          color="#7ca145"
+          color="#5fa827"
         />
         <TextInformationCard
           width="32%"
@@ -212,7 +212,7 @@ function Portfolio() {
           return (
             <PortfolioCard
               data={item}
-              color="#88B04B"
+              color="#5fa827"
               actionText="Update Bank Account"
               action={togglePortfolioItemModal}
               type={PortfolioTypeEnum.BankAccount}

@@ -173,7 +173,7 @@ function Expenditure() {
         <Typography
           color={
             rowData.typeEnum === TransactionTypeEnum.Credit
-              ? "#28b55b"
+              ? "#5fa827"
               : "#D65076"
           }
           sx={{ fontSize: 18, fontWeight: 550, ml: 0 }}
@@ -234,7 +234,7 @@ function Expenditure() {
           label={"Total Budget"}
           value={displayCurrency(getTotalValue(ExpenditureCategoryType.Income))}
           icon={<AccountBalanceIcon sx={{ height: "100%", width: "100%" }} />}
-          color="#28b55b"
+          color="#5fa827"
         />
         <TextInformationCard
           width="32%"
@@ -312,7 +312,7 @@ function Expenditure() {
               <ExpenditureCategoryCard
                 data={item}
                 value={getTotalCategoryValue(item._id)}
-                color="#28b55b"
+                color="#5fa827"
                 actionText="Update Income Stream"
                 action={toggleExpenditureItemModal}
                 type={ExpenditureCategoryType.Income}

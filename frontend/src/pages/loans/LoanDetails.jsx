@@ -196,7 +196,7 @@ function LoanDetails() {
               label={"Principal Amount Paid"}
               value={displayCurrency(data.principalAmountPaid)}
               icon={<PaidIcon sx={{ height: "100%", width: "100%" }} />}
-              color="#28b55b"
+              color="#5fa827"
             />
           </Box>
           <Box
@@ -438,7 +438,7 @@ function getPieChartData({ principalAmountPaid, interestAmountPaid }) {
       label: `Principal Amount Paid ( ${principalAmountPaidPercent.toFixed(
         2
       )} % )`,
-      color: "#28b55b",
+      color: "#5fa827",
     },
     {
       id: 1,
