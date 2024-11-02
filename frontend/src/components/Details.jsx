@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, Typography, Tooltip, Divider } from "@mui/material";
+import { Box, Typography, Tooltip } from "@mui/material";
 
 function Details({ data }) {
   return (

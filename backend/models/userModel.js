@@ -21,15 +21,10 @@ const userSchema = mongoose.Schema(
       required: true,
       enum: Object.values(UserRole),
     },
-    email: {
-      type: String,
-      required: true,
-      unique: true,
-    },
     contact: {
-      type: String,
-      required: true,
-      unique: true,
+      type: mongoose.Types.ObjectId,
+      ref: "Contact",
+      default: null,
     },
   },
   {

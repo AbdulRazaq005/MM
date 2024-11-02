@@ -28,7 +28,7 @@ export default function Register() {
   const [role, setRole] = useState("USER");
   const [email, setEmail] = useState();
   const [contactNo, setContactNo] = useState();
-  const [registerationCode, setRegisterationCode] = useState("");
+  const [registrationCode, setRegistrationCode] = useState("");
   const [acceptTnC, setAcceptTnC] = useState(false);
   const [message, setMessage] = useState();
 
@@ -43,7 +43,7 @@ export default function Register() {
         role &&
         email &&
         contactNo &&
-        registerationCode
+        registrationCode
       )
     ) {
       setMessage("Please complete all fields");
@@ -52,7 +52,7 @@ export default function Register() {
     } else if (isNaN(Number(contactNo))) {
       setMessage("Please enter a valid Contact no.");
     } else if (password1 !== password2) {
-      setMessage("Passowrds do not match. Please check again");
+      setMessage("Passwords do not match. Please check again");
     } else {
       axios
         .post(RegisterUrl, {
@@ -61,11 +61,11 @@ export default function Register() {
           password: password1,
           role,
           email,
-          contact: contactNo,
-          secretCode: registerationCode,
+          contactNo,
+          secretCode: registrationCode,
         })
         .then((response) => {
-          setMessage("Registeration Successful.");
+          setMessage("Registration Successful.");
           // console.log(response);
           navigate("/projects");
         })
@@ -87,7 +87,7 @@ export default function Register() {
           md={7}
           sx={{
             backgroundImage:
-              "url(https://source.unsplash.com/random?wallpapers)",
+              "url(https://plus.unsplash.com/premium_photo-1673697240073-04416dc18ab3?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D)",
             backgroundRepeat: "no-repeat",
             backgroundSize: "cover",
             backgroundPosition: "center",
@@ -196,9 +196,9 @@ export default function Register() {
                 name="registeration-code"
                 label="Registeration Code"
                 size="small"
-                value={registerationCode}
+                value={registrationCode}
                 onChange={(e) => {
-                  setRegisterationCode(e.target.value);
+                  setRegistrationCode(e.target.value);
                 }}
               />
               <TextField

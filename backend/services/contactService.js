@@ -15,6 +15,7 @@ export async function createContact(contactDetails) {
     email,
     address,
     projectId,
+    ContactType,
   });
   return await getContacts();
 }
@@ -24,14 +25,22 @@ export async function updateContact(id, contactDetails) {
   if (!contact) {
     throw new Error("Contact not found.");
   }
-  const { name, designation, contactNo, email, address, projectId } =
-    contactDetails;
+  const {
+    name,
+    designation,
+    contactNo,
+    email,
+    address,
+    projectId,
+    ContactType,
+  } = contactDetails;
   contact.name = name;
   contact.designation = designation;
   contact.contactNo = contactNo;
   contact.email = email;
   contact.address = address;
   contact.projectId = projectId;
+  contact.ContactType = ContactType;
   await contact.save();
   return await getContacts();
 }

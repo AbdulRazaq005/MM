@@ -16,7 +16,7 @@ const transactionSchema = mongoose.Schema(
     name: {
       type: String,
       required: true,
-      unique: true,
+      // unique: true,
     },
     description: {
       type: String,
@@ -28,6 +28,14 @@ const transactionSchema = mongoose.Schema(
     amount: {
       type: Number,
       required: true,
+    },
+    principalAmount: {
+      type: Number,
+      default: 0,
+    },
+    interestAmount: {
+      type: Number,
+      default: 0,
     },
     fromContact: {
       type: mongoose.Types.ObjectId,

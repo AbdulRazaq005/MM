@@ -20,8 +20,8 @@ function CategoryDetails() {
   const [data, setData] = useState({});
   const [render, setRender] = useState(0);
   const reRender = () => setRender(render + 1);
-  const [isCreateCaregoryMode, setCreateCaregoryMode] = useState(false);
-  const closeCreateCaregoryModal = () => setCreateCaregoryMode(false);
+  const [isCreateCategoryMode, setCreateCategoryMode] = useState(false);
+  const closeCreateCategoryModal = () => setCreateCategoryMode(false);
   const [isAddTransactionMode, setAddTransactionMode] = useState(false);
   const closeAddTransactionModal = () => setAddTransactionMode(false);
   const [activeEditTransaction, setActiveEditTransaction] = useState({});
@@ -161,7 +161,7 @@ function CategoryDetails() {
             })}
           <AppCard
             actionText={"Create New Category"}
-            action={() => setCreateCaregoryMode(true)}
+            action={() => setCreateCategoryMode(true)}
           />
         </Box>
       </Box>
@@ -191,12 +191,12 @@ function CategoryDetails() {
       </Box>
 
       {/* Create new Category Modal */}
-      <Modal open={isCreateCaregoryMode} onClose={closeCreateCaregoryModal}>
+      <Modal open={isCreateCategoryMode} onClose={closeCreateCategoryModal}>
         <CreateCategoryModal
           targetId={id}
           path={CategoriesUrl + "/add-category"}
           forceRender={reRender}
-          closeModal={closeCreateCaregoryModal}
+          closeModal={closeCreateCategoryModal}
         />
       </Modal>
 

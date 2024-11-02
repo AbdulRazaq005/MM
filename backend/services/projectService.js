@@ -3,8 +3,12 @@ import Category from "../models/categoryModel.js";
 import mongoose from "mongoose";
 import { CATEGORY_DEPTH_START } from "../utils/constants.js";
 
-export async function getAllProjectDetails() {
-  const projects = await Project.find({}).select("id name description");
+export async function getAllProjectDetails(userId) {
+  const projects = await Project.find({
+    projectUsers: { $elemMatch: { $eq: userId } },
+  })
+    .select("id name description")
+    .lean();
   return projects;
 }
 
@@ -34,9 +38,15 @@ export async function getProjectDetailsById(id) {
   return project;
 }
 
-export async function createProject(projectDetails) {
+export async function createProject(projectDetails, userId) {
   const { name, description, estimate } = projectDetails;
-  const project = await Project.create({ name, description, estimate });
+  const project = await Project.create({
+    name,
+    description,
+    estimate,
+    projectUsers: [userId],
+    createdById: userId,
+  });
   return project;
 }
 
