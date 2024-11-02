@@ -15,14 +15,11 @@ import loanRoutes from "./backend/routes/loanRoutes.js";
 import portfolioRoutes from "./backend/routes/portfolioRoutes.js";
 import expenditureRoutes from "./backend/routes/expenditureRoutes.js";
 import fs from "fs";
-// import NodeCache from "node-cache";
 
 dotenv.config();
 connectDatabase();
 
 const app = express();
-// let cacheTtlInSeconds = process.env.CACHE_TTL_IN_SECONDS;
-// export const cache = new NodeCache({ stdTTL: cacheTtlInSeconds ?? 900 });
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));

@@ -2,8 +2,9 @@ import jwt from "jsonwebtoken";
 import User from "../models/userModel.js";
 import asyncHandler from "express-async-handler";
 import NodeCache from "node-cache";
-export const cache = new NodeCache({ stdTTL: 900 });
-// import { cache } from "../../index.js";
+
+let cacheTtlInSeconds = process.env.CACHE_TTL_IN_SECONDS;
+export const cache = new NodeCache({ stdTTL: cacheTtlInSeconds ?? 900 });
 
 // Simple middleware for handling exceptions inside of async express routes
 // and passing them to your express error handlers. Avoiding .then.catch and try-catch blocks.
@@ -33,19 +34,17 @@ const protect = asyncHandler(async (req, res, next) => {
 });
 
 async function fetchCachedUserById(userId) {
-  // let user = cache.get(userId);
-  // if (user) {
-  //   // console.log("Found cached user: ", user.name);
-  //   return user;
-  // }
-  // user = await User.findById(userId).select("-password");
-  // if (user) {
-  //   cache.set(userId, user);
-  //   // console.log("Caching user for 900 seconds: ", user);
-  // }
-  // return user;
-
-  return User.findById(userId).select("-password");
+  let user = cache.get(userId);
+  if (user) {
+    // console.log("Found cached user: ", user.name);
+    return user;
+  }
+  user = await User.findById(userId).select("-password");
+  if (user) {
+    cache.set(userId, user);
+    // console.log("Caching user for 900 seconds: ", user);
+  }
+  return user;
 }
 
 export { protect };
