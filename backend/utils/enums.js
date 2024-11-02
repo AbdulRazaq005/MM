@@ -3,6 +3,12 @@ export const UserRole = Object.freeze({
   User: "USER",
 });
 
+export const ContactType = Object.freeze({
+  User: "USER",
+  Bank: "BANK",
+  ThirdParty: "TP",
+});
+
 export const TransactionType = Object.freeze({
   Debit: "DEBIT",
   Credit: "CREDIT",
@@ -10,7 +16,7 @@ export const TransactionType = Object.freeze({
 
 export const TransactionStatus = Object.freeze({
   Pending: "PENDING",
-  Succssful: "SUCCESSFUL",
+  Successful: "SUCCESSFUL",
   Revoked: "REVOKED",
 });
 
@@ -27,11 +33,27 @@ export const BankAccount = Object.freeze({
   Canara: "CANARA",
   BankOfBaroda: "BOB",
   PragathiKrishna: "PKGB",
-  TungaBadhra: "TBGB",
+  TungaBhadra: "TBGB",
   Axis: "AXIS",
+  Hdfc: "HDFC",
+  Icici: "ICICI",
+  Other: "OTHER",
 });
 
 export const ModuleType = Object.freeze({
   Projects: "PROJECTS",
+  Loans: "LOANS",
   Banking: "BANKING",
+  Expenditure: "EXPENDITURE",
+});
+
+export const PortfolioType = Object.freeze({
+  BankAccount: "BANKACCOUNT",
+  Asset: "ASSET",
+  Investment: "INVESTMENT",
+});
+
+export const ExpenditureCategoryType = Object.freeze({
+  Income: "INCOME",
+  Expense: "EXPENSE",
 });

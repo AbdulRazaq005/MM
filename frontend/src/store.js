@@ -4,6 +4,8 @@
 import { create } from "zustand";
 
 const useGlobalStore = create((set) => ({
+  user: {},
+  setUser: (_user) => set((state) => ({ ...state, user: _user })),
   contacts: [],
   setContacts: (_contacts) =>
     set((state) => ({ ...state, contacts: _contacts })),

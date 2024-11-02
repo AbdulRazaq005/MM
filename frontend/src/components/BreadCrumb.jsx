@@ -19,7 +19,7 @@ const BreadCrumb = () => {
 
   return (
     <>
-      {breadCrumbs && breadCrumbs.length !== 0 ? (
+      {/* {breadCrumbs && breadCrumbs.length !== 0 ? (
         <Box sx={{ my: 3, ml: 4 }}>
           <Breadcrumbs separator="/">
             {breadCrumbs.map((bc, index) => {
@@ -54,7 +54,7 @@ const BreadCrumb = () => {
         </Box>
       ) : (
         <></>
-      )}
+      )} */}
     </>
   );
 };

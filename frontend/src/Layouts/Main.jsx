@@ -7,8 +7,9 @@ function Main() {
   return (
     <Box
       sx={{
-        bgcolor: "#fafafa",
-        overflowY: "scroll",
+        height: "100%",
+        maxWidth: "1200px",
+        flexGrow: 1,
       }}
     >
       <BreadCrumb />

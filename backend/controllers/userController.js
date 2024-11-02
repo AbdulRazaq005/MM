@@ -5,6 +5,8 @@ import {
   generateToken,
   hashPassword,
 } from "../services/authService.js";
+import Contact from "../models/contactModel.js";
+import { ContactType } from "../utils/enums.js";
 
 // POST /api/login
 const loginUser = asyncHandler(async (req, res) => {
@@ -26,12 +28,12 @@ const loginUser = asyncHandler(async (req, res) => {
 
 // POST /api/register
 const registerUser = asyncHandler(async (req, res) => {
-  const { name, username, password, role, email, contact, secretCode } =
+  const { name, username, password, role, email, contactNo, secretCode } =
     req.body;
   if (!secretCode || secretCode !== process.env.REGISTER_SECRET) {
     res
       .status(400)
-      .json({ message: "Invalid Registeration code. Please contact admin." });
+      .json({ message: "Invalid Registration code. Please contact admin." });
   }
   const userExists = await User.findOne({ email });
   if (userExists) {
@@ -43,11 +45,19 @@ const registerUser = asyncHandler(async (req, res) => {
     username,
     password: passwordHash,
     role,
-    email,
-    contact,
   });
 
   if (user) {
+    let contact = await Contact.create({
+      name,
+      contactNo,
+      email,
+      contactType: ContactType.User,
+      designation: ContactType.User,
+    });
+    user.contact = contact;
+    await user.save();
+
     generateToken(res, user._id, user);
     res.status(201).json({
       userId: user._id,

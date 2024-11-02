@@ -11,12 +11,18 @@ import userRoutes from "./backend/routes/userRoutes.js";
 import projectRoutes from "./backend/routes/projectRoutes.js";
 import contactRoutes from "./backend/routes/contactRoutes.js";
 import transactionRoutes from "./backend/routes/transactionRoutes.js";
+import loanRoutes from "./backend/routes/loanRoutes.js";
+import portfolioRoutes from "./backend/routes/portfolioRoutes.js";
+import expenditureRoutes from "./backend/routes/expenditureRoutes.js";
 import fs from "fs";
+import NodeCache from "node-cache";
 
 dotenv.config();
 connectDatabase();
 
 const app = express();
+let cacheTtlInSeconds = process.env.CACHE_TTL_IN_SECONDS;
+export const cache = new NodeCache({ stdTTL: cacheTtlInSeconds ?? 900 });
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -25,6 +31,9 @@ app.use("/api", userRoutes);
 app.use("/api/projects", projectRoutes);
 app.use("/api/contacts", contactRoutes);
 app.use("/api/transactions", transactionRoutes);
+app.use("/api/loans", loanRoutes);
+app.use("/api/portfolio", portfolioRoutes);
+app.use("/api/expenditure", expenditureRoutes);
 
 if (process.env.NODE_ENV === "production") {
   const __dirname = path.resolve();

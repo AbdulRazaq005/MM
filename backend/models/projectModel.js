@@ -73,6 +73,16 @@ const projectSchema = mongoose.Schema(
       ],
       default: [],
     },
+    createdById: {
+      type: mongoose.Types.ObjectId,
+    },
+    projectUsers: [
+      {
+        type: mongoose.Types.ObjectId,
+        ref: "User",
+        default: [],
+      },
+    ],
   },
   {
     timestamps: true,

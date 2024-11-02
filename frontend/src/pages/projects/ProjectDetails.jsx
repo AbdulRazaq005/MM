@@ -22,9 +22,9 @@ function ProjectDetails() {
   const [data, setData] = useState({});
   const [render, setRender] = useState(0);
   const reRender = () => setRender(render + 1);
-  const [isCreateCaregoryMode, setCreateCaregoryMode] = useState(false);
-  const closeCreateCaregoryModal = () =>
-    setCreateCaregoryMode(!isCreateCaregoryMode);
+  const [isCreateCategoryMode, setCreateCategoryMode] = useState(false);
+  const closeCreateCategoryModal = () =>
+    setCreateCategoryMode(!isCreateCategoryMode);
   const [isDeleteMode, setIsDeleteMode] = useState(false);
   const closeDeleteModal = () => {
     setDeleteMessage("");
@@ -153,7 +153,7 @@ function ProjectDetails() {
             })}
 
           <AppCard
-            action={() => setCreateCaregoryMode(true)}
+            action={() => setCreateCategoryMode(true)}
             actionText={"Create New Category"}
           />
         </Box>
@@ -172,12 +172,12 @@ function ProjectDetails() {
       </Box>
 
       {/* Create new Category Modal */}
-      <Modal open={isCreateCaregoryMode} onClose={closeCreateCaregoryModal}>
+      <Modal open={isCreateCategoryMode} onClose={closeCreateCategoryModal}>
         <CreateCategoryModal
           targetId={id}
           path={ProjectsUrl + "/add-category"}
           forceRender={reRender}
-          closeModal={closeCreateCaregoryModal}
+          closeModal={closeCreateCategoryModal}
         />
       </Modal>
 

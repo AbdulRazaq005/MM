@@ -3,6 +3,12 @@ export const UserRoleEnum = Object.freeze({
   User: "USER",
 });
 
+export const ContactTypeEnum = Object.freeze({
+  User: "USER",
+  Bank: "BANK",
+  ThirdParty: "TP",
+});
+
 export const TransactionTypeEnum = Object.freeze({
   Debit: "DEBIT",
   Credit: "CREDIT",
@@ -10,7 +16,7 @@ export const TransactionTypeEnum = Object.freeze({
 
 export const TransactionStatusEnum = Object.freeze({
   Pending: "PENDING",
-  Succssful: "SUCCESSFUL",
+  Successful: "SUCCESSFUL",
   Revoked: "REVOKED",
 });
 
@@ -27,13 +33,29 @@ export const BankAccountEnum = Object.freeze({
   Canara: "CANARA",
   BankOfBaroda: "BOB",
   PragathiKrishna: "PKGB",
-  TungaBadhra: "TBGB",
+  TungaBhadra: "TBGB",
   Axis: "AXIS",
+  Hdfc: "HDFC",
+  Icici: "ICICI",
+  Other: "OTHER",
 });
 
 export const ModuleTypeEnum = Object.freeze({
   Projects: "PROJECTS",
+  Loans: "LOANS",
   Banking: "BANKING",
+  Expenditure: "EXPENDITURE",
+});
+
+export const PortfolioTypeEnum = Object.freeze({
+  BankAccount: "BANKACCOUNT",
+  Asset: "ASSET",
+  Investment: "INVESTMENT",
+});
+
+export const ExpenditureCategoryType = Object.freeze({
+  Income: "INCOME",
+  Expense: "EXPENSE",
 });
 
 // Options :
@@ -128,6 +150,11 @@ export const BankAccountOptions = [
     value: "",
   },
 ];
+
+export const GetBankNameFromEnum = function (bankEnum) {
+  var result = BankAccountOptions.find((ele) => ele.value === bankEnum);
+  return result?.label;
+};
 
 export const ModuleTypeOptions = [
   {
