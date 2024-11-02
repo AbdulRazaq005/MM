@@ -54,8 +54,13 @@ export async function upsertUserPortfolio({
     });
   }
 
+  let total = 0;
+  total += Number(bankAccounts.reduce((total, item) => total + item.value, 0));
+  total += Number(assets.reduce((total, item) => total + item.value, 0));
+  total += Number(investments.reduce((total, item) => total + item.value, 0));
+
   portfolio.lastUpdatedDate = date;
-  portfolio.netWorth = netWorth;
+  portfolio.netWorth = total;
   portfolio.bankAccounts = bankAccounts;
   portfolio.assets = assets;
   portfolio.investments = investments;
