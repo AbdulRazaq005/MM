@@ -1,7 +1,12 @@
 import jwt from "jsonwebtoken";
 import User from "../models/userModel.js";
 import asyncHandler from "express-async-handler";
-import { cache } from "../../index.js"; // Simple middleware for handling exceptions inside of async express routes
+import NodeCache from "node-cache";
+
+let cacheTtlInSeconds = process.env.CACHE_TTL_IN_SECONDS;
+export const cache = new NodeCache({ stdTTL: cacheTtlInSeconds ?? 900 });
+
+// Simple middleware for handling exceptions inside of async express routes
 // and passing them to your express error handlers. Avoiding .then.catch and try-catch blocks.
 
 const protect = asyncHandler(async (req, res, next) => {

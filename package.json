@@ -1,9 +1,9 @@
 {
-  "name": "mern-auth",
+  "name": "monetary-management",
   "version": "1.0.0",
   "type": "module",
-  "description": "MERN authentication system",
-  "main": "server.js",
+  "description": "Monetary Management System",
+  "main": "index.js",
   "engines": {
     "node": "16.x"
   },
@@ -16,7 +16,7 @@
     "build": "npm run build --prefix frontend",
     "winBuild": "npm run winBuild --prefix frontend"
   },
-  "author": "Brad Traversy",
+  "author": "Abdul Razaq",
   "license": "MIT",
   "dependencies": {
     "bcryptjs": "^2.4.3",
