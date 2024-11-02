@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import { modalContainerStyle } from "../helpers/styles";
 import { Box, Button, MenuItem, TextField, Typography } from "@mui/material";
-import { BankAccountOptions } from "../helpers/enums";
+import { BankAccountOptions, ContactTypeEnum } from "../helpers/enums";
 import { DatePicker } from "@mui/x-date-pickers";
 import { parseDateTime, toMoment } from "../helpers/dateTimeHelpers";
 import { ContactsUrl } from "../Constants";

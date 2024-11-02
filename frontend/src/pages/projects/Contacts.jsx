@@ -12,6 +12,7 @@ import ContactsCard from "../../components/ContactsCard";
 import axios from "axios";
 import useGlobalStore from "../../store";
 import EditContactModal from "../../components/EditContactModal";
+import { ContactTypeEnum } from "../../helpers/enums";
 
 function Contacts() {
   const [contacts, setContacts] = useGlobalStore((state) => [
@@ -196,18 +197,20 @@ function Contacts() {
           py: 3,
         }}
       >
-        {contacts.map((contact) => {
-          return (
-            <ContactsCard
-              data={contact}
-              key={contact._id}
-              onClickAction={() => {
-                setActiveEditContact(contact);
-                setEditContactMode(true);
-              }}
-            />
-          );
-        })}
+        {contacts
+          .filter((c) => c.contactType !== ContactTypeEnum.Bank)
+          .map((contact) => {
+            return (
+              <ContactsCard
+                data={contact}
+                key={contact._id}
+                onClickAction={() => {
+                  setActiveEditContact(contact);
+                  setEditContactMode(true);
+                }}
+              />
+            );
+          })}
       </Box>
 
       {/* Edit Contact Modal */}

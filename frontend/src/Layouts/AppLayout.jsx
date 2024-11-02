@@ -9,6 +9,7 @@ import { useEffect } from "react";
 import { getAsync } from "../services/apiHandlerService";
 import { ContactsUrl, UserProfileUrl } from "../Constants";
 import useGlobalStore from "../store";
+import { ContactTypeEnum } from "../helpers/enums";
 
 const darkTheme = createTheme({
   palette: {

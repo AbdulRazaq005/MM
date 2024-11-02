@@ -218,7 +218,7 @@ export async function getTransactionsByIds(targetIds) {
     .populate("fromContact toContact")
     .select("-isActive -__v")
     .exec();
-  return transactions.sort((t1, t2) => t1.date - t2.date);
+  return transactions.sort((t1, t2) => t2.date - t1.date);
 }
 
 export async function markTransactionsInactiveByTargetIds(targetIds) {

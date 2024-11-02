@@ -1,7 +1,8 @@
 import {
   BankAccountOptions,
+  ContactTypeEnum,
+  ModuleTypeEnum,
   PaymentModeTypeOptions,
-  TransactionTypeEnum,
 } from "../../helpers/enums";
 import { useState } from "react";
 import useGlobalStore from "../../store";
@@ -24,9 +25,8 @@ import Loading from "../../components/Loading";
 import Modal from "@mui/material/Modal";
 import moment from "moment";
 
-export default function Transactions() {
+export default function LoanTransactions() {
   const [data, setData] = useState([]);
-  const [total, setTotal] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const contacts = useGlobalStore((state) => state.contacts);
   const [name, setName] = useState("");
@@ -74,25 +74,17 @@ export default function Transactions() {
       typeEnum: transactionTypeEnum ? transactionTypeEnum : undefined,
       paymentModeEnum: paymentModeEnum ? paymentModeEnum : undefined,
       bankEnum: bankEnum ? bankEnum : undefined,
+      moduleEnum: ModuleTypeEnum.Loans,
     };
 
     setIsLoading(true);
     const response = await getAsync(TransactionsUrl, params);
     setIsLoading(false);
     if (response.success) {
-      setData(response.payload);
-      calculateTotal(response.payload);
+      let _data = response.payload;
+      // _data?.sort((a, b) => a.typeEnum.localeCompare(b.typeEnum));
+      setData(_data);
     } else setErrorMessage(response.payload.message);
-  };
-
-  const calculateTotal = (transactions) => {
-    let total = transactions.reduce((cumulativeTotal, transaction) => {
-      let amount = transaction.amount;
-      if (transaction.typeEnum === TransactionTypeEnum.Credit)
-        return cumulativeTotal - amount;
-      else return cumulativeTotal + amount;
-    }, 0);
-    setTotal(total);
   };
 
   const clearInputs = () => {
@@ -110,16 +102,11 @@ export default function Transactions() {
   };
 
   /************* TABLE CONFIG **************/
-  const transactionCustomColumns = {
-    fromContact: "From",
-    toContact: "To",
-    paymentModeEnum: "Mode",
-  };
   const transactionSlots = {
     name: ({ data, rowData }) => {
       return (
         <Typography
-          color={"primary"}
+          color={""}
           sx={{
             fontSize: 18,
             fontWeight: 550,
@@ -130,15 +117,24 @@ export default function Transactions() {
         </Typography>
       );
     },
-    fromContact: ({ data }) => data?.name,
-    toContact: ({ data }) => data?.name,
     date: ({ data }) => displayDate(data),
     amount: ({ data, rowData }) => {
       return (
-        <Typography
-          color={rowData.typeEnum === "DEBIT" ? "red" : "green"}
-          sx={{ fontSize: 18, fontWeight: 550, ml: 0 }}
-        >
+        <Typography sx={{ fontSize: 18, fontWeight: 550, ml: 0 }}>
+          {displayCurrency(data)}
+        </Typography>
+      );
+    },
+    principalAmount: ({ data, rowData }) => {
+      return (
+        <Typography color="green" sx={{ fontSize: 18, fontWeight: 550, ml: 0 }}>
+          {displayCurrency(data)}
+        </Typography>
+      );
+    },
+    interestAmount: ({ data, rowData }) => {
+      return (
+        <Typography color="red" sx={{ fontSize: 18, fontWeight: 550, ml: 0 }}>
           {displayCurrency(data)}
         </Typography>
       );
@@ -154,7 +150,7 @@ export default function Transactions() {
 
   return (
     <Box sx={{ p: 4 }}>
-      <Typography variant="h4">Transactions</Typography>
+      <Typography variant="h4">Loan Transactions</Typography>
       <Divider />
       <Box
         component="form"
@@ -182,7 +178,7 @@ export default function Transactions() {
             name="transaction-name"
             label="Name"
             size="small"
-            sx={{ bgcolor: "#fff", width: " 16rem", mr: "1rem" }}
+            sx={{ bgcolor: "#fff", width: " 20rem", mr: "1rem" }}
             onChange={(e) => {
               setName(e.target.value);
             }}
@@ -194,7 +190,7 @@ export default function Transactions() {
             name="minAmount"
             label="Min Amount"
             size="small"
-            sx={{ bgcolor: "#fff", width: " 16rem", mr: "01em" }}
+            sx={{ bgcolor: "#fff", width: " 20rem", mr: "01em" }}
             onChange={(e) => {
               setMinAmount(e.target.value);
             }}
@@ -206,7 +202,7 @@ export default function Transactions() {
             name="maxAmount"
             label="Max Amount"
             size="small"
-            sx={{ bgcolor: "#fff", width: " 16rem", mr: "01em" }}
+            sx={{ bgcolor: "#fff", width: " 20rem", mr: "01em" }}
             onChange={(e) => {
               setMaxAmount(e.target.value);
             }}
@@ -214,67 +210,11 @@ export default function Transactions() {
           <TextField
             margin="normal"
             fullWidth
-            name="from-contact"
-            label="From Party"
-            size="small"
-            select
-            sx={{ bgcolor: "#fff", width: " 16rem", mr: "01em" }}
-            onChange={(e) => {
-              setFromContactId(e.target.value);
-            }}
-            value={fromContactId}
-          >
-            {contacts.map((contact) => (
-              <MenuItem key={contact._id} value={contact._id}>
-                {getContactDisplayName(contact)}
-              </MenuItem>
-            ))}
-          </TextField>
-          <TextField
-            margin="normal"
-            fullWidth
-            name="to-contact"
-            label="To Party"
-            size="small"
-            select
-            sx={{ bgcolor: "#fff", width: " 16rem", mr: "01em" }}
-            onChange={(e) => {
-              setToContactId(e.target.value);
-            }}
-            value={toContactId}
-          >
-            {contacts.map((contact) => (
-              <MenuItem key={contact._id} value={contact._id}>
-                {getContactDisplayName(contact)}
-              </MenuItem>
-            ))}
-          </TextField>
-          {/* <TextField
-            margin="normal"
-            fullWidth
-            name="typeEnum"
-            label="Transaction Type"
-            size="small"
-            select
-            sx={{ bgcolor: "#fff" , width:" 16rem" , mx: "0.5rem"}}
-            onChange={(e) => {
-              setTransactionTypeEnum(e.target.value);
-            }}
-          >
-            {TransactionTypeOptions.map((option) => (
-              <MenuItem key={option.value} value={option.value}>
-                {option.label}
-              </MenuItem>
-            ))}
-          </TextField> */}
-          <TextField
-            margin="normal"
-            fullWidth
             name="paymentMode"
             label="Payment Mode"
             size="small"
             select
-            sx={{ bgcolor: "#fff", width: " 16rem", mr: "01em" }}
+            sx={{ bgcolor: "#fff", width: " 20rem", mr: "01em" }}
             onChange={(e) => {
               setPaymentModeEnum(e.target.value);
             }}
@@ -293,7 +233,7 @@ export default function Transactions() {
             label="Bank Account"
             size="small"
             select
-            sx={{ bgcolor: "#fff", width: " 16rem", mr: "01em" }}
+            sx={{ bgcolor: "#fff", width: " 20rem", mr: "01em" }}
             onChange={(e) => {
               setBankEnum(e.target.value);
             }}
@@ -305,6 +245,28 @@ export default function Transactions() {
               </MenuItem>
             ))}
           </TextField>
+
+          <TextField
+            margin="normal"
+            fullWidth
+            name="to-contact"
+            label="Loan Account"
+            size="small"
+            select
+            sx={{ bgcolor: "#fff", width: " 20rem", mr: "01em" }}
+            onChange={(e) => {
+              setToContactId(e.target.value);
+            }}
+            value={toContactId}
+          >
+            {contacts
+              .filter((c) => c.contactType === ContactTypeEnum.Bank)
+              .map((contact) => (
+                <MenuItem key={contact._id} value={contact._id}>
+                  {getContactDisplayName(contact)}
+                </MenuItem>
+              ))}
+          </TextField>
           <DatePicker
             size="small"
             label="From Date"
@@ -314,9 +276,8 @@ export default function Transactions() {
             }}
             sx={{
               bgcolor: "#fff",
-              width: "100%",
               mt: 2,
-              width: " 16rem",
+              width: " 20rem",
               mr: "01em",
             }}
             onChange={(moment) => setFromDate(parseDateTime(moment))}
@@ -330,9 +291,8 @@ export default function Transactions() {
             }}
             sx={{
               bgcolor: "#fff",
-              width: "100%",
               mt: 2,
-              width: " 16rem",
+              width: " 20rem",
               mr: "01em",
             }}
             onChange={(moment) => setToDate(parseDateTime(moment))}
@@ -341,6 +301,7 @@ export default function Transactions() {
         <Box
           sx={{
             mr: "auto",
+            mt: 2,
           }}
         >
           {errorMessage && (
@@ -366,25 +327,10 @@ export default function Transactions() {
           </Button>
         </Box>
       </Box>
-      <AppTable
-        name="Transactions"
-        data={data}
-        columns={[
-          "name",
-          "date",
-          "fromContact",
-          "toContact",
-          "amount",
-          "paymentModeEnum",
-        ]}
-        slots={transactionSlots}
-        customColumns={transactionCustomColumns}
-      />
-
-      {total && (
+      {/* {total && (
         <Typography
           sx={{
-            m: "1rem",
+            mt: "1rem",
             pr: "2rem",
             fontSize: 20,
             width: "100%",
@@ -394,7 +340,24 @@ export default function Transactions() {
         >
           Total : {displayCurrency(total)}
         </Typography>
-      )}
+      )} */}
+      <AppTable
+        name="Transactions"
+        data={data}
+        columns={[
+          "name",
+          "date",
+          "amount",
+          "principalAmount",
+          "interestAmount",
+        ]}
+        slots={transactionSlots}
+        customColumns={{
+          principalAmount: "Principal",
+          interestAmount: "Interest",
+        }}
+        showTotal={true}
+      />
 
       {/* Loading Modal */}
       <Modal open={isLoading}>

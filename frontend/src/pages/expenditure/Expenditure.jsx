@@ -1,27 +1,26 @@
 import React, { useEffect, useState } from "react";
-// import useGlobalStore from "../store";
-import { ExpenditureUrl } from "../Constants";
-import { getAsync } from "../services/apiHandlerService";
+import { ExpenditureUrl } from "../../Constants";
+import { getAsync } from "../../services/apiHandlerService";
 import { Box, Button, Divider, Modal, Typography } from "@mui/material";
-import Loading from "../components/Loading";
-import { displayCurrency } from "../helpers/displayFormatHelpers";
+import Loading from "../../components/Loading";
+import { displayCurrency } from "../../helpers/displayFormatHelpers";
 import axios from "axios";
-import TextInformationCard from "../components/TextInformationCard";
+import TextInformationCard from "../../components/TextInformationCard";
 import AssessmentIcon from "@mui/icons-material/Assessment";
 import AccountBalanceIcon from "@mui/icons-material/AccountBalance";
 import PermMediaIcon from "@mui/icons-material/PermMedia";
-import ExpenditureCategoryCard from "../components/ExpenditureCategoryCard";
+import ExpenditureCategoryCard from "../../components/ExpenditureCategoryCard";
 import {
   ExpenditureCategoryType,
   ModuleTypeEnum,
   TransactionTypeEnum,
-} from "../helpers/enums";
-import CreateUpdateExpenditureItemModal from "../components/CreateUpdateExpenditureItemModal";
-import AppTable from "../components/AppTable";
-import CreateTransactionModal from "../components/CreateTransactionModal";
-import EditTransactionModal from "../components/EditTransactionModal";
-import useGlobalStore from "../store";
-import { displayDate } from "../helpers/dateTimeHelpers";
+} from "../../helpers/enums";
+import CreateUpdateExpenditureItemModal from "../../components/CreateUpdateExpenditureItemModal";
+import AppTable from "../../components/AppTable";
+import CreateTransactionModal from "../../components/CreateTransactionModal";
+import EditTransactionModal from "../../components/EditTransactionModal";
+import useGlobalStore from "../../store";
+import { displayDate } from "../../helpers/dateTimeHelpers";
 
 function Expenditure() {
   const [isLoading, setIsLoading] = useState(false);
@@ -55,13 +54,21 @@ function Expenditure() {
     async function fetchData() {
       setIsLoading(true);
       const response = await getAsync(ExpenditureUrl);
-      setData(response.payload);
+      let _data = response.payload;
+      _data?.transactions?.sort((a, b) => a.typeEnum.localeCompare(b.typeEnum));
+      setData(_data);
       setIsLoading(false);
-      console.log("pageData: ", response.payload);
     }
     fetchData();
     // eslint-disable-next-line
-  }, [render]);
+  }, []);
+
+  useEffect(() => {
+    if (getTotalValue(ExpenditureCategoryType.Income) === 0)
+      setIsIncomeEditMode(true);
+    if (getTotalValue(ExpenditureCategoryType.Expense) === 0)
+      setIsIExpenseEditMode(true);
+  }, [data]);
 
   function toggleExpenditureItemModal(type, itemData) {
     if (!isExpenditureItemModalOpen) {
@@ -92,11 +99,9 @@ function Expenditure() {
       .reduce((total, item) => total + item.amount, 0);
 
     if (type === ExpenditureCategoryType.Income) {
-      if (totalIncome === 0) setIsIncomeEditMode(true);
       return totalIncome;
     }
     if (type === ExpenditureCategoryType.Expense) {
-      if (totalExpense === 0) setIsIExpenseEditMode(true);
       return totalExpense;
     }
     return totalIncome - totalExpense;
@@ -441,8 +446,8 @@ function Expenditure() {
           closeModal={closeAddTransactionModal}
           moduleType={ModuleTypeEnum.Expenditure}
           loanName={data.name}
-          fromContact={user.contact}
-          toContact={user.contact}
+          fromContact={user?.contact}
+          toContact={user?.contact}
         />
       </Modal>
 

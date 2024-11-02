@@ -16,12 +16,12 @@ const menuListItems = [
       submenuItems: [
         {
           label: "Transactions",
-          path: "transactions",
+          path: "projects/transactions",
           icon: <DehazeOutlinedIcon sx={{ fontSize: "1.5rem" }} />,
         },
         {
           label: "Contacts",
-          path: "/contacts",
+          path: "contacts",
           icon: <ContactPhoneIcon sx={{ fontSize: "1.5rem" }} />,
         },
       ],
@@ -35,7 +35,7 @@ const menuListItems = [
       submenuItems: [
         {
           label: "Transactions",
-          path: "transactions",
+          path: "loans/transactions",
           icon: <DehazeOutlinedIcon sx={{ fontSize: "1.5rem" }} />,
         },
       ],
@@ -44,12 +44,12 @@ const menuListItems = [
   [
     {
       label: "Expenditures",
-      path: "/expenditure",
+      path: "expenditure",
       icon: <BarChartIcon sx={{ fontSize: "1.8rem" }} />,
       submenuItems: [
         {
           label: "Transactions",
-          path: "transactions",
+          path: "expenditure/transactions",
           icon: <DehazeOutlinedIcon sx={{ fontSize: "1.5rem" }} />,
         },
       ],
