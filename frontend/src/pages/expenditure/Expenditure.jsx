@@ -20,7 +20,13 @@ import AppTable from "../../components/AppTable";
 import CreateTransactionModal from "../../components/CreateTransactionModal";
 import EditTransactionModal from "../../components/EditTransactionModal";
 import useGlobalStore from "../../store";
-import { displayDate } from "../../helpers/dateTimeHelpers";
+import {
+  displayDate,
+  parseDateTime,
+  toMoment,
+} from "../../helpers/dateTimeHelpers";
+import { DatePicker } from "@mui/x-date-pickers";
+import moment from "moment";
 
 function Expenditure() {
   const [isLoading, setIsLoading] = useState(false);
@@ -34,6 +40,10 @@ function Expenditure() {
   const [isIncomeEditMode, setIsIncomeEditMode] = useState(false);
   const [isExpenseEditMode, setIsIExpenseEditMode] = useState(false);
   const [addTransactionType, setAddTransactionType] = useState("");
+  const [fromDate, setFromDate] = useState(
+    parseDateTime(moment().startOf("month"))
+  );
+  const [toDate, setToDate] = useState(parseDateTime(moment().endOf("month")));
 
   const user = useGlobalStore((state) => state.user);
   const [isAddTransactionMode, setAddTransactionMode] = useState(false);
@@ -51,23 +61,33 @@ function Expenditure() {
   const closeEditTransactionModal = () => setEditTransactionMode(false);
 
   useEffect(() => {
+    // const _fromDate = parseDateTime(moment().startOf("month"));
+    // const _toDate = parseDateTime(moment().endOf("month"));
+    // setFromDate(_fromDate);
+    // setToDate(_toDate);
+
     async function fetchData() {
       setIsLoading(true);
-      const response = await getAsync(ExpenditureUrl);
+      const response = await getAsync(ExpenditureUrl, {
+        fromDate: fromDate,
+        toDate: toDate,
+      });
       let _data = response.payload;
       _data?.transactions?.sort((a, b) => a.typeEnum.localeCompare(b.typeEnum));
       setData(_data);
       setIsLoading(false);
     }
     fetchData();
+
     // eslint-disable-next-line
-  }, []);
+  }, [render]);
 
   useEffect(() => {
     if (getTotalValue(ExpenditureCategoryType.Income) === 0)
       setIsIncomeEditMode(true);
     if (getTotalValue(ExpenditureCategoryType.Expense) === 0)
       setIsIExpenseEditMode(true);
+    // eslint-disable-next-line
   }, [data]);
 
   function toggleExpenditureItemModal(type, itemData) {
@@ -224,6 +244,31 @@ function Expenditure() {
         >
           Expenditure
         </Typography>
+        <Box sx={{ display: "flex", mx: 1 }}>
+          <DatePicker
+            size="small"
+            value={toMoment(fromDate)}
+            label="From Date"
+            slotProps={{
+              textField: { size: "small", fullWidth: true },
+            }}
+            sx={{ bgcolor: "#fff", width: "10rem" }}
+            onChange={(moment) => setFromDate(parseDateTime(moment))}
+          />
+          <DatePicker
+            size="small"
+            value={toMoment(toDate)}
+            label="To Date"
+            slotProps={{
+              textField: { size: "small", fullWidth: true },
+            }}
+            sx={{ bgcolor: "#fff", width: "10rem", mx: 2 }}
+            onChange={(moment) => setToDate(parseDateTime(moment))}
+          />
+          <Button variant="outlined" color="primary" onClick={reRender}>
+            Go
+          </Button>
+        </Box>
       </Box>
 
       <Box
@@ -294,7 +339,7 @@ function Expenditure() {
           <Button
             variant="outlined"
             color={isIncomeEditMode ? "error" : "warning"}
-            sx={{ fontWeight: "550", py: 0, ml: 1 }}
+            sx={{ fontWeight: "500", py: 0, ml: 1 }}
             onClick={() => setIsIncomeEditMode(!isIncomeEditMode)}
           >
             {isIncomeEditMode ? "Cancel" : "Edit"}
@@ -369,7 +414,7 @@ function Expenditure() {
           <Button
             variant="outlined"
             color={isExpenseEditMode ? "error" : "warning"}
-            sx={{ fontWeight: "550", py: 0, ml: 1 }}
+            sx={{ fontWeight: "500", py: 0, ml: 1 }}
             onClick={() => setIsIExpenseEditMode(!isExpenseEditMode)}
           >
             {isExpenseEditMode ? "Cancel" : "Edit"}
