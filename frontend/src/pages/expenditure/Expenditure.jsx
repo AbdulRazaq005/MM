@@ -83,10 +83,16 @@ function Expenditure() {
   }, [render]);
 
   useEffect(() => {
-    if (getTotalValue(ExpenditureCategoryType.Income) === 0)
-      setIsIncomeEditMode(true);
-    if (getTotalValue(ExpenditureCategoryType.Expense) === 0)
-      setIsIExpenseEditMode(true);
+    let incomeCategories = [];
+    let expenseCategories = [];
+    incomeCategories = data?.expenditureCategories?.filter(
+      (c) => c.type === ExpenditureCategoryType.Income
+    );
+    expenseCategories = data?.expenditureCategories?.filter(
+      (c) => c.type === ExpenditureCategoryType.Expense
+    );
+    setIsIncomeEditMode(incomeCategories?.length === 0 ? true : false);
+    setIsIExpenseEditMode(expenseCategories?.length === 0 ? true : false);
     // eslint-disable-next-line
   }, [data]);
 
@@ -136,7 +142,7 @@ function Expenditure() {
   }
 
   function upsertExpenditureItem(type, { _id, name, description }) {
-    console.log("UPSERT:", type, { _id, name, description });
+    // console.log("UPSERT:", type, { _id, name, description });
     let payload = {
       _id,
       name,
