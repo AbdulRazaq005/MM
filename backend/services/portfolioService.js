@@ -14,7 +14,9 @@ export async function getCurrentMonthPortfolio(userId) {
 
   if (!portfolio) {
     // fetch the latest existing record
-    portfolio = await Portfolio.findOne().sort({ lastUpdatedDate: -1 });
+    portfolio = await Portfolio.findOne({
+      userId: userId,
+    }).sort({ lastUpdatedDate: -1 });
   }
   if (!portfolio) {
     // create one if no records exist for this userId
