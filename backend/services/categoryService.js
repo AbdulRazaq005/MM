@@ -70,6 +70,7 @@ export async function addCategory(categoryId, categoryDetails) {
     description,
     estimate,
     level: category.level + 1,
+    projectId: category.projectId,
   });
   category.categories.push(subCategory._id);
   await category.save();

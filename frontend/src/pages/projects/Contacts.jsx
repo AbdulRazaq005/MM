@@ -198,7 +198,7 @@ function Contacts() {
         }}
       >
         {contacts
-          .filter((c) => c.contactType !== ContactTypeEnum.Bank)
+          // .filter((c) => c.contactType === ContactTypeEnum.ThirdParty)
           .map((contact) => {
             return (
               <ContactsCard

@@ -79,6 +79,9 @@ const categorySchema = mongoose.Schema({
       `Category level cannot exceed ${CATEGORY_DEPTH_ALLOWED}.`,
     ],
   },
+  projectId: {
+    type: mongoose.Types.ObjectId,
+  },
 });
 
 const Category = mongoose.model("Category", categorySchema);

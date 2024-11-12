@@ -3,7 +3,7 @@ import Category from "../models/categoryModel.js";
 import mongoose from "mongoose";
 import { CATEGORY_DEPTH_START } from "../utils/constants.js";
 
-export async function getAllProjectDetails(userId) {
+export async function getAllUserProjects(userId) {
   const projects = await Project.find({
     projectUsers: { $elemMatch: { $eq: userId } },
   })
@@ -101,6 +101,7 @@ export async function addCategory(projectId, categoryDetails) {
     description,
     estimate,
     level: CATEGORY_DEPTH_START,
+    projectId: project._id,
   });
   project.categories.push(category._id);
   await project.save();
@@ -129,4 +130,11 @@ export async function removeCategory(projectId, categoryId) {
     return { isSuccessful: res.deletedCount === 1, project: updatedProject };
   }
   return false;
+}
+
+export async function getAllTargetIdsByProjectIds(projectIds) {
+  let categoryIds = await Category.find({ projectId: { $in: projectIds } })
+    .select("_id")
+    .lean();
+  return categoryIds;
 }

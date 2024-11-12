@@ -8,7 +8,7 @@ import {
 
 // GET /api/contacts
 export const getAllContacts = asyncHandler(async (req, res) => {
-  const contacts = await getContacts();
+  const contacts = await getContacts(req.user._id);
   res.status(200).json(contacts);
 });
 
@@ -22,7 +22,7 @@ export const createNewContact = asyncHandler(async (req, res) => {
     email,
     address,
     projectId,
-    ContactType,
+    userId: req.user._id,
   });
   res.status(200).json(result);
 });
@@ -41,6 +41,7 @@ export const updateContactById = asyncHandler(async (req, res) => {
     address,
     projectId,
     ContactType,
+    userId: req.user._id,
   });
   res.status(200).json(result);
 });
@@ -51,6 +52,6 @@ export const deleteContactById = asyncHandler(async (req, res) => {
     res.status(400).json({ message: "Contact id cannot be empty." });
   }
   const { isHardDelete } = req.body;
-  let result = await deleteContact(req.params.id, isHardDelete);
+  let result = await deleteContact(req.params.id, isHardDelete, req.user._id);
   res.status(200).json(result);
 });

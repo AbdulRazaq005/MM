@@ -10,10 +10,19 @@ import { ContactType } from "../utils/enums.js";
 
 // POST /api/login
 const loginUser = asyncHandler(async (req, res) => {
-  const { username, password } = req.body;
-  const user = await User.findOne({
-    username,
-  });
+  let { username, password, isTestUserLogin = false } = req.body;
+  let user;
+  if (isTestUserLogin) {
+    username = process.env.TEST_USER_USERNAME;
+    password = process.env.TEST_USER_PASSWORD;
+    user = await User.findOne({
+      username,
+    });
+  } else {
+    user = await User.findOne({
+      username,
+    });
+  }
   if (user && (await verifyPassword(password, user.password))) {
     generateToken(res, user._id, user);
     res.json({

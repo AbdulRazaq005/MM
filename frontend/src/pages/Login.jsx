@@ -12,6 +12,7 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { LoginUrl } from "../Constants";
+import { Divider } from "@mui/material";
 
 const defaultTheme = createTheme();
 
@@ -30,7 +31,24 @@ export default function Login() {
       })
       .then((response) => {
         setMessage("Login Successful.");
-        navigate("/projects");
+        navigate("/expenditure");
+      })
+      .catch((error) => {
+        setMessage(error.response.data.message);
+        console.error(error);
+      });
+  };
+  const submitTestUserLogin = (e) => {
+    e.preventDefault();
+    axios
+      .post(LoginUrl, {
+        username: username,
+        password: password,
+        isTestUserLogin: true,
+      })
+      .then((response) => {
+        setMessage("Login Successful.");
+        navigate("/expenditure");
       })
       .catch((error) => {
         setMessage(error.response.data.message);
@@ -115,9 +133,30 @@ export default function Login() {
               >
                 LOGIN
               </Button>
-              <Typography sx={{ color: "#008dcf" }}>
+              <Typography sx={{ color: "#008dcf", mb: 2 }}>
                 <Link to="/register">{"Don't have an account? Register"}</Link>
               </Typography>
+            </Box>
+
+            {/* Test Login */}
+            <Box
+              component="form"
+              noValidate
+              onSubmit={submitTestUserLogin}
+              sx={{ mt: 1 }}
+            >
+              <Divider />
+              <Typography sx={{ mt: 4 }}>
+                To Test or Explore the project login as Test User below
+              </Typography>
+              <Button
+                type="submit"
+                fullWidth
+                variant="contained"
+                sx={{ mt: 3, mb: 2 }}
+              >
+                TEST USER LOGIN
+              </Button>
             </Box>
           </Box>
         </Grid>

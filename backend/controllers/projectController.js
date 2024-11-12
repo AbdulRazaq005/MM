@@ -3,7 +3,7 @@ import {
   addCategory,
   createProject,
   deleteProjectById,
-  getAllProjectDetails,
+  getAllUserProjects,
   getProjectDetailsById,
   removeCategory,
   updateProject,
@@ -16,7 +16,7 @@ import { UserRole } from "../utils/enums.js";
 
 // GET /api/projects
 export const getAllProjects = asyncHandler(async (req, res) => {
-  const projects = await getAllProjectDetails(req.user._id);
+  const projects = await getAllUserProjects(req.user._id);
   if (!projects) {
     res.status(500).json({ message: "Error while fetching projects." });
     return;

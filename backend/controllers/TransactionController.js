@@ -1,16 +1,21 @@
 import asyncHandler from "express-async-handler";
-import { PaymentModeType } from "../utils/enums.js";
+import { ModuleType, PaymentModeType } from "../utils/enums.js";
 import {
   createTransaction,
   deleteTransaction,
   getTransactions,
   updateTransaction,
 } from "../services/transactionService.js";
+import { getUserLoanDetails } from "../services/loanService.js";
+import {
+  getAllTargetIdsByProjectIds,
+  getAllUserProjects,
+} from "../services/projectService.js";
+import ExpenditureCategory from "../models/expenditureCategoryModel.js";
 
 // GET /api/transactions
 export const getFilteredTransactions = asyncHandler(async (req, res) => {
   const {
-    targetIds,
     name,
     fromDate,
     toDate,
@@ -24,6 +29,29 @@ export const getFilteredTransactions = asyncHandler(async (req, res) => {
     statusEnum,
     moduleEnum,
   } = req.query;
+
+  let targetIds = req.query.targetIds;
+  let userId = req.user._id;
+
+  if (!targetIds) {
+    if (moduleEnum === ModuleType.Projects) {
+      let userProjects = await getAllUserProjects(userId);
+      let projectIds = userProjects.map((p) => p._id);
+      targetIds = await getAllTargetIdsByProjectIds(projectIds);
+    }
+    if (moduleEnum === ModuleType.Loans) {
+      let userLoans = await getUserLoanDetails(userId);
+      targetIds = userLoans.map((p) => p._id);
+    }
+    if (moduleEnum === ModuleType.Expenditure) {
+      let categories = await ExpenditureCategory.find({
+        userId: userId,
+        isActive: true,
+      });
+      targetIds = categories.map((c) => c._id);
+    }
+  }
+
   const contacts = await getTransactions({
     targetIds,
     name,
